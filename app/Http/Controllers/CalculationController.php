@@ -25,12 +25,18 @@ class CalculationController extends Controller
         $calculation->comment = $data['formComment'];
         $calculation->save();
 
-        $calculation->elements()->attach($data['formElement'],
-            [
-                'amount' => $data['formAmount'],
-                'price' => $data['formPrice']
-            ]
-        );
+        $elements = $request->input('formElements', []);
+        $amounts = $request->input('formAmounts', []);
+        $prices = $request->input('formPrices', []);
+        
+        for ($element=0; $element < count($elements); $element++) {
+            if ($elements[$element] != '') {
+                $calculation->elements()->attach($elements[$element], [
+                    'amount' => $amounts[$element],
+                    'price' => $prices[$element]
+                ]);
+            }
+        }
     }
 
     public function show($id)

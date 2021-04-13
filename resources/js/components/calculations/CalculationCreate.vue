@@ -4,25 +4,28 @@
 
             <table class="table table-bordered table-hover mb-4">
                 <tbody>
-                    <tr>
+                    <tr v-for="(row, index) in rows" :key="index">
                         <td>
-                            <select v-model="formElement" class="custom-select">
+                            <select v-model="formElements[index]" class="custom-select">
                                 <option v-for="element in elements" :key="element.id" :value="element.id">{{ element.title }}</option>
                             </select>
                         </td>
                         <td>
-                            <input v-model="formAmount" type="text" class="form-control" value="1"/>
+                            <input v-model="formAmounts[index]" type="text" class="form-control" value="1"/>
                         </td>
                         <td>
-                            <input v-model="formPrice" type="text" class="form-control" value="1"/>
+                            <input v-model="formPrices[index]" type="text" class="form-control" value="1"/>
+                        </td>
+                        <td>
+                            <span @click="deleteRow(index)" class="btn btn-outline-danger">&times;</span>
                         </td>
                     </tr>
                 </tbody>
             </table>
-
+            <span @click="addRow()" class="btn btn-secondary">+</span>
             <textarea v-model="formComment" class="form-control mt-4"></textarea>
 
-            <button @click="CalculationSubmit" type="submit" class="btn btn-success">Сохранить</button>
+            <button @click="CalculationSubmit" type="submit" class="btn btn-success mt-4">Сохранить</button>
 
     </div>
 </template>
@@ -32,10 +35,11 @@
         data() {
             return {
                 elements: [],
-                formElement: '',
+                rows: [],
+                formElements: [],
+                formAmounts: [],
+                formPrices: [],
                 formComment: '',
-                formAmount: '',
-                formPrice: '',
             }
         },
         created() {
@@ -46,12 +50,18 @@
                 ));
         },
         methods: {
+            addRow() {
+                this.rows.push('')
+            },
+            deleteRow(index) {
+                this.rows.splice(index, 1)
+            },
             CalculationSubmit() {
                 axios.post('/api/calculations', {
                     formComment: this.formComment,
-                    formElement: this.formElement,
-                    formAmount: this.formAmount,
-                    formPrice: this.formPrice,
+                    formElements: this.formElements,
+                    formAmounts: this.formAmounts,
+                    formPrices: this.formPrices,
                 })
                 .then((response) => {
                     //console.log(response);

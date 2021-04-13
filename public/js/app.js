@@ -1972,14 +1972,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       elements: [],
-      formElement: '',
-      formComment: '',
-      formAmount: '',
-      formPrice: ''
+      rows: [],
+      formElements: [],
+      formAmounts: [],
+      formPrices: [],
+      formComment: ''
     };
   },
   created: function created() {
@@ -1990,14 +1994,20 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    addRow: function addRow() {
+      this.rows.push('');
+    },
+    deleteRow: function deleteRow(index) {
+      this.rows.splice(index, 1);
+    },
     CalculationSubmit: function CalculationSubmit() {
       var _this2 = this;
 
       axios.post('/api/calculations', {
         formComment: this.formComment,
-        formElement: this.formElement,
-        formAmount: this.formAmount,
-        formPrice: this.formPrice
+        formElements: this.formElements,
+        formAmounts: this.formAmounts,
+        formPrices: this.formPrices
       }).then(function (response) {
         //console.log(response);
         _this2.$router.push({
@@ -2024,6 +2034,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -24913,98 +24944,134 @@ var render = function() {
     _c("h1", { staticClass: "mb-4" }, [_vm._v("Новый расчет")]),
     _vm._v(" "),
     _c("table", { staticClass: "table table-bordered table-hover mb-4" }, [
-      _c("tbody", [
-        _c("tr", [
-          _c("td", [
-            _c(
-              "select",
-              {
+      _c(
+        "tbody",
+        _vm._l(_vm.rows, function(row, index) {
+          return _c("tr", { key: index }, [
+            _c("td", [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formElements[index],
+                      expression: "formElements[index]"
+                    }
+                  ],
+                  staticClass: "custom-select",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.formElements,
+                        index,
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.elements, function(element) {
+                  return _c(
+                    "option",
+                    { key: element.id, domProps: { value: element.id } },
+                    [_vm._v(_vm._s(element.title))]
+                  )
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("input", {
                 directives: [
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.formElement,
-                    expression: "formElement"
+                    value: _vm.formAmounts[index],
+                    expression: "formAmounts[index]"
                   }
                 ],
-                staticClass: "custom-select",
+                staticClass: "form-control",
+                attrs: { type: "text", value: "1" },
+                domProps: { value: _vm.formAmounts[index] },
                 on: {
-                  change: function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.formElement = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.formAmounts, index, $event.target.value)
                   }
                 }
-              },
-              _vm._l(_vm.elements, function(element) {
-                return _c(
-                  "option",
-                  { key: element.id, domProps: { value: element.id } },
-                  [_vm._v(_vm._s(element.title))]
-                )
-              }),
-              0
-            )
-          ]),
-          _vm._v(" "),
-          _c("td", [
-            _c("input", {
-              directives: [
+              })
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.formPrices[index],
+                    expression: "formPrices[index]"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", value: "1" },
+                domProps: { value: _vm.formPrices[index] },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.formPrices, index, $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c(
+                "span",
                 {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.formAmount,
-                  expression: "formAmount"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", value: "1" },
-              domProps: { value: _vm.formAmount },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+                  staticClass: "btn btn-outline-danger",
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteRow(index)
+                    }
                   }
-                  _vm.formAmount = $event.target.value
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("td", [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.formPrice,
-                  expression: "formPrice"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", value: "1" },
-              domProps: { value: _vm.formPrice },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.formPrice = $event.target.value
-                }
-              }
-            })
+                },
+                [_vm._v("×")]
+              )
+            ])
           ])
-        ])
-      ])
+        }),
+        0
+      )
     ]),
+    _vm._v(" "),
+    _c(
+      "span",
+      {
+        staticClass: "btn btn-secondary",
+        on: {
+          click: function($event) {
+            return _vm.addRow()
+          }
+        }
+      },
+      [_vm._v("+")]
+    ),
     _vm._v(" "),
     _c("textarea", {
       directives: [
@@ -25030,7 +25097,7 @@ var render = function() {
     _c(
       "button",
       {
-        staticClass: "btn btn-success",
+        staticClass: "btn btn-success mt-4",
         attrs: { type: "submit" },
         on: { click: _vm.CalculationSubmit }
       },
@@ -25064,12 +25131,47 @@ var render = function() {
   return _c("div", [
     _c("h2", [_vm._v("Расчет №" + _vm._s(_vm.calculation.id))]),
     _vm._v(" "),
-    _c("h3", [_vm._v(_vm._s(_vm.calculation.comment))]),
+    _c("p", [_vm._v(_vm._s(_vm.calculation.comment))]),
     _vm._v(" "),
-    _c("h4", [_vm._v(_vm._s(_vm.calculation.created_at))])
+    _c("p", [
+      _vm._v(
+        _vm._s(_vm.moment(_vm.calculation.created_at).format("D MMMM YYYY"))
+      )
+    ]),
+    _vm._v(" "),
+    _c("table", { staticClass: "table table-bordered table-hover" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.calculation.elements, function(element) {
+          return _c("tr", [
+            _c("td", [_vm._v(_vm._s(element.title))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(element.pivot.amount))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(element.pivot.price))])
+          ])
+        }),
+        0
+      )
+    ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", [_vm._v("\n                Наименование\n            ")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("\n                Кол-во\n            ")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("\n                Цена\n            ")])
+    ])
+  }
+]
 render._withStripped = true
 
 
