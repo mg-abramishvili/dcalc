@@ -2000,6 +2000,8 @@ __webpack_require__.r(__webpack_exports__);
     deleteRow: function deleteRow(index) {
       this.rows.splice(index, 1);
     },
+    onChange: function onChange(index, event) {//console.log(index, event.target.value);
+    },
     CalculationSubmit: function CalculationSubmit() {
       var _this2 = this;
 
@@ -24962,23 +24964,28 @@ var render = function() {
                   ],
                   staticClass: "custom-select",
                   on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.formElements,
-                        index,
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    }
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.formElements,
+                          index,
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.onChange(index, $event)
+                      }
+                    ]
                   }
                 },
                 _vm._l(_vm.elements, function(element) {
@@ -25003,7 +25010,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "text", value: "1" },
+                attrs: { type: "text" },
                 domProps: { value: _vm.formAmounts[index] },
                 on: {
                   input: function($event) {
@@ -25027,7 +25034,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "text", value: "1" },
+                attrs: { type: "text" },
                 domProps: { value: _vm.formPrices[index] },
                 on: {
                   input: function($event) {
