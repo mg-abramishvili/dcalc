@@ -15,17 +15,17 @@ class ElementSeeder extends Seeder
             [
                 'id' => '1',
                 'title' => 'Корпус №1',
-                'price' => '100',
+                'price' => 100,
             ],
             [
                 'id' => '2',
-                'title' => 'Монитор №1',
-                'price' => '150',
+                'title' => 'iiyama 27" model-1',
+                'price' => 150,
             ],
             [
                 'id' => '3',
-                'title' => 'Монитор №2',
-                'price' => '250',
+                'title' => 'Samsung 55" abcd',
+                'price' => 250,
             ],
         ]);
     }

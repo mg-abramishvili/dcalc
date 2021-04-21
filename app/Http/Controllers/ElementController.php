@@ -10,7 +10,7 @@ class ElementController extends Controller
 {
     public function elements()
     {
-        return Element::all();
+        return Element::with('categories')->get();
     }
 
     public function categories()
