@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/users','App\Http\Controllers\UserController@index');
 
 // Элементы
-Route::get('/elements','App\Http\Controllers\ElementController@index');
+Route::get('/element-categories','App\Http\Controllers\ElementController@categories');
+Route::get('/element-category/{id}','App\Http\Controllers\ElementController@category_item');
+Route::get('/elements','App\Http\Controllers\ElementController@elements');
+Route::get('/elements/category/{id}','App\Http\Controllers\ElementController@category_elements');
 
 // Расчеты
 Route::get('/calculations','App\Http\Controllers\CalculationController@index');

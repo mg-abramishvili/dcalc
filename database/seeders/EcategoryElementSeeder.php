@@ -7,25 +7,25 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class ElementSeeder extends Seeder
+class EcategoryElementSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('elements')->insert([
+        DB::table('ecategory_element')->insert([
             [
                 'id' => '1',
-                'title' => 'Корпус №1',
-                'price' => '100',
+                'element_id' => '1',
+                'ecategory_id' => '1',
             ],
             [
                 'id' => '2',
-                'title' => 'Монитор №1',
-                'price' => '150',
+                'element_id' => '2',
+                'ecategory_id' => '2',
             ],
             [
                 'id' => '3',
-                'title' => 'Монитор №2',
-                'price' => '250',
+                'element_id' => '3',
+                'ecategory_id' => '2',
             ],
         ]);
     }

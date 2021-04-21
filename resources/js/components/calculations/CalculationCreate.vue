@@ -2,31 +2,30 @@
     <div>
         <h1 class="mb-4">Новый расчет</h1>
 
-        <table class="table table-bordered table-hover mb-4">
-            <tbody>
-                <tr v-for="(row, index) in rows" :key="index">
-                    <td>
-                        <select v-model="formElements[index]" @change="onChange(index, $event)" class="custom-select">
-                            <option v-for="element in elements" :key="element.id" :value="element.id">{{ element.title }}</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input v-model="formAmounts[index]" type="text" class="form-control" />
-                    </td>
-                    <td>
-                        <input v-model="formPrices[index]" type="text" class="form-control" />
-                    </td>
-                    <td>
-                        <span @click="deleteRow(index)" class="btn btn-outline-danger">&times;</span>
-                    </td>
-                </tr>
-            </tbody>
+        <table class="table table-bordered">
+            <tr v-for="category in categories" :key="category.id">
+                <td>
+                    <h5>{{ category.title }}</h5>
+                </td>
+                <td>
+                    <select v-model="selected">
+                        <option v-for="element in elements" :key="element.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }}</option>
+                    </select>
+                </td>
+                <td>
+                    {{selected.price}}
+                </td>
+            </tr>
         </table>
-        <span @click="addRow()" class="btn btn-secondary">+</span>
-        <textarea v-model="formComment" class="form-control mt-4"></textarea>
-
-        <button @click="CalculationSubmit" type="submit" class="btn btn-success mt-4">Сохранить</button>
-
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                Итого:
+            </div>
+            <div class="col-6 text-right">
+                {{ offer_total }}
+            </div>
+        </div>
     </div>
 </template>
 
@@ -34,15 +33,18 @@
     export default {
         data() {
             return {
+                categories: [],
                 elements: [],
-                rows: [],
-                formElements: [],
-                formAmounts: [],
-                formPrices: [],
-                formComment: '',
+                selected: '',
+                offer_total: {},
             }
         },
         created() {
+            axios
+                .get('/api/element-categories')
+                .then(response => (
+                    this.categories = response.data
+                ));
             axios
                 .get('/api/elements')
                 .then(response => (
@@ -50,29 +52,8 @@
                 ));
         },
         methods: {
-            addRow() {
-                this.rows.push('')
-            },
-            deleteRow(index) {
-                this.rows.splice(index, 1)
-            },
-            onChange(index, event) {
-                //console.log(index, event.target.value);
-            },
-            CalculationSubmit() {
-                axios.post('/api/calculations', {
-                    formComment: this.formComment,
-                    formElements: this.formElements,
-                    formAmounts: this.formAmounts,
-                    formPrices: this.formPrices,
-                })
-                .then((response) => {
-                    //console.log(response);
-                    this.$router.push({name: 'Calculations'})
-                }, (error) => {
-                    console.log(error);
-                });
-            },
+        },
+        watch: {
         },
         components: {
         }

@@ -9,6 +9,11 @@ class Element extends Model
 {
     use HasFactory;
 
+    public function categories()
+    {
+        return $this->belongsToMany('App\Models\Ecategory');
+    }
+
     public function calculations()
     {
         return $this->belongsToMany('App\Models\Calculation');
