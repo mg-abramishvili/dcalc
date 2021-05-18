@@ -9,21 +9,18 @@
                 <th>
                     Наименование
                 </th>
-                <th>
-                    Кол-во
-                </th>
-                <th>
+                <th class="text-right">
                     Цена
                 </th>
             </thead>
             <tbody>
                 <tr v-for="element in calculation.elements">
                     <td>{{ element.title }}</td>
-                    <td>{{ element.pivot.amount }}</td>
-                    <td>{{ element.pivot.price }}</td>
+                    <td class="text-right">{{ element.price }} ₽</td>
                 </tr>
             </tbody>
         </table>
+        Итого: {{ calculation.price_total }} ₽
     </div>
 </template>
 

@@ -22,18 +22,17 @@ class CalculationController extends Controller
     {
         $data = request()->all();
         $calculation = new Calculation();
-        $calculation->comment = $data['formComment'];
+        $calculation->comment = $data['comment'];
+        $calculation->price_total = $data['price_total'];
         $calculation->save();
 
-        $elements = $request->input('formElements', []);
-        $amounts = $request->input('formAmounts', []);
-        $prices = $request->input('formPrices', []);
+        $elements = $request->input('elements', []);
         
         for ($element=0; $element < count($elements); $element++) {
             if ($elements[$element] != '') {
                 $calculation->elements()->attach($elements[$element], [
-                    'amount' => $amounts[$element],
-                    'price' => $prices[$element]
+                    'amount' => '1',
+                    'price' => '0'
                 ]);
             }
         }

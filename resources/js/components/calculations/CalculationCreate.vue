@@ -4,32 +4,31 @@
 
         <table class="table table-bordered">
             <tr v-for="(category, index) in categories" :key="index">
-                <td class="w-30 align-middle">
+                <td class="w-30 align-middle text-right">
                     <h5 class="m-0">{{ category.title }}</h5>
                 </td>
-                <td class="w-45 align-middle py-4">
-                    <select v-model="selects[index]" @change="onChange(index, $event)" class="custom-select">
+                <td class="w-70 align-middle py-4">
+                    <select v-model="selected_elements[index]" @change="onChange(index, $event)" class="custom-select">
                         <template v-for="element in elements">
                             <template v-for="ect in element.categories">
-                                <option v-if="ect.id === category.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }}</option>
+                                <option v-if="ect.id === category.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }} — {{ element.price }} ₽</option>
                             </template>
                         </template>
                     </select>
                 </td>
-                <td class="w-25 align-middle">
-                    <input type="text" class="form-control text-right">
-                </td>
             </tr>
         </table>
         <hr class="mt-4">
-        <div class="row">
-            <div class="col-6">
+        <textarea class="form-control mb-2" v-model="comment"></textarea>
+        <div v-if="price_total > 0" class="row align-items-center">
+            <div class="col-10 text-right" style="color: #888;">
                 Итого:
             </div>
-            <div class="col-6 text-right">
-                <h4 v-if="offer_total > 0" class="text-primary">{{ offer_total }} ₽</h4>
+            <div class="col-2 text-right">
+                <h4 class="text-primary m-0">{{ price_total }} ₽</h4>
             </div>
         </div>
+        <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
     </div>
 </template>
 
@@ -39,8 +38,10 @@
             return {
                 categories: [],
                 elements: [],
-                offer_total: {},
-                selects: [],
+                price_total: {},
+                comment: '',
+                selected_elements: [],
+                selected_elements_amounts: [],
             }
         },
         created() {
@@ -57,9 +58,16 @@
         },
         methods: {
             onChange(index, event) {
-                //console.log(this.selects);
-                this.offer_total =  this.selects.reduce((acc, curr) => acc + parseInt(curr.price), 0);
+                //console.log(this.selected_elements);
+                this.price_total =  this.selected_elements.reduce((acc, curr) => acc + parseInt(curr.price), 0);
             },
+            saveCalculation() {
+                axios
+                .post('/api/calculations', { comment: this.comment, price_total: this.price_total, elements: this.selected_elements.map(element=>({id:element.id})), amounts: this.selected_elements_amounts })
+                .then(response => (
+                    this.$router.push({path: '/calculations'}) 
+                ));
+            }
         },
         watch: {
         },

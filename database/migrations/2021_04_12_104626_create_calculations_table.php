@@ -12,6 +12,7 @@ class CreateCalculationsTable extends Migration
         Schema::create('calculations', function (Blueprint $table) {
             $table->id();
             $table->string('comment');
+            $table->string('price_total');
             $table->timestamps();
         });
     }

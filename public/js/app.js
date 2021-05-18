@@ -1977,14 +1977,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       categories: [],
       elements: [],
-      offer_total: {},
-      selects: []
+      price_total: {},
+      comment: '',
+      selected_elements: [],
+      selected_elements_amounts: []
     };
   },
   created: function created() {
@@ -1999,10 +2000,28 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onChange: function onChange(index, event) {
-      //console.log(this.selects);
-      this.offer_total = this.selects.reduce(function (acc, curr) {
+      //console.log(this.selected_elements);
+      this.price_total = this.selected_elements.reduce(function (acc, curr) {
         return acc + parseInt(curr.price);
       }, 0);
+    },
+    saveCalculation: function saveCalculation() {
+      var _this2 = this;
+
+      axios.post('/api/calculations', {
+        comment: this.comment,
+        price_total: this.price_total,
+        elements: this.selected_elements.map(function (element) {
+          return {
+            id: element.id
+          };
+        }),
+        amounts: this.selected_elements_amounts
+      }).then(function (response) {
+        return _this2.$router.push({
+          path: '/calculations'
+        });
+      });
     }
   },
   watch: {},
@@ -2022,9 +2041,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
 //
 //
 //
@@ -25058,11 +25074,11 @@ var render = function() {
       { staticClass: "table table-bordered" },
       _vm._l(_vm.categories, function(category, index) {
         return _c("tr", { key: index }, [
-          _c("td", { staticClass: "w-30 align-middle" }, [
+          _c("td", { staticClass: "w-30 align-middle text-right" }, [
             _c("h5", { staticClass: "m-0" }, [_vm._v(_vm._s(category.title))])
           ]),
           _vm._v(" "),
-          _c("td", { staticClass: "w-45 align-middle py-4" }, [
+          _c("td", { staticClass: "w-70 align-middle py-4" }, [
             _c(
               "select",
               {
@@ -25070,8 +25086,8 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.selects[index],
-                    expression: "selects[index]"
+                    value: _vm.selected_elements[index],
+                    expression: "selected_elements[index]"
                   }
                 ],
                 staticClass: "custom-select",
@@ -25087,7 +25103,7 @@ var render = function() {
                           return val
                         })
                       _vm.$set(
-                        _vm.selects,
+                        _vm.selected_elements,
                         index,
                         $event.target.multiple
                           ? $$selectedVal
@@ -25116,7 +25132,14 @@ var render = function() {
                                   }
                                 }
                               },
-                              [_vm._v(_vm._s(element.title))]
+                              [
+                                _vm._v(
+                                  _vm._s(element.title) +
+                                    " — " +
+                                    _vm._s(element.price) +
+                                    " ₽"
+                                )
+                              ]
                             )
                           : _vm._e()
                       ]
@@ -25126,9 +25149,7 @@ var render = function() {
               ],
               2
             )
-          ]),
-          _vm._v(" "),
-          _vm._m(0, true)
+          ])
         ])
       }),
       0
@@ -25136,34 +25157,61 @@ var render = function() {
     _vm._v(" "),
     _c("hr", { staticClass: "mt-4" }),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-6" }, [
-        _vm._v("\n            Итого:\n        ")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-6 text-right" }, [
-        _vm.offer_total > 0
-          ? _c("h4", { staticClass: "text-primary" }, [
-              _vm._v(_vm._s(_vm.offer_total) + " ₽")
+    _c("textarea", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.comment,
+          expression: "comment"
+        }
+      ],
+      staticClass: "form-control mb-2",
+      domProps: { value: _vm.comment },
+      on: {
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.comment = $event.target.value
+        }
+      }
+    }),
+    _vm._v(" "),
+    _vm.price_total > 0
+      ? _c("div", { staticClass: "row align-items-center" }, [
+          _c(
+            "div",
+            {
+              staticClass: "col-10 text-right",
+              staticStyle: { color: "#888" }
+            },
+            [_vm._v("\n            Итого:\n        ")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-2 text-right" }, [
+            _c("h4", { staticClass: "text-primary m-0" }, [
+              _vm._v(_vm._s(_vm.price_total) + " ₽")
             ])
-          : _vm._e()
-      ])
-    ])
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary",
+        on: {
+          click: function($event) {
+            return _vm.saveCalculation()
+          }
+        }
+      },
+      [_vm._v("Сохранить")]
+    )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "w-25 align-middle" }, [
-      _c("input", {
-        staticClass: "form-control text-right",
-        attrs: { type: "text" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -25206,14 +25254,15 @@ var render = function() {
           return _c("tr", [
             _c("td", [_vm._v(_vm._s(element.title))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(element.pivot.amount))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(element.pivot.price))])
+            _c("td", { staticClass: "text-right" }, [
+              _vm._v(_vm._s(element.price) + " ₽")
+            ])
           ])
         }),
         0
       )
-    ])
+    ]),
+    _vm._v("\n    Итого: " + _vm._s(_vm.calculation.price_total) + " ₽\n")
   ])
 }
 var staticRenderFns = [
@@ -25224,9 +25273,9 @@ var staticRenderFns = [
     return _c("thead", [
       _c("th", [_vm._v("\n                Наименование\n            ")]),
       _vm._v(" "),
-      _c("th", [_vm._v("\n                Кол-во\n            ")]),
-      _vm._v(" "),
-      _c("th", [_vm._v("\n                Цена\n            ")])
+      _c("th", { staticClass: "text-right" }, [
+        _vm._v("\n                Цена\n            ")
+      ])
     ])
   }
 ]
