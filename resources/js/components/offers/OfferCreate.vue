@@ -11,12 +11,12 @@
                 <label>Клиент</label>
                 <input v-model="client" type="text" class="form-control mb-3">
                 <label>Клиент</label>
-                <select v-model="calculation_selected" @change="onChange(index, $event)" class="form-control mb-3">
+                <select v-model="calculation_selected" class="form-control mb-3">
                     <template v-for="calculation in calculations">
                         <option :value="calculation.id">{{ calculation.comment }}</option>
                     </template>
                 </select>
-                Комментарий:
+                Текст КП:
                 <textarea class="form-control mb-2" v-model="comment"></textarea>
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
             </div>

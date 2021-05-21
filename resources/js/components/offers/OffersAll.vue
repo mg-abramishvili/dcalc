@@ -17,20 +17,16 @@
                         <tr>
                             <th>Автор КП</th>
                             <th>Клиент</th>
-                            <th>Комментарий</th>
                             <th class="text-end">Дата создания</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="offer in offers" :key="offer.id" @click="goTo(offer.id)">
                             <td class="align-middle">
-                                <img src="https://appstack.bootlab.io/img/avatars/avatar-3.jpg" width="48" height="48" class="rounded-circle me-2" alt="Avatar"> Ashley Briggs
+                                <img src="https://appstack.bootlab.io/img/avatars/avatar-3.jpg" width="48" height="48" class="rounded-circle me-2" alt="Avatar"> Петр Иванов
                             </td>
                             <td class="align-middle">
                                 {{ offer.client }}
-                            </td>
-                            <td class="align-middle">
-                                {{ offer.comment }}
                             </td>
                             <td class="align-middle text-end">
                                 {{moment(offer.created_at).format('D MMMM YYYY')}}

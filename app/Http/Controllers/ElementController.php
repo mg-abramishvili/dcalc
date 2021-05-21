@@ -30,14 +30,14 @@ class ElementController extends Controller
         })->get();
     }
 
-    public function create(Request $request)
-    {
-        //
-    }
-
     public function store(Request $request)
     {
-        //
+        $data = request()->all();
+        $element = new Element();
+        $element->title = $data['title'];
+        $element->price = $data['price'];
+        $element->save();
+        $element->categories()->attach($request->categories, ['element_id' => $element->id]);
     }
 
     public function show(Element $element)

@@ -9,6 +9,11 @@ class Element extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'price'
+    ];
+
     public function categories()
     {
         return $this->belongsToMany('App\Models\Ecategory');

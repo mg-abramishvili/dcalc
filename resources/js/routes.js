@@ -1,12 +1,18 @@
 import Home from './components/Home.vue';
 import Users from './components/users/UsersAll.vue';
+import UserCreate from './components/users/UserCreate.vue';
 import Elements from './components/elements/ElementsAll.vue';
+import ElementCreate from './components/elements/ElementCreate.vue';
 import Calculations from './components/calculations/CalculationsAll.vue';
 import CalculationCreate from './components/calculations/CalculationCreate.vue';
 import CalculationItem from './components/calculations/CalculationItem.vue';
 import Offers from './components/offers/OffersAll.vue';
 import OfferCreate from './components/offers/OfferCreate.vue';
 import OfferItem from './components/offers/OfferItem.vue';
+import Tasks from './components/tasks/TasksAll.vue';
+import TaskCreate from './components/tasks/TaskCreate.vue';
+import Announcements from './components/announcements/AnnouncementsAll.vue';
+import AnnouncementCreate from './components/announcements/AnnouncementCreate.vue';
 
 export const routes = [
     {
@@ -20,9 +26,19 @@ export const routes = [
         component: Users
     },
     {
+        path: '/users/create',
+        name: 'UserCreate',
+        component: UserCreate
+    },
+    {
         path: '/elements',
         name: 'Elements',
         component: Elements
+    },
+    {
+        path: '/elements/create',
+        name: 'ElementCreate',
+        component: ElementCreate
     },
     {
         path: '/calculations',
@@ -53,5 +69,25 @@ export const routes = [
         path: '/offer/:id',
         name: 'OfferItem',
         component: OfferItem
+    },
+    {
+        path: '/tasks',
+        name: 'Tasks',
+        component: Tasks
+    },
+    {
+        path: '/tasks/create',
+        name: 'TaskCreate',
+        component: TaskCreate
+    },
+    {
+        path: '/announcements',
+        name: 'Announcements',
+        component: Announcements
+    },
+    {
+        path: '/announcements/create',
+        name: 'AnnouncementCreate',
+        component: AnnouncementCreate
     },
 ];

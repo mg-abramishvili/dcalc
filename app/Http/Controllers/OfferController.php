@@ -31,6 +31,6 @@ class OfferController extends Controller
 
     public function show($id)
     {
-        return Offer::with('calculations')->find($id);
+        return Offer::with('calculations.elements')->find($id);
     }
 }
