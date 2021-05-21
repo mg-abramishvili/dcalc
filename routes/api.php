@@ -17,5 +17,10 @@ Route::get('/calculations','App\Http\Controllers\CalculationController@index');
 Route::get('/calculation/{id}','App\Http\Controllers\CalculationController@show');
 Route::post('/calculations','App\Http\Controllers\CalculationController@store');
 
+// КП
+Route::get('/offers','App\Http\Controllers\OfferController@index');
+Route::get('/offer/{id}','App\Http\Controllers\OfferController@show');
+Route::post('/offers','App\Http\Controllers\OfferController@store');
+
 // Коммерческие предложения
 Route::get('/offers','App\Http\Controllers\OfferController@index');

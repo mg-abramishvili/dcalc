@@ -1,9 +1,9 @@
 <template>
     <div class="wrapper">
-        <Sidebar />
+        <Sidebar :class="{ collapsed: sidebar === false }" />
         <div class="main">
 <nav class="navbar navbar-expand navbar-light navbar-bg">
-				<a class="sidebar-toggle">
+				<a @click="sidebar_toggle()" class="sidebar-toggle">
           <i class="hamburger align-self-center"></i>
         </a>
 
@@ -18,71 +18,57 @@
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
 						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
+							<a @click="bell_icon_toggle()" class="nav-icon dropdown-toggle" :class="{ show: bell_icon === true }" id="messagesDropdown">
 								<div class="position-relative">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle align-middle"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell align-middle me-2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
 									<span class="indicator">4</span>
 								</div>
 							</a>
-							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" :class="{ show: bell_icon === true }" aria-labelledby="messagesDropdown">
 								<div class="dropdown-menu-header">
 									<div class="position-relative">
-										4 New Messages
+										Новые уведомления
 									</div>
 								</div>
 								<div class="list-group">
 									<a href="#" class="list-group-item">
 										<div class="row g-0 align-items-center">
 											<div class="col-2">
-												<img src="img/avatars/avatar-5.jpg" class="avatar img-fluid rounded-circle" alt="Ashley Briggs">
+												<img src="https://appstack.bootlab.io/img/avatars/avatar-3.jpg" class="avatar img-fluid rounded-circle" alt="Carl Jenkins">
 											</div>
 											<div class="col-10 ps-2">
-												<div class="text-dark">Ashley Briggs</div>
-												<div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu tortor.</div>
-												<div class="text-muted small mt-1">15m ago</div>
+												<div class="text-dark">Игорь Васильев</div>
+												<div class="text-muted small mt-1">создал новое КП</div>
 											</div>
 										</div>
 									</a>
 									<a href="#" class="list-group-item">
 										<div class="row g-0 align-items-center">
 											<div class="col-2">
-												<img src="img/avatars/avatar-2.jpg" class="avatar img-fluid rounded-circle" alt="Carl Jenkins">
+												<img src="https://appstack.bootlab.io/img/avatars/avatar-3.jpg" class="avatar img-fluid rounded-circle" alt="Carl Jenkins">
 											</div>
 											<div class="col-10 ps-2">
-												<div class="text-dark">Carl Jenkins</div>
-												<div class="text-muted small mt-1">Curabitur ligula sapien euismod vitae.</div>
-												<div class="text-muted small mt-1">2h ago</div>
+												<div class="text-dark">Игорь Васильев</div>
+												<div class="text-muted small mt-1">создал новый расчет</div>
 											</div>
 										</div>
 									</a>
 									<a href="#" class="list-group-item">
 										<div class="row g-0 align-items-center">
 											<div class="col-2">
-												<img src="img/avatars/avatar-4.jpg" class="avatar img-fluid rounded-circle" alt="Stacie Hall">
+												<img src="https://appstack.bootlab.io/img/avatars/avatar.jpg" class="avatar img-fluid rounded-circle" alt="Carl Jenkins">
 											</div>
 											<div class="col-10 ps-2">
-												<div class="text-dark">Stacie Hall</div>
-												<div class="text-muted small mt-1">Pellentesque auctor neque nec urna.</div>
-												<div class="text-muted small mt-1">4h ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-3.jpg" class="avatar img-fluid rounded-circle" alt="Bertha Martin">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">Bertha Martin</div>
-												<div class="text-muted small mt-1">Aenean tellus metus, bibendum sed, posuere ac, mattis non.</div>
-												<div class="text-muted small mt-1">5h ago</div>
+												<div class="text-dark">Петр Иванов</div>
+												<div class="text-muted small mt-1">Иван Петров выполнил задачу</div>
+												<div class="text-muted small mt-1">"Создай расчет киоска для РЖД"</div>
 											</div>
 										</div>
 									</a>
 								</div>
-								<div class="dropdown-menu-footer">
+								<!--<div class="dropdown-menu-footer">
 									<a href="#" class="text-muted">Show all messages</a>
-								</div>
+								</div>-->
 							</div>
 						</li>
 
@@ -121,10 +107,28 @@
     export default {
         data() {
             return {
+				sidebar: true,
+				bell_icon: false,
             }
         },
         created() {
         },
+		methods: {
+			sidebar_toggle() {
+				if (this.sidebar === false) {
+					this.sidebar = true
+				} else {
+					this.sidebar = false
+				}
+			},
+			bell_icon_toggle() {
+				if (this.bell_icon === false) {
+					this.bell_icon = true
+				} else {
+					this.bell_icon = false
+				}
+			}
+		},
         components: {
             Sidebar
         }

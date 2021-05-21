@@ -17,4 +17,9 @@ class Calculation extends Model
     {
         return $this->belongsToMany('App\Models\Element')->withPivot(['amount', 'price']);
     }
+
+    public function offers()
+    {
+        return $this->belongsToMany('App\Models\Offer');
+    }
 }

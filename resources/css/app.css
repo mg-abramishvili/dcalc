@@ -25,6 +25,15 @@ body {
 /* SIDEBAR */
 
 
+/* NAVBAR */
+
+.navbar-expand .navbar-nav .dropdown-menu {
+    right: 0;
+}
+
+/* NAVBER */
+
+
 
 /* TABLE */
 .table {
