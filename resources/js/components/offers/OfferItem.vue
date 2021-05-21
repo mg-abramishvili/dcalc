@@ -79,7 +79,7 @@
                     let img = canvas.toDataURL('image/png')
                     let pdf = new jsPDF('p', 'pt', 'a4')
                     pdf.addImage(img, 'JPEG', 5, 5, 595.28, 841.89)
-                    pdf.save('offer.pdf')
+                    pdf.save(`KP_${this.offer.id}.pdf`)
                 })
             }
         },

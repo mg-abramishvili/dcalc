@@ -2774,6 +2774,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     generatePdf: function generatePdf() {
+      var _this2 = this;
+
       html2canvas__WEBPACK_IMPORTED_MODULE_1___default()(document.getElementById('offer'), {
         imageTimeout: 5000,
         useCORS: true
@@ -2781,7 +2783,7 @@ __webpack_require__.r(__webpack_exports__);
         var img = canvas.toDataURL('image/png');
         var pdf = new jspdf__WEBPACK_IMPORTED_MODULE_0__.default('p', 'pt', 'a4');
         pdf.addImage(img, 'JPEG', 5, 5, 595.28, 841.89);
-        pdf.save('offer.pdf');
+        pdf.save("KP_".concat(_this2.offer.id, ".pdf"));
       });
     }
   },
