@@ -1,31 +1,41 @@
 <template>
     <div>
+
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="m-0">Расчеты</h1>
+                <h1 class="h3 m-0">Расчеты</h1>
             </div>
-            <div class="col-12 col-lg-6 text-right">
-                <router-link to="/calculations/create" class="btn btn-info">Новый расчет</router-link>
+            <div class="col-12 col-lg-6 text-end">
+                <router-link to="/calculations/create" class="btn btn-primary">Новый расчет</router-link>
             </div>
         </div>
-        <table class="table table-striped table-hover">
-            <tbody>
-                <tr v-for="calculation in calculations" :key="calculation.id" @click="goTo(calculation.id)">
-                    <td class="align-middle">
-                        <span class="font-weight-bold text-primary">
-                            №{{ calculation.id }}
-                        </span>
-                        <br>
-                        <span class="text-muted">
-                            {{ calculation.comment }}
-                        </span>
-                    </td>
-                    <td class="align-middle text-right">
-                        {{moment(calculation.created_at).format('D MMMM YYYY')}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+        <div class="card">
+            <div class="card-body pt-1">
+                <table class="table table-striped table-hover dataTable no-footer dtr-inline">
+                    <thead>
+                        <tr>
+                            <th>Автор расчета</th>
+                            <th>Комментарий</th>
+                            <th class="text-end">Дата расчета</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="calculation in calculations" :key="calculation.id" @click="goTo(calculation.id)">
+                            <td class="align-middle">
+                                <img src="https://appstack.bootlab.io/img/avatars/avatar-3.jpg" width="48" height="48" class="rounded-circle me-2" alt="Avatar"> Ashley Briggs
+                            </td>
+                            <td class="align-middle">
+                                {{ calculation.comment }}
+                            </td>
+                            <td class="align-middle text-end">
+                                {{moment(calculation.created_at).format('D MMMM YYYY')}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 

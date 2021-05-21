@@ -1,0 +1,44 @@
+@import 'light.css';
+
+body {
+    font-size: .98rem;
+}
+
+.input-group {
+    width: auto;
+}
+
+/* SIDEBAR */
+.sidebar-brand a img {
+    width: 30px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.sidebar-brand a {
+    color: #fff;
+    text-decoration: none;
+}
+.sidebar-brand a span {
+    display: inline-block;
+    vertical-align: middle;
+}
+/* SIDEBAR */
+
+
+
+/* TABLE */
+.table {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+.table th {
+    font-size: 0.8rem;
+}
+.table .rounded-circle {
+    width: 30px;
+    height: 30px;
+}
+table.dataTable {
+    margin: 0;
+}
+/* TABLE */
