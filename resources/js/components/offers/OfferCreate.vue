@@ -10,7 +10,7 @@
             <div class="card-body">
                 <label>Клиент</label>
                 <input v-model="client" type="text" class="form-control mb-3">
-                <label>Клиент</label>
+                <label>Расчет</label>
                 <select v-model="calculation_selected" class="form-control mb-3">
                     <template v-for="calculation in calculations">
                         <option :value="calculation.id">{{ calculation.comment }}</option>
