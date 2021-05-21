@@ -28001,7 +28001,7 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _c("label", [_vm._v("Клиент")]),
+        _c("label", [_vm._v("Расчет")]),
         _vm._v(" "),
         _c(
           "select",
