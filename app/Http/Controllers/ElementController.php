@@ -13,6 +13,11 @@ class ElementController extends Controller
         return Element::with('categories')->get();
     }
 
+    public function elements_count()
+    {
+        return Element::with('categories')->count();
+    }
+
     public function categories()
     {
         return Ecategory::with('elements')->get();
@@ -40,23 +45,11 @@ class ElementController extends Controller
         $element->categories()->attach($request->categories, ['element_id' => $element->id]);
     }
 
-    public function show(Element $element)
+    public function store_ecategory(Request $request)
     {
-        //
-    }
-
-    public function edit(Element $element)
-    {
-        //
-    }
-
-    public function update(Request $request, Element $element)
-    {
-        //
-    }
-
-    public function destroy(Element $element)
-    {
-        //
+        $data = request()->all();
+        $ecategory = new Ecategory();
+        $ecategory->title = $data['title'];
+        $ecategory->save();
     }
 }

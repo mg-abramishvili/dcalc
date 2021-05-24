@@ -9,6 +9,10 @@ class Ecategory extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title'
+    ];
+
     public function elements()
     {
         return $this->belongsToMany('App\Models\Element');

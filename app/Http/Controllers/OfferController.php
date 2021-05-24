@@ -14,6 +14,11 @@ class OfferController extends Controller
         return Offer::orderBy('created_at', 'desc')->get();
     }
 
+    public function index_count()
+    {
+        return Offer::orderBy('created_at', 'desc')->count();
+    }
+
     public function create(Request $request)
     {
         

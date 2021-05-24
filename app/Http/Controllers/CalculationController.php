@@ -13,6 +13,11 @@ class CalculationController extends Controller
         return Calculation::orderBy('created_at', 'desc')->get();
     }
 
+    public function index_count()
+    {
+        return Calculation::orderBy('created_at', 'desc')->count();
+    }
+
     public function create(Request $request)
     {
         

@@ -21,9 +21,20 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="text-end">
+                    <p class="m-0">
+                        Итого: 
+                        <strong class="text-primary font-weight-bolder">{{ calculation.price_total }} ₽</strong>
+                    </p>
+                </div>
                 <div class="mt-4">
-                    Итого: <strong class="text-primary">{{ calculation.price_total }} ₽</strong>
-                    <p class="mb-0 mt-4">{{ calculation.comment }}</p>
+                    <div class="alert alert-primary alert-outline">
+                        <div></div>
+                        <div class="alert-message">
+                            <h6 class="alert-heading">Комментарий:</h6>
+                            <p class="mb-0">{{ calculation.comment }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

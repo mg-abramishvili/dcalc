@@ -12,7 +12,7 @@
         
         <div class="row">
             <div class="col-12 col-lg-3">
-                <div class="card">
+                <div class="card mb-2">
                     <div class="list-group list-group-flush">
                         <div v-for="element_category in element_categories" @click="filter_category(element_category)">
                             <a v-if="current_category.id === element_category.id" class="list-group-item list-group-item-action active">
@@ -24,6 +24,10 @@
                         </div>
                     </div>
                 </div>
+                <button @click="ecategory_create_modal_toggle()" class="btn btn-outline-secondary btn-sm">добавить категорию</button>
+
+                <EcategoryCreate :class="{ show: ecategory_create_modal === true, 'd-block': ecategory_create_modal === true }" />
+                <div v-if="ecategory_create_modal" class="modal-backdrop fade show"></div>
             </div>
             <div class="col-12 col-lg-9">
                 <div class="card">
@@ -56,12 +60,15 @@
 </template>
 
 <script>
+    import EcategoryCreate from './EcategoryCreate'
+
     export default {
         data() {
             return {
                 element_categories: [],
                 elements: [],
                 current_category: '',
+                ecategory_create_modal: false,
             }
         },
         created() {
@@ -89,8 +96,23 @@
                     this.current_category = response.data
                 ));
             },
+            ecategory_create_modal_toggle() {
+				if (this.ecategory_create_modal === false) {
+					this.ecategory_create_modal = true
+				} else {
+					this.ecategory_create_modal = false
+				}
+			},
+            refresh() {
+                axios
+                .get('/api/element-categories')
+                .then(response => (
+                    this.element_categories = response.data
+                ));
+            }
         },
         components: {
+            EcategoryCreate
         }
     }
 </script>
