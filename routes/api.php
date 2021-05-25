@@ -14,6 +14,7 @@ Route::get('/elements/category/{id}','App\Http\Controllers\ElementController@cat
 Route::post('/elements','App\Http\Controllers\ElementController@store');
 Route::get('/elements_count','App\Http\Controllers\ElementController@elements_count');
 Route::post('/ecategory_create','App\Http\Controllers\ElementController@store_ecategory');
+Route::post('/ecategory_edit/{id}','App\Http\Controllers\ElementController@edit_ecategory');
 
 // Расчеты
 Route::get('/calculations','App\Http\Controllers\CalculationController@index');

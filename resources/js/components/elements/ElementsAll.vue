@@ -1,6 +1,6 @@
 <template>
     <div>
-
+<button @click="refresh()"></button>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
                 <h1 class="h3 m-0" style="position:relative;">Компоненты 
@@ -124,6 +124,11 @@
                 .get('/api/element-categories')
                 .then(response => (
                     this.element_categories = response.data
+                ));
+                axios
+                .get(`/api/element-category/${this.current_category.id}`)
+                .then(response => (
+                    this.current_category = response.data
                 ));
             }
         },

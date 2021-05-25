@@ -52,4 +52,12 @@ class ElementController extends Controller
         $ecategory->title = $data['title'];
         $ecategory->save();
     }
+
+    public function edit_ecategory(Request $request)
+    {
+        $data = request()->all();
+        $ecategory = Ecategory::find($data['id']);
+        $ecategory->title = $data['title'];
+        $ecategory->save();
+    }
 }

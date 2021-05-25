@@ -44,7 +44,7 @@
 			},
             store_ecategory() {
                 axios
-                .post('/api/ecategory_edit', { title: this.title })
+                .post(`/api/ecategory_edit/${this.$props.id}`, { id: this.$props.id, title: this.title })
                 .then(response => (
                     this.title = '',
                     this.$parent.ecategory_edit_modal = false,

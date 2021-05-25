@@ -2574,7 +2574,8 @@ __webpack_require__.r(__webpack_exports__);
     store_ecategory: function store_ecategory() {
       var _this2 = this;
 
-      axios.post('/api/ecategory_edit', {
+      axios.post("/api/ecategory_edit/".concat(this.$props.id), {
+        id: this.$props.id,
         title: this.title
       }).then(function (response) {
         return _this2.title = '', _this2.$parent.ecategory_edit_modal = false, _this2.$parent.refresh();
@@ -2848,6 +2849,9 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/element-categories').then(function (response) {
         return _this3.element_categories = response.data;
+      });
+      axios.get("/api/element-category/".concat(this.current_category.id)).then(function (response) {
+        return _this3.current_category = response.data;
       });
     }
   },
@@ -38057,13 +38061,21 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("button", {
+      on: {
+        click: function($event) {
+          return _vm.refresh()
+        }
+      }
+    }),
+    _vm._v(" "),
     _c("div", { staticClass: "row align-items-center mb-4" }, [
       _c("div", { staticClass: "col-12 col-lg-6" }, [
         _c(
           "h1",
           { staticClass: "h3 m-0", staticStyle: { position: "relative" } },
           [
-            _vm._v("Компоненты \n                "),
+            _vm._v("Компоненты \n                    "),
             _vm.current_category
               ? _c(
                   "span",
@@ -38078,9 +38090,9 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                    " +
+                      "\n                        " +
                         _vm._s(_vm.current_category.title) +
-                        "\n                "
+                        "\n                    "
                     )
                   ]
                 )
@@ -38135,9 +38147,9 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                            " +
+                              "\n                                " +
                                 _vm._s(element_category.title) +
-                                "\n                        "
+                                "\n                            "
                             )
                           ]
                         )
@@ -38149,9 +38161,9 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                            " +
+                              "\n                                " +
                                 _vm._s(element_category.title) +
-                                "\n                        "
+                                "\n                            "
                             )
                           ]
                         )
