@@ -85,11 +85,11 @@
             },
             TotalPrice() {
                 if(this.price_rub > 0 && this.price_usd > 0) {
-                    this.price = (this.price_rub + (parseFloat(this.currencies.Value) * this.price_usd)).toFixed(2)
+                    this.price = Math.ceil((this.price_rub + (parseFloat(this.currencies.Value) * this.price_usd)) / 50)*50
                 } else if (!this.price_rub) {
-                    this.price = (0 + (parseFloat(this.currencies.Value) * this.price_usd)).toFixed(2)
+                    this.price = Math.ceil((0 + (parseFloat(this.currencies.Value) * this.price_usd)) / 50)*50
                 } else if (!this.price_usd) {
-                    this.price = (this.price_rub + 0).toFixed(2)
+                    this.price = Math.ceil((this.price_rub + 0) / 50)*50
                 }
             }
         },
