@@ -2796,9 +2796,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -38068,53 +38065,25 @@ var render = function() {
           [
             _vm._v("Компоненты \n                "),
             _vm.current_category
-              ? _c("span", { staticClass: "text-primary" }, [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.current_category.title) +
-                      "\n                    "
-                  ),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-outline p-0 ms-1 text-secondary",
-                      staticStyle: { opacity: "0.5" },
-                      on: {
-                        click: function($event) {
-                          return _vm.ecategory_edit_modal_toggle()
-                        }
+              ? _c(
+                  "span",
+                  {
+                    staticClass: "text-primary cursor-pointer",
+                    staticStyle: { "border-bottom": "1px dashed" },
+                    on: {
+                      click: function($event) {
+                        return _vm.ecategory_edit_modal_toggle()
                       }
-                    },
-                    [
-                      _c(
-                        "svg",
-                        {
-                          staticClass: "feather feather-edit-3 align-middle",
-                          attrs: {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            width: "24",
-                            height: "24",
-                            viewBox: "0 0 24 24",
-                            fill: "none",
-                            stroke: "currentColor",
-                            "stroke-width": "2",
-                            "stroke-linecap": "round",
-                            "stroke-linejoin": "round"
-                          }
-                        },
-                        [
-                          _c("path", { attrs: { d: "M12 20h9" } }),
-                          _c("path", {
-                            attrs: {
-                              d:
-                                "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
-                            }
-                          })
-                        ]
-                      )
-                    ]
-                  )
-                ])
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm.current_category.title) +
+                        "\n                "
+                    )
+                  ]
+                )
               : _vm._e()
           ]
         )
