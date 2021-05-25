@@ -2626,12 +2626,20 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     price_rub: function price_rub(val) {
-      this.price_rub = parseFloat(val);
-      this.TotalPrice();
+      if (!isNaN(parseFloat(val))) {
+        this.price_rub = parseFloat(val);
+        this.TotalPrice();
+      } else {
+        this.price_rub = 0;
+      }
     },
     price_usd: function price_usd(val) {
-      this.price_usd = parseFloat(val);
-      this.TotalPrice();
+      if (!isNaN(parseFloat(val))) {
+        this.price_usd = parseFloat(val);
+        this.TotalPrice();
+      } else {
+        this.price_usd = 0;
+      }
     }
   },
   components: {}

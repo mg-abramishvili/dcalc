@@ -95,12 +95,20 @@
         },
         watch: {
             price_rub: function (val) {
-                this.price_rub = parseFloat(val)
-                this.TotalPrice()
+                if(!isNaN(parseFloat(val))) {
+                    this.price_rub = parseFloat(val)
+                    this.TotalPrice()
+                } else {
+                    this.price_rub = 0
+                }
             },
             price_usd: function (val) {
-                this.price_usd = parseFloat(val)
-                this.TotalPrice()
+                if(!isNaN(parseFloat(val))) {
+                    this.price_usd = parseFloat(val)
+                    this.TotalPrice()
+                } else {
+                    this.price_usd = 0
+                }
             },
         },
         components: {
