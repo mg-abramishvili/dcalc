@@ -2555,13 +2555,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       categories: {},
       categories_selected: '',
       title: '',
-      price: ''
+      price_rub: '',
+      price_usd: '',
+      price: '',
+      currencies: {},
+      currencies_date: {},
+      moment: moment
     };
   },
   created: function created() {
@@ -2569,6 +2594,9 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get('/api/element-categories').then(function (response) {
       return _this.categories = response.data;
+    });
+    axios.get('https://www.cbr-xml-daily.ru/daily_json.js').then(function (response) {
+      return _this.currencies = response.data.Valute.USD, _this.currencies_date = response.data.Date;
     });
   },
   methods: {
@@ -2585,9 +2613,27 @@ __webpack_require__.r(__webpack_exports__);
           path: '/elements'
         });
       });
+    },
+    TotalPrice: function TotalPrice() {
+      if (this.price_rub > 0 && this.price_usd > 0) {
+        this.price = (this.price_rub + parseFloat(this.currencies.Value) * this.price_usd).toFixed(2);
+      } else if (!this.price_rub) {
+        this.price = (0 + parseFloat(this.currencies.Value) * this.price_usd).toFixed(2);
+      } else if (!this.price_usd) {
+        this.price = (this.price_rub + 0).toFixed(2);
+      }
     }
   },
-  watch: {},
+  watch: {
+    price_rub: function price_rub(val) {
+      this.price_rub = parseFloat(val);
+      this.TotalPrice();
+    },
+    price_usd: function price_usd(val) {
+      this.price_usd = parseFloat(val);
+      this.TotalPrice();
+    }
+  },
   components: {}
 });
 
@@ -37502,29 +37548,147 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _c("label", [_vm._v("Цена")]),
+        _c("label", [
+          _vm._v("Курс USD "),
+          _c("small", [
+            _vm._v(
+              "(на " +
+                _vm._s(_vm.moment(_vm.currencies_date).format("DD.MM.YYYY")) +
+                ")"
+            )
+          ])
+        ]),
         _vm._v(" "),
         _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.price,
-              expression: "price"
-            }
-          ],
           staticClass: "form-control mb-3",
-          attrs: { type: "text" },
-          domProps: { value: _vm.price },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.price = $event.target.value
-            }
-          }
+          attrs: { type: "text", disabled: "" },
+          domProps: { value: _vm.currencies.Value }
         }),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("label", [_vm._v("Цена RUB")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.price_rub,
+                  expression: "price_rub"
+                }
+              ],
+              staticClass: "form-control mb-3",
+              attrs: { type: "text" },
+              domProps: { value: _vm.price_rub },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.price_rub = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-6" }, [
+            _c("label", [_vm._v("Цена USD")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.price_usd,
+                  expression: "price_usd"
+                }
+              ],
+              staticClass: "form-control mb-3",
+              attrs: { type: "text" },
+              domProps: { value: _vm.price_usd },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.price_usd = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              staticStyle: {
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                display: "block",
+                width: "10px",
+                padding: "0",
+                margin: "0",
+                "margin-top": "-12px"
+              }
+            },
+            [_vm._v("+")]
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "form-group", staticStyle: { position: "relative" } },
+          [
+            _c("label", [_vm._v("Цена (финальная)")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.price,
+                  expression: "price"
+                }
+              ],
+              staticClass: "form-control mb-3",
+              attrs: { type: "text" },
+              domProps: { value: _vm.price },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.price = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticStyle: {
+                  position: "absolute",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  right: "1rem",
+                  border: "none",
+                  "box-shadow": "none",
+                  "font-size": "0.7rem",
+                  background: "none",
+                  "margin-top": "0.75rem"
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.TotalPrice()
+                  }
+                }
+              },
+              [_vm._v("пересчитать")]
+            )
+          ]
+        ),
         _vm._v(" "),
         _c("label", [_vm._v("Категория")]),
         _vm._v(" "),
