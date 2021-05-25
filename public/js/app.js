@@ -2796,7 +2796,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -38061,21 +38060,13 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("button", {
-      on: {
-        click: function($event) {
-          return _vm.refresh()
-        }
-      }
-    }),
-    _vm._v(" "),
     _c("div", { staticClass: "row align-items-center mb-4" }, [
       _c("div", { staticClass: "col-12 col-lg-6" }, [
         _c(
           "h1",
           { staticClass: "h3 m-0", staticStyle: { position: "relative" } },
           [
-            _vm._v("Компоненты \n                    "),
+            _vm._v("Компоненты \n                "),
             _vm.current_category
               ? _c(
                   "span",
@@ -38090,9 +38081,9 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        " +
+                      "\n                    " +
                         _vm._s(_vm.current_category.title) +
-                        "\n                    "
+                        "\n                "
                     )
                   ]
                 )
@@ -38147,9 +38138,9 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                " +
+                              "\n                            " +
                                 _vm._s(element_category.title) +
-                                "\n                            "
+                                "\n                        "
                             )
                           ]
                         )
@@ -38161,9 +38152,9 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                " +
+                              "\n                            " +
                                 _vm._s(element_category.title) +
-                                "\n                            "
+                                "\n                        "
                             )
                           ]
                         )
