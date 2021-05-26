@@ -103,6 +103,10 @@
                 .then(response => (
                     this.elements = response.data
                 ));
+                var indexes = document.querySelectorAll('[id^="index"]');
+                [].forEach.call(indexes, function(index) {
+                index.style.display = "none";
+                });
                 document.getElementById('index0').style.display = "block";
             },
             saveCalculation() {

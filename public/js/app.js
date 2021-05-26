@@ -2313,6 +2313,10 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/elements_filter/".concat(this.selected_boxes.id)).then(function (response) {
         return _this3.elements = response.data;
       });
+      var indexes = document.querySelectorAll('[id^="index"]');
+      [].forEach.call(indexes, function (index) {
+        index.style.display = "none";
+      });
       document.getElementById('index0').style.display = "block";
     },
     saveCalculation: function saveCalculation() {
