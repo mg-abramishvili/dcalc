@@ -8,20 +8,34 @@
 
         <div class="card">
             <div class="card-body">
+
+                <label>Тип</label>
+                <select v-model="selected_types" @change="onTypeChange()" class="form-control mb-3">
+                    <option v-for="type in types" v-bind:value="{ id: type.id, title: type.title }">{{ type.title }}</option>
+                </select>
+
+                <label v-if="boxes.length">Корпус</label>
+                <select v-if="boxes.length" v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                    <option v-for="box in boxes" v-bind:value="{ id: box.id, title: box.title }">{{ box.title }}</option>
+                </select>
+
                 <div v-for="(category, index) in categories" :key="index" class="mb-3">
-                    <div class="col-12 col-lg-4">
-                        {{ category.title }}
-                    </div>
-                    <div class="col-12 col-lg-4">
-                        <select v-model="selected_elements[index]" @change="onChange(index, $event)" class="form-control">
-                            <template v-for="element in elements">
-                                <template v-for="ect in element.categories">
-                                    <option v-if="ect.id === category.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }} — {{ element.price }} ₽</option>
+                    <div :id="'index' + index" style="display:none">
+                        <div class="col-12 col-lg-4">
+                            {{ category.title }}
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <select v-model="selected_elements[index]" @change="onChange(index, $event)" class="form-control">
+                                <template v-for="element in elements">
+                                    <template v-for="ect in element.categories">
+                                        <option v-if="ect.id === category.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }} — {{ element.price }} ₽</option>
+                                    </template>
                                 </template>
-                            </template>
-                        </select>
+                            </select>
+                        </div>
                     </div>
                 </div>
+
                 Комментарий:
                 <textarea class="form-control mb-2" v-model="comment"></textarea>
                 <div v-if="price_total > 0" class="row align-items-center my-4">
@@ -48,6 +62,10 @@
                 comment: '',
                 selected_elements: [],
                 selected_elements_amounts: [],
+                boxes: {},
+                types: {},
+                selected_types: '',
+                selected_boxes: '',
             }
         },
         created() {
@@ -61,11 +79,31 @@
                 .then(response => (
                     this.elements = response.data
                 ));
+            axios
+                .get('/api/types')
+                .then(response => (
+                    this.types = response.data
+                ));
         },
         methods: {
             onChange(index, event) {
-                //console.log(this.selected_elements);
+                document.getElementById('index' + (index + 1)).style.display = "block";
                 this.price_total =  this.selected_elements.reduce((acc, curr) => acc + parseInt(curr.price), 0);
+            },
+            onTypeChange() {
+                axios
+                .get(`/api/boxes_filter/${this.selected_types.id}`)
+                .then(response => (
+                    this.boxes = response.data
+                ));
+            },
+            onBoxChange() {
+                axios
+                .get(`/api/elements_filter/${this.selected_boxes.id}`)
+                .then(response => (
+                    this.elements = response.data
+                ));
+                document.getElementById('index0').style.display = "block";
             },
             saveCalculation() {
                 axios

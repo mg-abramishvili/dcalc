@@ -10,6 +10,7 @@ Route::get('/users','App\Http\Controllers\UserController@index');
 Route::get('/element-categories','App\Http\Controllers\ElementController@categories');
 Route::get('/element-category/{id}','App\Http\Controllers\ElementController@category_item');
 Route::get('/elements','App\Http\Controllers\ElementController@elements');
+Route::get('/elements_filter/{box_id}','App\Http\Controllers\ElementController@elements_filter');
 Route::get('/elements/category/{id}','App\Http\Controllers\ElementController@category_elements');
 Route::post('/elements','App\Http\Controllers\ElementController@store');
 Route::get('/elements_count','App\Http\Controllers\ElementController@elements_count');
@@ -35,6 +36,13 @@ Route::post('/tasks','App\Http\Controllers\TaskController@store');
 // Новости
 Route::get('/announcements','App\Http\Controllers\AnnouncementController@index');
 Route::post('/announcements','App\Http\Controllers\AnnouncementController@store');
+
+// Типы
+Route::get('/types','App\Http\Controllers\TypeController@index');
+
+// Корпуса
+Route::get('/boxes','App\Http\Controllers\BoxController@index');
+Route::get('/boxes_filter/{type_id}','App\Http\Controllers\BoxController@index_filter');
 
 // Коммерческие предложения
 Route::get('/offers','App\Http\Controllers\OfferController@index');

@@ -13,6 +13,13 @@ class ElementController extends Controller
         return Element::with('categories')->get();
     }
 
+    public function elements_filter($box_id, Request $request)
+    {
+        return Element::with('boxes', 'categories')->whereHas('boxes', function ($query) use($box_id) {
+            return $query->where('box_id', '=', $box_id);
+        })->get();
+    }
+
     public function elements_count()
     {
         return Element::with('categories')->count();
@@ -43,6 +50,8 @@ class ElementController extends Controller
         $element->price = $data['price'];
         $element->save();
         $element->categories()->attach($request->categories, ['element_id' => $element->id]);
+        $element->connected_elements()->attach($request->connected_elements, ['element_id' => $element->id]);
+        $element->boxes()->attach($request->boxes, ['element_id' => $element->id]);
     }
 
     public function store_ecategory(Request $request)

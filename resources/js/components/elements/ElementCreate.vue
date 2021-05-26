@@ -38,6 +38,13 @@
                         <option :value="category.id">{{ category.title }}</option>
                     </template>
                 </select>
+
+                <label>Совместимость</label>
+                <select v-model="selected_boxes" class="form-control mb-3" multiple>
+                    <template v-for="box in boxes">
+                        <option :value="box.id">{{ box.title }}</option>
+                    </template>
+                </select>
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
@@ -49,7 +56,9 @@
         data() {
             return {
                 categories: {},
+                boxes: {},
                 categories_selected: '',
+                connected_elements: '',
                 title: '',
                 price_rub: '',
                 price_usd: '',
@@ -57,6 +66,8 @@
                 currencies: {},
                 currencies_date: {},
                 moment: moment,
+                elements: {},
+                selected_boxes: [],
             }
         },
         created() {
@@ -66,10 +77,20 @@
                     this.categories = response.data
                 ));
             axios
+                .get('/api/boxes')
+                .then(response => (
+                    this.boxes = response.data
+                ));
+            axios
                 .get('https://www.cbr-xml-daily.ru/daily_json.js')
                 .then(response => (
                     this.currencies = response.data.Valute.USD,
                     this.currencies_date = response.data.Date
+                ));
+            axios
+                .get('/api/elements')
+                .then(response => (
+                    this.elements = response.data
                 ));
         },
         methods: {
@@ -78,7 +99,7 @@
             },
             saveCalculation() {
                 axios
-                .post('/api/elements', { title: this.title, price: this.price, categories: this.categories_selected })
+                .post('/api/elements', { title: this.title, price: this.price, categories: this.categories_selected, boxes: this.selected_boxes })
                 .then(response => (
                     this.$router.push({path: '/elements'}) 
                 ));
