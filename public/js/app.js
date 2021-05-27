@@ -2295,10 +2295,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onChange: function onChange(index, event) {
-      document.getElementById('index' + (index + 1)).style.display = "block";
       this.price_total = this.selected_elements.reduce(function (acc, curr) {
         return acc + parseInt(curr.price);
       }, 0);
+
+      if (document.getElementById('index' + (index + 1))) {
+        document.getElementById('index' + (index + 1)).style.display = "block";
+      }
     },
     onTypeChange: function onTypeChange() {
       var _this2 = this;

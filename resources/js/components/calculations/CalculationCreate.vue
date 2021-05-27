@@ -87,8 +87,10 @@
         },
         methods: {
             onChange(index, event) {
-                document.getElementById('index' + (index + 1)).style.display = "block";
                 this.price_total =  this.selected_elements.reduce((acc, curr) => acc + parseInt(curr.price), 0);
+                if(document.getElementById('index' + (index + 1))) {
+                    document.getElementById('index' + (index + 1)).style.display = "block";
+                }
             },
             onTypeChange() {
                 axios
