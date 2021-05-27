@@ -110,6 +110,8 @@
                 index.style.display = "none";
                 });
                 document.getElementById('index0').style.display = "block";
+                this.selected_elements = [],
+                this.price_total = 0
             },
             saveCalculation() {
                 axios

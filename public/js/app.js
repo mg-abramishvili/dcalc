@@ -2321,6 +2321,7 @@ __webpack_require__.r(__webpack_exports__);
         index.style.display = "none";
       });
       document.getElementById('index0').style.display = "block";
+      this.selected_elements = [], this.price_total = 0;
     },
     saveCalculation: function saveCalculation() {
       var _this4 = this;
