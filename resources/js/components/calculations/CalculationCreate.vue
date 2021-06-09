@@ -98,6 +98,10 @@
                 .then(response => (
                     this.boxes = response.data
                 ));
+                var indexes = document.querySelectorAll('[id^="index"]');
+                [].forEach.call(indexes, function(index) {
+                index.style.display = "none";
+                });
             },
             onBoxChange() {
                 axios
