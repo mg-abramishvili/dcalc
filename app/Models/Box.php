@@ -9,6 +9,11 @@ class Box extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'price'
+    ];
+
     public function types()
     {
         return $this->belongsToMany('App\Models\Type');

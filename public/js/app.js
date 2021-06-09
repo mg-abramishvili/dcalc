@@ -2295,7 +2295,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onChange: function onChange(index, event) {
-      this.price_total = this.selected_elements.reduce(function (acc, curr) {
+      this.price_total = parseInt(this.selected_boxes.price) + this.selected_elements.reduce(function (acc, curr) {
         return acc + parseInt(curr.price);
       }, 0);
 
@@ -2321,7 +2321,7 @@ __webpack_require__.r(__webpack_exports__);
         index.style.display = "none";
       });
       document.getElementById('index0').style.display = "block";
-      this.selected_elements = [], this.price_total = 0;
+      this.selected_elements = [], this.price_total = parseInt(this.selected_boxes.price);
     },
     saveCalculation: function saveCalculation() {
       var _this4 = this;
@@ -37330,8 +37330,20 @@ var render = function() {
                 _vm._l(_vm.boxes, function(box) {
                   return _c(
                     "option",
-                    { domProps: { value: { id: box.id, title: box.title } } },
-                    [_vm._v(_vm._s(box.title))]
+                    {
+                      domProps: {
+                        value: {
+                          id: box.id,
+                          title: box.title,
+                          price: box.price
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        _vm._s(box.title) + "  — " + _vm._s(box.price) + " ₽"
+                      )
+                    ]
                   )
                 }),
                 0

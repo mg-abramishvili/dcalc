@@ -16,7 +16,7 @@
 
                 <label v-if="boxes.length">Корпус</label>
                 <select v-if="boxes.length" v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
-                    <option v-for="box in boxes" v-bind:value="{ id: box.id, title: box.title }">{{ box.title }}</option>
+                    <option v-for="box in boxes" v-bind:value="{ id: box.id, title: box.title, price: box.price }">{{ box.title }}  — {{ box.price }} ₽</option>
                 </select>
 
                 <div v-for="(category, index) in categories" :key="index" class="mb-3">
@@ -87,7 +87,7 @@
         },
         methods: {
             onChange(index, event) {
-                this.price_total =  this.selected_elements.reduce((acc, curr) => acc + parseInt(curr.price), 0);
+                this.price_total =  parseInt(this.selected_boxes.price) + this.selected_elements.reduce((acc, curr) => acc + parseInt(curr.price), 0);
                 if(document.getElementById('index' + (index + 1))) {
                     document.getElementById('index' + (index + 1)).style.display = "block";
                 }
@@ -111,7 +111,7 @@
                 });
                 document.getElementById('index0').style.display = "block";
                 this.selected_elements = [],
-                this.price_total = 0
+                this.price_total =  parseInt(this.selected_boxes.price)
             },
             saveCalculation() {
                 axios

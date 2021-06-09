@@ -11,6 +11,7 @@ class CreateBoxesTable extends Migration
         Schema::create('boxes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->decimal('price');
             $table->timestamps();
         });
     }
