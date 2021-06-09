@@ -2313,6 +2313,8 @@ __webpack_require__.r(__webpack_exports__);
       [].forEach.call(indexes, function (index) {
         index.style.display = "none";
       });
+      document.getElementById('index0').style.display = "block";
+      this.selected_elements = [], this.price_total = 0;
     },
     onBoxChange: function onBoxChange() {
       var _this3 = this;
