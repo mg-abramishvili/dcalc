@@ -31,6 +31,8 @@ class CalculationController extends Controller
         $calculation->price_total = $data['price_total'];
         $calculation->save();
 
+        $calculation->boxes()->attach($request->boxes, ['calculation_id' => $calculation->id]);
+
         $elements = $request->input('elements', []);
         
         for ($element=0; $element < count($elements); $element++) {
@@ -45,7 +47,7 @@ class CalculationController extends Controller
 
     public function show($id)
     {
-        return Calculation::with('elements')->find($id);
+        return Calculation::with('elements', 'boxes')->find($id);
     }
 
     public function edit(Calculation $calculation)

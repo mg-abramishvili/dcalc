@@ -23,4 +23,9 @@ class Box extends Model
     {
         return $this->belongsToMany('App\Models\Element');
     }
+
+    public function calculations()
+    {
+        return $this->belongsToMany('App\Models\Calculation');
+    }
 }

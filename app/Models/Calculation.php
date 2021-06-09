@@ -10,12 +10,18 @@ class Calculation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'comment'
+        'comment',
+        'price_total'
     ];
 
     public function elements()
     {
-        return $this->belongsToMany('App\Models\Element')->withPivot(['amount', 'price']);
+        return $this->belongsToMany('App\Models\Element');
+    }
+
+    public function boxes()
+    {
+        return $this->belongsToMany('App\Models\Box');
     }
 
     public function offers()
