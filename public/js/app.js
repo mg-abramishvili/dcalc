@@ -2309,12 +2309,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/boxes_filter/".concat(this.selected_types.id)).then(function (response) {
         return _this2.boxes = response.data;
       });
-      var indexes = document.querySelectorAll('[id^="index"]');
-      [].forEach.call(indexes, function (index) {
-        index.style.display = "none";
-      });
-      document.getElementById('index0').style.display = "block";
-      this.selected_elements = [], this.price_total = 0;
     },
     onBoxChange: function onBoxChange() {
       var _this3 = this;
