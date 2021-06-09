@@ -51,3 +51,13 @@ table.dataTable {
     margin: 0;
 }
 /* TABLE */
+
+
+
+/* ERRORS */
+
+.border-danger {
+    border-color: #d9534f;
+}
+
+/* ERRORS */

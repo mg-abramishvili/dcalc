@@ -12,7 +12,7 @@ Route::get('/element-category/{id}','App\Http\Controllers\ElementController@cate
 Route::get('/elements','App\Http\Controllers\ElementController@elements');
 Route::get('/elements_filter/{box_id}','App\Http\Controllers\ElementController@elements_filter');
 Route::get('/elements/category/{id}','App\Http\Controllers\ElementController@category_elements');
-Route::post('/elements','App\Http\Controllers\ElementController@store');
+Route::post('/elements','App\Http\Controllers\ElementController@elements_store');
 Route::get('/elements_count','App\Http\Controllers\ElementController@elements_count');
 Route::post('/ecategory_create','App\Http\Controllers\ElementController@store_ecategory');
 Route::post('/ecategory_edit/{id}','App\Http\Controllers\ElementController@edit_ecategory');

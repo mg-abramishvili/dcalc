@@ -8,13 +8,13 @@
 
         <div class="card">
             <div class="card-body">
-                <label>Название</label>
-                <input v-model="title" type="text" class="form-control mb-3">
+                <label id="title_label">Название</label>
+                <input v-model="title" id="title_input" type="text" class="form-control mb-3">
 
                 <label>Курс USD <small>(на {{moment(currencies_date).format('DD.MM.YYYY')}})</small></label>
                 <input type="text" class="form-control mb-3" :value="currencies.Value" disabled>
 
-                <div class="row">
+                <div class="row" style="position: relative">
                     <div class="col-6">
                         <label>Цена RUB</label>
                         <input type="text" class="form-control mb-3" v-model="price_rub">
@@ -23,24 +23,24 @@
                         <label>Цена USD</label>
                         <input type="text" class="form-control mb-3" v-model="price_usd">
                     </div>
-                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: block; width: 10px; padding: 0; margin: 0; margin-top: -12px;">+</span>
+                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: block; width: 10px; padding: 0; margin: 0; margin-top: 2px;">+</span>
                 </div>
 
                 <div class="form-group" style="position: relative;">
-                    <label>Цена (финальная)</label>
-                    <input v-model="price" type="text" class="form-control mb-3">
+                    <label id="price_label">Цена (финальная)</label>
+                    <input v-model="price" id="price_input" type="text" class="form-control mb-3">
                     <button @click="TotalPrice()" style="position: absolute; top: 50%; transform: translateY(-50%); right: 1rem; border: none; box-shadow: none; font-size: 0.7rem; background: none; margin-top: 0.75rem">пересчитать</button>
                 </div>
 
-                <label>Категория</label>
-                <select v-model="categories_selected" class="form-control mb-3">
+                <label id="categories_label">Категория</label>
+                <select v-model="categories_selected" id="categories_input" class="form-control mb-3">
                     <template v-for="category in categories">
                         <option :value="category.id">{{ category.title }}</option>
                     </template>
                 </select>
 
-                <label>Совместимость</label>
-                <select v-model="selected_boxes" class="form-control mb-3" multiple>
+                <label id="boxes_label">Совместимость</label>
+                <select v-model="selected_boxes" id="boxes_input" class="form-control mb-3" multiple>
                     <template v-for="box in boxes">
                         <option :value="box.id">{{ box.title }}</option>
                     </template>
@@ -98,11 +98,40 @@
                 
             },
             saveCalculation() {
+                for (var i = 0; i < document.querySelectorAll('label').length; i++) {
+                    if(document.querySelectorAll('label')[i].classList.contains('text-danger') === true) {
+                        document.querySelectorAll('label')[i].classList.remove('text-danger')
+                    }
+                }
+                for (var i = 0; i < document.querySelectorAll('input').length; i++) {
+                    if(document.querySelectorAll('input')[i].classList.contains('border-danger') === true) {
+                        document.querySelectorAll('input')[i].classList.remove('border-danger')
+                    }
+                }
+                for (var i = 0; i < document.querySelectorAll('select').length; i++) {
+                    if(document.querySelectorAll('select')[i].classList.contains('border-danger') === true) {
+                        document.querySelectorAll('select')[i].classList.remove('border-danger')
+                    }
+                }
+
                 axios
-                .post('/api/elements', { title: this.title, price: this.price, categories: this.categories_selected, boxes: this.selected_boxes })
+                .post('/api/elements', {
+                    title: this.title,
+                    price: this.price,
+                    categories: this.categories_selected,
+                    boxes: this.selected_boxes,
+                })
                 .then(response => (
                     this.$router.push({path: '/elements'}) 
-                ));
+                ))
+                .catch((error) => {
+                    if(error.response) {
+                        for(var key in error.response.data.errors){
+                            document.getElementById(key + '_label').classList.add('text-danger')
+                            document.getElementById(key + '_input').classList.add('border-danger')
+                        }
+                    }
+                });
             },
             TotalPrice() {
                 if(this.price_rub > 0 && this.price_usd > 0) {

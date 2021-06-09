@@ -25,6 +25,27 @@ class ElementController extends Controller
         return Element::with('categories')->count();
     }
 
+    public function elements_store(Request $request)
+    {
+        $rules = [
+            'title' => 'required',
+            'price' => 'required|numeric',
+            'categories' => 'required',
+            'boxes' => 'required',
+        ];
+
+        $this->validate($request, $rules);
+
+        $data = request()->all();
+        $element = new Element();
+        $element->title = $data['title'];
+        $element->price = $data['price'];
+        $element->save();
+        $element->categories()->attach($request->categories, ['element_id' => $element->id]);
+        $element->connected_elements()->attach($request->connected_elements, ['element_id' => $element->id]);
+        $element->boxes()->attach($request->boxes, ['element_id' => $element->id]);
+    }
+
     public function categories()
     {
         return Ecategory::with('elements')->get();
@@ -42,17 +63,7 @@ class ElementController extends Controller
         })->get();
     }
 
-    public function store(Request $request)
-    {
-        $data = request()->all();
-        $element = new Element();
-        $element->title = $data['title'];
-        $element->price = $data['price'];
-        $element->save();
-        $element->categories()->attach($request->categories, ['element_id' => $element->id]);
-        $element->connected_elements()->attach($request->connected_elements, ['element_id' => $element->id]);
-        $element->boxes()->attach($request->boxes, ['element_id' => $element->id]);
-    }
+    
 
     public function store_ecategory(Request $request)
     {
