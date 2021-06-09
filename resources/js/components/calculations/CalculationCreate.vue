@@ -115,7 +115,7 @@
             },
             saveCalculation() {
                 axios
-                .post('/api/calculations', { comment: this.comment, price_total: this.price_total, elements: this.selected_elements.map(element=>({id:element.id})), boxes: this.selected_boxes })
+                .post('/api/calculations', { comment: this.comment, price_total: this.price_total, boxes: this.selected_boxes.id, elements: this.selected_elements.map(element=>({id:element.id})) })
                 .then(response => (
                     this.$router.push({path: '/calculations'}) 
                 ));

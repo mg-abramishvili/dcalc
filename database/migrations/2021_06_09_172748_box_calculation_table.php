@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CalculationBoxTable extends Migration
+class BoxCalculationTable extends Migration
 {
     public function up()
     {
-        Schema::create('calculation_box', function (Blueprint $table) {
+        Schema::create('box_calculation', function (Blueprint $table) {
             $table->id();
             $table->integer('box_id');
             $table->integer('calculation_id');

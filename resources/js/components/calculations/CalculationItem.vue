@@ -15,6 +15,10 @@
                         </th>
                     </thead>
                     <tbody>
+                        <tr v-for="box in calculation.boxes">
+                            <td>{{ box.title }}</td>
+                            <td class="text-end">{{ box.price }} ₽</td>
+                        </tr>
                         <tr v-for="element in calculation.elements">
                             <td>{{ element.title }}</td>
                             <td class="text-end">{{ element.price }} ₽</td>

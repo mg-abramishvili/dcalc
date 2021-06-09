@@ -7,18 +7,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class EcategorySeeder extends Seeder
+class TypeSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('ecategories')->insert([
+        DB::table('types')->insert([
             [
                 'id' => '1',
-                'title' => 'Корпус',
-            ],
-            [
-                'id' => '2',
-                'title' => 'Монитор',
+                'title' => 'Киоск',
             ],
         ]);
     }

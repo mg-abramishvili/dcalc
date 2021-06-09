@@ -2329,12 +2329,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/calculations', {
         comment: this.comment,
         price_total: this.price_total,
+        boxes: this.selected_boxes.id,
         elements: this.selected_elements.map(function (element) {
           return {
             id: element.id
           };
-        }),
-        amounts: this.selected_elements_amounts
+        })
       }).then(function (response) {
         return _this4.$router.push({
           path: '/calculations'
@@ -2359,6 +2359,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
 //
 //
 //
@@ -37559,16 +37563,28 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.calculation.elements, function(element) {
-                return _c("tr", [
-                  _c("td", [_vm._v(_vm._s(element.title))]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "text-end" }, [
-                    _vm._v(_vm._s(element.price) + " ₽")
+              [
+                _vm._l(_vm.calculation.boxes, function(box) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(box.title))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-end" }, [
+                      _vm._v(_vm._s(box.price) + " ₽")
+                    ])
                   ])
-                ])
-              }),
-              0
+                }),
+                _vm._v(" "),
+                _vm._l(_vm.calculation.elements, function(element) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(element.title))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-end" }, [
+                      _vm._v(_vm._s(element.price) + " ₽")
+                    ])
+                  ])
+                })
+              ],
+              2
             )
           ]
         ),
