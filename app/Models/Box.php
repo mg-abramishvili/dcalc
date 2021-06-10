@@ -11,6 +11,8 @@ class Box extends Model
 
     protected $fillable = [
         'title',
+        'pre_rub',
+        'pre_usd',
         'price'
     ];
 

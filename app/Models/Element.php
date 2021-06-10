@@ -11,22 +11,19 @@ class Element extends Model
 
     protected $fillable = [
         'title',
+        'pre_rub',
+        'pre_usd',
         'price'
     ];
 
     public function categories()
     {
-        return $this->belongsToMany('App\Models\Ecategory');
+        return $this->belongsToMany('App\Models\Category');
     }
 
     public function calculations()
     {
         return $this->belongsToMany('App\Models\Calculation');
-    }
-
-    public function connected_elements()
-    {
-        return $this->belongsToMany('App\Models\Element', 'element_element', 'element_id', 'celement_id');
     }
 
     public function boxes()

@@ -11,7 +11,9 @@ class CreateElementsTable extends Migration
         Schema::create('elements', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->decimal('price');
+            $table->decimal('pre_rub')->default(0);
+            $table->decimal('pre_usd')->default(0);
+            $table->decimal('price')->default(0);
             $table->timestamps();
         });
     }

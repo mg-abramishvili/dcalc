@@ -13,6 +13,7 @@
                     </div>			
                 </div>
                 <div class="modal-footer">
+                    <button @click="delete_ecategory()" class="btn btn-outline-danger me-auto">Удалить категорию</button>
                     <button @click="ecategory_edit_modal_toggle()" class="btn btn-secondary">Отмена</button>
                     <button @click="store_ecategory()" class="btn btn-primary">Сохранить</button>
                 </div>
@@ -50,7 +51,7 @@
                     this.$parent.ecategory_edit_modal = false,
                     this.$parent.refresh()
                 ));
-            }
+            },
         },
         components: {
         }

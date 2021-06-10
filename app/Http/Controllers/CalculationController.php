@@ -38,8 +38,8 @@ class CalculationController extends Controller
         for ($element=0; $element < count($elements); $element++) {
             if ($elements[$element] != '') {
                 $calculation->elements()->attach($elements[$element], [
-                    'amount' => '1',
-                    'price' => '0'
+                    //'amount' => '1',
+                    //'price' => '0'
                 ]);
             }
         }

@@ -12,8 +12,6 @@ class CalculationElementTable extends Migration
             $table->id();
             $table->integer('calculation_id');
             $table->integer('element_id');
-            $table->string('amount');
-            $table->string('price');
         });
     }
 

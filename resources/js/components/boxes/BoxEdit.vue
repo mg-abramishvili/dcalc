@@ -2,7 +2,7 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0">Новый компонент</h1>
+                <h1 class="h3 m-0">{{ box.title }}</h1>
             </div>
         </div>
 
@@ -32,20 +32,7 @@
                     <button @click="TotalPrice()" style="position: absolute; top: 50%; transform: translateY(-50%); right: 1rem; border: none; box-shadow: none; font-size: 0.7rem; background: none; margin-top: 0.75rem">пересчитать</button>
                 </div>
 
-                <label id="categories_label">Категория</label>
-                <select v-model="categories_selected" id="categories_input" class="form-control mb-3">
-                    <template v-for="category in categories">
-                        <option :value="category.id">{{ category.title }}</option>
-                    </template>
-                </select>
-
-                <label id="boxes_label">Совместимость</label>
-                <select v-model="selected_boxes" id="boxes_input" class="form-control mb-3" multiple>
-                    <template v-for="box in boxes">
-                        <option :value="box.id">{{ box.title }}</option>
-                    </template>
-                </select>
-                <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
+                <button @click="saveBox()" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
     </div>
@@ -55,10 +42,7 @@
     export default {
         data() {
             return {
-                categories: {},
-                boxes: {},
-                categories_selected: '',
-                connected_elements: '',
+                box: {},
                 title: '',
                 pre_rub: '',
                 pre_usd: '',
@@ -66,20 +50,17 @@
                 currencies: {},
                 currencies_date: {},
                 moment: moment,
-                elements: {},
-                selected_boxes: [],
             }
         },
         created() {
             axios
-                .get('/api/categories')
+                .get(`/api/box/${this.$route.params.id}`)
                 .then(response => (
-                    this.categories = response.data
-                ));
-            axios
-                .get('/api/boxes')
-                .then(response => (
-                    this.boxes = response.data
+                    this.box = response.data,
+                    this.title = response.data.title,
+                    this.pre_rub = response.data.pre_rub,
+                    this.pre_usd = response.data.pre_usd,
+                    this.price = response.data.price
                 ));
             axios
                 .get('https://www.cbr-xml-daily.ru/daily_json.js')
@@ -87,17 +68,12 @@
                     this.currencies = response.data.Valute.USD,
                     this.currencies_date = response.data.Date
                 ));
-            axios
-                .get('/api/elements')
-                .then(response => (
-                    this.elements = response.data
-                ));
         },
         methods: {
             onChange(index, event) {
                 
             },
-            saveCalculation() {
+            saveBox() {
                 for (var i = 0; i < document.querySelectorAll('label').length; i++) {
                     if(document.querySelectorAll('label')[i].classList.contains('text-danger') === true) {
                         document.querySelectorAll('label')[i].classList.remove('text-danger')
@@ -115,16 +91,15 @@
                 }
 
                 axios
-                .post('/api/elements', {
+                .post(`/api/box/${this.$route.params.id}/edit`, {
+                    id: this.box.id,
                     title: this.title,
                     pre_rub: this.pre_rub,
                     pre_usd: this.pre_usd,
                     price: this.price,
-                    categories: this.categories_selected,
-                    boxes: this.selected_boxes,
                 })
                 .then(response => (
-                    this.$router.push({path: '/elements'}) 
+                    this.$router.push({path: '/boxes'}) 
                 ))
                 .catch((error) => {
                     if(error.response) {

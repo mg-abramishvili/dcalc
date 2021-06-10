@@ -59,7 +59,7 @@
         },
         created() {
             axios
-                .get('/api/elements')
+                .get(`/api/category/${this.$route.params.id}/elements`)
                 .then(response => (
                     this.elements = response.data
                 ));

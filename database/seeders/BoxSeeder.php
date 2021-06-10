@@ -15,12 +15,16 @@ class BoxSeeder extends Seeder
             [
                 'id' => '1',
                 'title' => 'ПроИнфо 19',
-                'price' => 50000,
+                'pre_rub' => 5000,
+                'pre_usd' => 500,
+                'price' => 41450,
             ],
             [
                 'id' => '2',
                 'title' => 'ПроИнфо 21.5',
-                'price' => 10000,
+                'pre_rub' => 8000,
+                'pre_usd' => 800,
+                'price' => 66300,
             ],
         ]);
     }

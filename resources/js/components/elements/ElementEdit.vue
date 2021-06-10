@@ -2,7 +2,7 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0">Новый компонент</h1>
+                <h1 class="h3 m-0">{{ element.title }}</h1>
             </div>
         </div>
 
@@ -33,7 +33,7 @@
                 </div>
 
                 <label id="categories_label">Категория</label>
-                <select v-model="categories_selected" id="categories_input" class="form-control mb-3">
+                <select v-model="selected_category" id="categories_input" class="form-control mb-3">
                     <template v-for="category in categories">
                         <option :value="category.id">{{ category.title }}</option>
                     </template>
@@ -55,10 +55,9 @@
     export default {
         data() {
             return {
+                element: {},
                 categories: {},
                 boxes: {},
-                categories_selected: '',
-                connected_elements: '',
                 title: '',
                 pre_rub: '',
                 pre_usd: '',
@@ -66,11 +65,22 @@
                 currencies: {},
                 currencies_date: {},
                 moment: moment,
-                elements: {},
+                selected_category: {},
                 selected_boxes: [],
             }
         },
         created() {
+            axios
+                .get(`/api/element/${this.$route.params.id}`)
+                .then(response => (
+                    this.element = response.data,
+                    this.title = response.data.title,
+                    this.selected_category = response.data.categories[0].id,
+                    this.selected_boxes = response.data.boxes.map(box => box.id),
+                    this.pre_rub = response.data.pre_rub,
+                    this.pre_usd = response.data.pre_usd,
+                    this.price = response.data.price
+                ));
             axios
                 .get('/api/categories')
                 .then(response => (
@@ -115,12 +125,13 @@
                 }
 
                 axios
-                .post('/api/elements', {
+                .post(`/api/element/${this.$route.params.id}/edit`, {
+                    id: this.element.id,
                     title: this.title,
                     pre_rub: this.pre_rub,
                     pre_usd: this.pre_usd,
                     price: this.price,
-                    categories: this.categories_selected,
+                    categories: this.selected_category,
                     boxes: this.selected_boxes,
                 })
                 .then(response => (

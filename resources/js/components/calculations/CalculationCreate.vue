@@ -70,7 +70,7 @@
         },
         created() {
             axios
-                .get('/api/element-categories')
+                .get('/api/categories')
                 .then(response => (
                     this.categories = response.data
                 ));
@@ -94,14 +94,14 @@
             },
             onTypeChange() {
                 axios
-                .get(`/api/boxes_filter/${this.selected_types.id}`)
+                .get(`/api/boxes/filter/${this.selected_types.id}`)
                 .then(response => (
                     this.boxes = response.data
                 ));
             },
             onBoxChange() {
                 axios
-                .get(`/api/elements_filter/${this.selected_boxes.id}`)
+                .get(`/api/elements/filter/box/${this.selected_boxes.id}`)
                 .then(response => (
                     this.elements = response.data
                 ));

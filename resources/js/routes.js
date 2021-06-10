@@ -1,8 +1,15 @@
 import Home from './components/Home.vue';
 import Users from './components/users/UsersAll.vue';
 import UserCreate from './components/users/UserCreate.vue';
+
 import Elements from './components/elements/ElementsAll.vue';
+import ElementsByCategory from './components/elements/ElementsByCategory.vue';
 import ElementCreate from './components/elements/ElementCreate.vue';
+import ElementEdit from './components/elements/ElementEdit.vue';
+
+import Boxes from './components/boxes/BoxesAll.vue';
+import BoxEdit from './components/boxes/BoxEdit.vue';
+
 import Calculations from './components/calculations/CalculationsAll.vue';
 import CalculationCreate from './components/calculations/CalculationCreate.vue';
 import CalculationItem from './components/calculations/CalculationItem.vue';
@@ -36,9 +43,29 @@ export const routes = [
         component: Elements
     },
     {
+        path: '/category/:id/elements',
+        name: 'ElementsByCategory',
+        component: ElementsByCategory
+    },
+    {
         path: '/elements/create',
         name: 'ElementCreate',
         component: ElementCreate
+    },
+    {
+        path: '/elements/:id/edit',
+        name: 'ElementEdit',
+        component: ElementEdit
+    },
+    {
+        path: '/boxes',
+        name: 'Boxes',
+        component: Boxes
+    },
+    {
+        path: '/boxes/:id/edit',
+        name: 'BoxEdit',
+        component: BoxEdit
     },
     {
         path: '/calculations',
