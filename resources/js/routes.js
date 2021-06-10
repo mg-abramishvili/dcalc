@@ -9,6 +9,7 @@ import ElementEdit from './components/elements/ElementEdit.vue';
 import ElementDelete from './components/elements/ElementDelete.vue';
 
 import Boxes from './components/boxes/BoxesAll.vue';
+import BoxCreate from './components/boxes/BoxCreate.vue';
 import BoxEdit from './components/boxes/BoxEdit.vue';
 import BoxDelete from './components/boxes/BoxDelete.vue';
 
@@ -71,6 +72,11 @@ export const routes = [
         path: '/boxes',
         name: 'Boxes',
         component: Boxes
+    },
+    {
+        path: '/boxes/create',
+        name: 'BoxCreate',
+        component: BoxCreate
     },
     {
         path: '/box/:id/edit',

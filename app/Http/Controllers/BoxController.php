@@ -19,6 +19,28 @@ class BoxController extends Controller
         })->get();
     }
 
+    public function boxes_store(Request $request)
+    {
+        $rules = [
+            'title' => 'required',
+            'pre_rub' => 'required|numeric',
+            'pre_usd' => 'required|numeric',
+            'price' => 'required|numeric',
+            'types' => 'required',
+        ];
+
+        $this->validate($request, $rules);
+
+        $data = request()->all();
+        $box = new Box();
+        $box->title = $data['title'];
+        $box->pre_rub = $data['pre_rub'];
+        $box->pre_usd = $data['pre_usd'];
+        $box->price = $data['price'];
+        $box->save();
+        $box->types()->attach($request->types, ['box_id' => $box->id]);
+    }
+
     public function box_edit(Request $request)
     {
         $rules = [
@@ -26,6 +48,7 @@ class BoxController extends Controller
             'pre_rub' => 'required|numeric',
             'pre_usd' => 'required|numeric',
             'price' => 'required|numeric',
+            'types' => 'required',
         ];
 
         $this->validate($request, $rules);
@@ -37,6 +60,8 @@ class BoxController extends Controller
         $box->pre_usd = $data['pre_usd'];
         $box->price = $data['price'];
         $box->save();
+        $box->types()->detach();
+        $box->types()->attach($request->types, ['box_id' => $box->id]);
     }
 
     public function box_item($id, Request $request)

@@ -2,7 +2,7 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0">{{ box.title }}</h1>
+                <h1 class="h3 m-0">Новый корпус</h1>
             </div>
         </div>
 
@@ -63,16 +63,6 @@
         },
         created() {
             axios
-                .get(`/api/box/${this.$route.params.id}`)
-                .then(response => (
-                    this.box = response.data,
-                    this.title = response.data.title,
-                    this.pre_rub = response.data.pre_rub,
-                    this.pre_usd = response.data.pre_usd,
-                    this.price = response.data.price,
-                    this.selected_types = response.data.types.map(type => type.id)
-                ));
-            axios
                 .get('https://www.cbr-xml-daily.ru/daily_json.js')
                 .then(response => (
                     this.currencies = response.data.Valute.USD,
@@ -106,7 +96,7 @@
                 }
 
                 axios
-                .post(`/api/box/${this.$route.params.id}/edit`, {
+                .post(`/api/boxes`, {
                     id: this.box.id,
                     title: this.title,
                     pre_rub: this.pre_rub,
