@@ -19,6 +19,7 @@ Route::get('/elements/filter/box/{box_id}','App\Http\Controllers\ElementControll
 Route::get('/element/{id}','App\Http\Controllers\ElementController@element_item');
 Route::post('/elements','App\Http\Controllers\ElementController@elements_store');
 Route::post('/element/{id}/edit','App\Http\Controllers\ElementController@element_edit');
+Route::get('/element/{id}/delete','App\Http\Controllers\ElementController@element_delete');
 
 // Корпуса
 Route::get('/boxes','App\Http\Controllers\BoxController@boxes');
@@ -26,6 +27,7 @@ Route::get('/box/{id}','App\Http\Controllers\BoxController@box_item');
 Route::get('/boxes/filter/{type_id}','App\Http\Controllers\BoxController@boxes_filter');
 Route::post('/boxes','App\Http\Controllers\BoxController@boxes_store');
 Route::post('/box/{id}/edit','App\Http\Controllers\BoxController@box_edit');
+Route::get('/box/{id}/delete','App\Http\Controllers\BoxController@box_delete');
 
 // Расчеты
 Route::get('/calculations','App\Http\Controllers\CalculationController@index');

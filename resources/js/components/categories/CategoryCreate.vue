@@ -1,20 +1,19 @@
 <template>
-    <div class="modal fade" tabindex="-1" aria-modal="true" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Новый раздел каталога</h5>
-                    <button @click="category_create_modal_toggle()" class="btn-close" aria-label="Close"></button>
-                </div>
-                <div class="modal-body m-3">
-                    <div class="mb-3">
-                        <label class="form-label">Название</label>
-                        <input v-model="title" class="form-control" placeholder="Название">
-                    </div>			
-                </div>
-                <div class="modal-footer">
-                    <button @click="category_create_modal_toggle()" class="btn btn-secondary">Отмена</button>
-                    <button @click="store_category()" class="btn btn-primary">Сохранить</button>
+    <div>
+        <div class="row align-items-center mb-4">
+            <div class="col-12 col-lg-6">
+                <h1 class="h3 m-0">Новая категория</h1>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <label id="title_label">Название</label>
+                <input v-model="title" type="text" class="form-control mb-3">
+
+                <div>
+                    <button @click="saveCategory()" class="btn btn-primary">Сохранить</button>
+                    <router-link :to="{name: 'Elements'}" class="btn btn-default">Отмена</router-link>
                 </div>
             </div>
         </div>
@@ -31,15 +30,15 @@
         created() {
         },
         methods: {
-            store_category() {
+            saveCategory() {
                 axios
                 .post('/api/categories', { title: this.title })
                 .then(response => (
-                    this.title = '',
-                    this.$parent.category_create_modal = false,
-                    this.$parent.refresh()
+                    this.$router.push({path: '/elements'}) 
                 ));
-            }
+            },
+        },
+        watch: {
         },
         components: {
         }

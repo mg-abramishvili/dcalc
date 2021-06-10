@@ -41,6 +41,13 @@ class BoxController extends Controller
 
     public function box_item($id, Request $request)
     {
-        return Box::find($id);
+        return Box::with('types')->find($id);
+    }
+
+    public function box_delete($id)
+    {
+        $box = Box::find($id);
+        $box->delete();
+        $box->types()->detach();
     }
 }

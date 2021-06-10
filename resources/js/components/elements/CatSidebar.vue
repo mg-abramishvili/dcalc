@@ -2,10 +2,11 @@
     <div>
         <div class="card mb-2">
             <div class="list-group list-group-flush">
-                <router-link :to="{name: 'Boxes'}" class="list-group-item list-group-item-action">
-                    Корпуса
-                </router-link>
-
+                <div>
+                    <router-link :to="{name: 'Boxes'}" class="list-group-item list-group-item-action">
+                        Корпуса
+                    </router-link>
+                </div>
                 <div v-for="category in categories" :key="category.id">
                     <router-link :to="{name: 'ElementsByCategory', params: {id: category.id}}" class="list-group-item list-group-item-action">
                         {{ category.title }}
@@ -13,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-outline-secondary btn-sm">добавить категорию</button>
+        <router-link :to="{name: 'CategoryCreate'}" class="btn btn-outline-secondary btn-sm">добавить категорию</router-link>
     </div>
 </template>
 

@@ -75,6 +75,14 @@ class ElementController extends Controller
         return Element::with('boxes', 'categories')->find($id);
     }
 
+    public function element_delete($id)
+    {
+        $element = Element::find($id);
+        $element->delete();
+        $element->categories()->detach();
+        $element->boxes()->detach();
+    }
+
     public function categories()
     {
         return Category::with('elements')->get();
@@ -82,7 +90,7 @@ class ElementController extends Controller
 
     public function category_item($id, Request $request)
     {
-        return Category::find($id);
+        return Category::with('elements')->find($id);
     }
 
     public function category_elements($category, Request $request)
@@ -106,5 +114,12 @@ class ElementController extends Controller
         $category = Category::find($data['id']);
         $category->title = $data['title'];
         $category->save();
+    }
+
+    public function category_delete($id)
+    {
+        $category = Category::find($id);
+        $category->delete();
+        $category->elements()->detach();
     }
 }

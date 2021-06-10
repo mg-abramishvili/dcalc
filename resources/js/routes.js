@@ -6,9 +6,14 @@ import Elements from './components/elements/ElementsAll.vue';
 import ElementsByCategory from './components/elements/ElementsByCategory.vue';
 import ElementCreate from './components/elements/ElementCreate.vue';
 import ElementEdit from './components/elements/ElementEdit.vue';
+import ElementDelete from './components/elements/ElementDelete.vue';
 
 import Boxes from './components/boxes/BoxesAll.vue';
 import BoxEdit from './components/boxes/BoxEdit.vue';
+import BoxDelete from './components/boxes/BoxDelete.vue';
+
+import CategoryCreate from './components/categories/CategoryCreate.vue';
+import CategoryEdit from './components/categories/CategoryEdit.vue';
 
 import Calculations from './components/calculations/CalculationsAll.vue';
 import CalculationCreate from './components/calculations/CalculationCreate.vue';
@@ -53,9 +58,14 @@ export const routes = [
         component: ElementCreate
     },
     {
-        path: '/elements/:id/edit',
+        path: '/element/:id/edit',
         name: 'ElementEdit',
         component: ElementEdit
+    },
+    {
+        path: '/element/:id/delete',
+        name: 'ElementDelete',
+        component: ElementDelete
     },
     {
         path: '/boxes',
@@ -63,9 +73,24 @@ export const routes = [
         component: Boxes
     },
     {
-        path: '/boxes/:id/edit',
+        path: '/box/:id/edit',
         name: 'BoxEdit',
         component: BoxEdit
+    },
+    {
+        path: '/box/:id/delete',
+        name: 'BoxDelete',
+        component: BoxDelete
+    },
+    {
+        path: '/categories/create',
+        name: 'CategoryCreate',
+        component: CategoryCreate
+    },
+    {
+        path: '/category/:id/edit',
+        name: 'CategoryEdit',
+        component: CategoryEdit
     },
     {
         path: '/calculations',

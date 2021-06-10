@@ -2,7 +2,11 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0" style="position:relative;">Компоненты</h1>
+                <h1 class="h3 m-0" style="position:relative;">Компоненты
+                    <router-link :to="{name: 'CategoryEdit', params: {id: current_category.id}}" class="text-primary cursor-pointer text-primary-dotted">
+                        {{ current_category.title }}
+                    </router-link>
+                </h1>
             </div>
             <div class="col-12 col-lg-6 text-end">
                 <router-link :to="{name: 'ElementCreate'}" class="btn btn-primary">Новый компонент</router-link>
@@ -34,7 +38,7 @@
                                     <router-link :to="{name: 'ElementEdit', params: {id: element.id}}" class="btn btn-outline-warning">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 align-middle"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                     </router-link>
-                                    <router-link :to="{name: 'ElementEdit', params: {id: element.id}}" class="btn btn-outline-danger">
+                                    <router-link :to="{name: 'ElementDelete', params: {id: element.id}}" class="btn btn-outline-danger">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                     </router-link>
                                 </td>
@@ -55,6 +59,7 @@
         data() {
             return {
                 elements: [],
+                current_category: {},
             }
         },
         created() {
@@ -62,6 +67,11 @@
                 .get(`/api/category/${this.$route.params.id}/elements`)
                 .then(response => (
                     this.elements = response.data
+                ));
+            axios
+                .get(`/api/category/${this.$route.params.id}`)
+                .then(response => (
+                    this.current_category = response.data
                 ));
         },
         methods: {

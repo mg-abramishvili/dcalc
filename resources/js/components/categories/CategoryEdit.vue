@@ -1,21 +1,19 @@
 <template>
-    <div class="modal fade" tabindex="-1" aria-modal="true" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Правка раздела каталога</h5>
-                    <button @click="ecategory_edit_modal_toggle()" class="btn-close" aria-label="Close"></button>
-                </div>
-                <div class="modal-body m-3">
-                    <div class="mb-3">
-                        <label class="form-label">Название</label>
-                        <input v-model="title" class="form-control" placeholder="Название">
-                    </div>			
-                </div>
-                <div class="modal-footer">
-                    <button @click="delete_ecategory()" class="btn btn-outline-danger me-auto">Удалить категорию</button>
-                    <button @click="ecategory_edit_modal_toggle()" class="btn btn-secondary">Отмена</button>
-                    <button @click="store_ecategory()" class="btn btn-primary">Сохранить</button>
+    <div>
+        <div class="row align-items-center mb-4">
+            <div class="col-12 col-lg-6">
+                <h1 class="h3 m-0">{{ category.title }}</h1>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <label id="title_label">Название</label>
+                <input v-model="title" type="text" class="form-control mb-3">
+
+                <div class="d-flex justify-content-between">
+                    <button @click="saveCategory()" class="btn btn-primary">Сохранить</button>
+                    <button @click="deleteCategory()" class="btn btn-outline-danger">Удалить категорию</button>
                 </div>
             </div>
         </div>
@@ -24,34 +22,45 @@
 
 <script>
     export default {
-        props: ['id'],
         data() {
             return {
-                ecategory: {},
+                category: {},
                 title: '',
             }
         },
         created() {
             axios
-            .get(`/api/element-category/${this.$props.id}`)
-            .then(response => (
-                this.ecategory = response.data,
-                this.title = response.data.title
-            ));
+                .get(`/api/category/${this.$route.params.id}`)
+                .then(response => (
+                    this.category = response.data,
+                    this.title = response.data.title
+                ));
         },
         methods: {
-            ecategory_edit_modal_toggle() {
-				this.$parent.ecategory_edit_modal = false
-			},
-            store_ecategory() {
+            saveCategory() {
                 axios
-                .post(`/api/ecategory_edit/${this.$props.id}`, { id: this.$props.id, title: this.title })
+                .post(`/api/category/${this.$route.params.id}/edit`, {
+                    id: this.category.id,
+                    title: this.title,
+                })
                 .then(response => (
-                    this.title = '',
-                    this.$parent.ecategory_edit_modal = false,
-                    this.$parent.refresh()
-                ));
+                    this.$router.push({path: '/elements'}) 
+                ))
             },
+            deleteCategory(id) {
+                if(this.category.elements.length) {
+                    alert('Невозможно удалить категорию - категория не пуста!')
+                } else {
+                    axios
+                    .get(`/api/category/${this.$route.params.id}/delete`)
+                    .then(response => (
+                        this.$router.push({path: '/elements'})
+                    ));
+                }
+                
+            },
+        },
+        watch: {
         },
         components: {
         }
