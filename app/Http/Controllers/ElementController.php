@@ -13,7 +13,7 @@ class ElementController extends Controller
         return Element::with('categories')->get();
     }
 
-    public function elements_filter($box_id, Request $request)
+    public function elements_filter_box($box_id, Request $request)
     {
         return Element::with('boxes', 'categories')->whereHas('boxes', function ($query) use($box_id) {
             return $query->where('box_id', '=', $box_id);
