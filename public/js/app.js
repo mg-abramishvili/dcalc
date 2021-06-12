@@ -2889,6 +2889,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2950,7 +2951,15 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveCalculation: function saveCalculation() {
-      console.log();
+      var megred_select_form_values = [];
+      this.categories.forEach(function (category) {
+        if (document.getElementsByName(category.slug)[0].value !== 'none') {
+          megred_select_form_values.push(document.getElementsByName(category.slug)[0].value);
+        } else {
+          console.log(category.slug + '- none');
+        }
+      });
+      console.log(megred_select_form_values);
       /*axios
       .post('/api/calculations', { comment: this.comment, price_total: this.price_total, boxes: this.selected_boxes.id, elements: this.selected_elements.map(element=>({id:element.id})).concat(this.selected_elements_dop.map(element=>({id:element.id}))) })
       .then(response => (
@@ -40408,6 +40417,8 @@ var render = function() {
                     attrs: { name: category.slug }
                   },
                   [
+                    _c("option", { attrs: { value: "none" } }, [_vm._v(" ")]),
+                    _vm._v(" "),
                     _vm._l(_vm.elements, function(element) {
                       return [
                         _vm._l(element.categories, function(ect) {

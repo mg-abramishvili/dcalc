@@ -26,6 +26,7 @@
                 <div v-for="(category, index) in categories" :key="'category_' + category.id" class="mb-3">
                     <label>{{ category.title }}</label>
                     <select :name="category.slug" class="form-control mb-3">
+                        <option value="none">&nbsp;</option>
                         <template v-for="element in elements">
                             <template v-for="ect in element.categories">
                                 <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
@@ -133,7 +134,16 @@
                 ));
             },
             saveCalculation() {
-                console.log()
+                var megred_select_form_values = [];
+                this.categories.forEach(function(category) {
+                        if(document.getElementsByName(category.slug)[0].value !== 'none') {
+                            megred_select_form_values.push(document.getElementsByName(category.slug)[0].value)
+                        } else {
+                            console.log(category.slug + '- none')
+                        }
+                    }
+                );
+                console.log(megred_select_form_values)
                 /*axios
                 .post('/api/calculations', { comment: this.comment, price_total: this.price_total, boxes: this.selected_boxes.id, elements: this.selected_elements.map(element=>({id:element.id})).concat(this.selected_elements_dop.map(element=>({id:element.id}))) })
                 .then(response => (
