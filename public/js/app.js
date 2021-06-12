@@ -2903,6 +2903,7 @@ __webpack_require__.r(__webpack_exports__);
       types: {},
       selected_types: '',
       selected_boxes: {},
+      selected_boxes_price: '',
       moment: moment
     };
   },
@@ -2910,7 +2911,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get("/api/calculation/".concat(this.$route.params.id)).then(function (response) {
-      return _this.calculation = response.data, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment;
+      return _this.calculation = response.data, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
     });
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
@@ -2927,13 +2928,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onChange: function onChange(index, event) {
-      this.price_total = parseInt(this.selected_boxes.price) + this.selected_elements.reduce(function (acc, curr) {
-        return acc + parseInt(curr.price);
-      }, 0);
-
-      if (document.getElementById('index' + (index + 1))) {
-        document.getElementById('index' + (index + 1)).style.display = "block";
-      }
+      this.price_total = parseInt(this.selected_boxes_price);
     },
     onTypeChange: function onTypeChange() {
       var _this2 = this;
@@ -2947,7 +2942,7 @@ __webpack_require__.r(__webpack_exports__);
 
       // Берем цену корпуса
       axios.get("/api/box/".concat(this.selected_boxes)).then(function (response) {
-        return _this3.price_total = response.data.price;
+        return _this3.selected_boxes_price = response.data.price, _this3.price_total = response.data.price;
       }); // Фильтруем остальные детали относительно корпуса
 
       axios.get("/api/elements/filter/box/".concat(this.selected_boxes)).then(function (response) {
@@ -40363,6 +40358,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control mb-3",
+              attrs: { id: "selected_boxes" },
               on: {
                 change: [
                   function($event) {
@@ -40388,7 +40384,7 @@ var render = function() {
               _vm._l(_vm.boxes, function(box) {
                 return [
                   _c("option", { domProps: { value: box.id } }, [
-                    _vm._v(_vm._s(box.title))
+                    _vm._v(_vm._s(box.title) + " - " + _vm._s(box.price) + "₽")
                   ])
                 ]
               })
@@ -40428,7 +40424,14 @@ var render = function() {
                                           attrs: { selected: "" },
                                           domProps: { value: element.id }
                                         },
-                                        [_vm._v(_vm._s(element.title))]
+                                        [
+                                          _vm._v(
+                                            _vm._s(element.title) +
+                                              " - " +
+                                              _vm._s(element.price) +
+                                              "₽"
+                                          )
+                                        ]
                                       )
                                     : _vm._e()
                                 ]
@@ -40437,7 +40440,14 @@ var render = function() {
                                     ? _c(
                                         "option",
                                         { domProps: { value: element.id } },
-                                        [_vm._v(_vm._s(element.title))]
+                                        [
+                                          _vm._v(
+                                            _vm._s(element.title) +
+                                              " - " +
+                                              _vm._s(element.price) +
+                                              "₽"
+                                          )
+                                        ]
                                       )
                                     : _vm._e()
                                 ]

@@ -15,9 +15,9 @@
                 </select>
 
                 <label>Корпус</label>
-                <select v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                <select v-model="selected_boxes" id="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
                     <template v-for="box in boxes">
-                        <option :value="box.id">{{ box.title }}</option>
+                        <option :value="box.id">{{ box.title }} - {{ box.price }}₽</option>
                     </template>
                 </select>
 
@@ -29,10 +29,10 @@
                         <template v-for="element in elements">
                             <template v-for="ect in element.categories">
                                 <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
-                                    <option v-if="ect.id === category.id" :value="element.id" selected>{{ element.title }}</option>
+                                    <option v-if="ect.id === category.id" :value="element.id" selected>{{ element.title }} - {{ element.price }}₽</option>
                                 </template>
                                 <template v-else>
-                                    <option v-if="ect.id === category.id" :value="element.id">{{ element.title }}</option>
+                                    <option v-if="ect.id === category.id" :value="element.id">{{ element.title }} - {{ element.price }}₽</option>
                                 </template>
                             </template>
                         </template>
@@ -72,6 +72,7 @@
                 types: {},
                 selected_types: '',
                 selected_boxes: {},
+                selected_boxes_price: '',
                 moment: moment,
             }
         },
@@ -81,7 +82,8 @@
                 .then(response => (
                     this.calculation = response.data,
                     this.selected_boxes = response.data.boxes[0].id,
-                    this.comment = response.data.comment
+                    this.comment = response.data.comment,
+                    this.price_total = response.data.price_total
                 ));
             axios
                 .get('/api/categories')
@@ -106,10 +108,7 @@
         },
         methods: {
             onChange(index, event) {
-                this.price_total =  parseInt(this.selected_boxes.price) + this.selected_elements.reduce((acc, curr) => acc + parseInt(curr.price), 0);
-                if(document.getElementById('index' + (index + 1))) {
-                    document.getElementById('index' + (index + 1)).style.display = "block";
-                }
+                this.price_total =  parseInt(this.selected_boxes_price);
             },
             onTypeChange() {
                 axios
@@ -123,6 +122,7 @@
                 axios
                 .get(`/api/box/${this.selected_boxes}`)
                 .then(response => (
+                    this.selected_boxes_price =  response.data.price,
                     this.price_total =  response.data.price
                 ));
                 // Фильтруем остальные детали относительно корпуса
