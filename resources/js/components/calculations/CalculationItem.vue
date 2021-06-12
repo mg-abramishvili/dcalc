@@ -1,6 +1,14 @@
 <template>
     <div>
-        <h1 class="h3 mb-4">Расчет №{{ calculation.id }} от {{moment(calculation.created_at).format('D MMMM YYYY')}}</h1>
+        <div class="row align-items-center mb-4">
+            <div class="col-12 col-lg-6">
+                <h1 class="h3 m-0">Расчет №{{ calculation.id }} от {{moment(calculation.created_at).format('D MMMM YYYY')}}</h1>
+            </div>
+            <div class="col-12 col-lg-6 text-end">
+                <router-link :to="{name: 'CalculationEdit', params: {id: calculation.id}}" class="btn btn-warning">Изменить</router-link>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-body">
                 

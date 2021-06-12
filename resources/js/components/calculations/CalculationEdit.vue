@@ -2,7 +2,7 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0">Новый расчет</h1>
+                <h1 class="h3 m-0">Расчет №{{ calculation.id }} от {{moment(calculation.created_at).format('D MMMM YYYY')}}</h1>
             </div>
         </div>
 
@@ -14,34 +14,32 @@
                     <option v-for="type in types" v-bind:value="{ id: type.id, title: type.title }">{{ type.title }}</option>
                 </select>
 
-                <label v-if="boxes.length">Корпус</label>
-                <select v-if="boxes.length" v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
-                    <option v-for="box in boxes" v-bind:value="{ id: box.id, title: box.title, price: box.price }">{{ box.title }}  — {{ box.price }} ₽</option>
+                <label>Корпус</label>
+                <select v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                    <template v-for="box in boxes">
+                        <option :value="box.id">{{ box.title }}</option>
+                    </template>
                 </select>
 
-                <div v-for="(category, index) in categories" :key="index" class="mb-3">
-                    <div :id="'index' + index" class="col-lg-4" style="display:none">
-                        <div>
-                            {{ category.title }}
-                        </div>
-                        <div>
-                            <select v-model="selected_elements[index]" @change="onChange(index, $event)" class="form-control">
-                                <template v-for="element in elements">
-                                    <template v-for="ect in element.categories">
-                                        <option v-if="ect.id === category.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }} — {{ element.price }} ₽</option>
-                                    </template>
+                <hr>
+
+                <div v-for="(category, index) in categories" :key="'category_' + category.id" class="mb-3">
+                    <label>{{ category.title }}</label>
+                    <select :name="category.slug" class="form-control mb-3">
+                        <template v-for="element in elements">
+                            <template v-for="ect in element.categories">
+                                <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
+                                    <option v-if="ect.id === category.id" :value="element.id" selected>{{ element.title }}</option>
                                 </template>
-                            </select>
-                            <select v-model="selected_elements_dop[index]" @change="onChange(index, $event)" class="form-control">
-                                <template v-for="element in elements">
-                                    <template v-for="ect in element.categories">
-                                        <option v-if="ect.id === category.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }} — {{ element.price }} ₽</option>
-                                    </template>
+                                <template v-else>
+                                    <option v-if="ect.id === category.id" :value="element.id">{{ element.title }}</option>
                                 </template>
-                            </select>
-                        </div>
-                    </div>
+                            </template>
+                        </template>
+                    </select>
                 </div>
+
+                <hr>
 
                 Комментарий:
                 <textarea class="form-control mb-2" v-model="comment"></textarea>
@@ -63,6 +61,7 @@
     export default {
         data() {
             return {
+                calculation: {},
                 categories: [],
                 elements: [],
                 price_total: {},
@@ -72,10 +71,18 @@
                 boxes: {},
                 types: {},
                 selected_types: '',
-                selected_boxes: '',
+                selected_boxes: {},
+                moment: moment,
             }
         },
         created() {
+            axios
+                .get(`/api/calculation/${this.$route.params.id}`)
+                .then(response => (
+                    this.calculation = response.data,
+                    this.selected_boxes = response.data.boxes[0].id,
+                    this.comment = response.data.comment
+                ));
             axios
                 .get('/api/categories')
                 .then(response => (
@@ -90,6 +97,11 @@
                 .get('/api/types')
                 .then(response => (
                     this.types = response.data
+                ));
+            axios
+                .get('/api/boxes')
+                .then(response => (
+                    this.boxes = response.data
                 ));
         },
         methods: {
@@ -107,25 +119,26 @@
                 ));
             },
             onBoxChange() {
+                // Берем цену корпуса
                 axios
-                .get(`/api/elements/filter/box/${this.selected_boxes.id}`)
+                .get(`/api/box/${this.selected_boxes}`)
+                .then(response => (
+                    this.price_total =  response.data.price
+                ));
+                // Фильтруем остальные детали относительно корпуса
+                axios
+                .get(`/api/elements/filter/box/${this.selected_boxes}`)
                 .then(response => (
                     this.elements = response.data
                 ));
-                var indexes = document.querySelectorAll('[id^="index"]');
-                [].forEach.call(indexes, function(index) {
-                index.style.display = "none";
-                });
-                document.getElementById('index0').style.display = "block";
-                this.selected_elements = [],
-                this.price_total =  parseInt(this.selected_boxes.price)
             },
             saveCalculation() {
-                axios
+                console.log()
+                /*axios
                 .post('/api/calculations', { comment: this.comment, price_total: this.price_total, boxes: this.selected_boxes.id, elements: this.selected_elements.map(element=>({id:element.id})).concat(this.selected_elements_dop.map(element=>({id:element.id}))) })
                 .then(response => (
                     this.$router.push({path: '/calculations'}) 
-                ));
+                ));*/
             }
         },
         watch: {

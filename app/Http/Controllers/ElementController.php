@@ -105,6 +105,7 @@ class ElementController extends Controller
         $data = request()->all();
         $category = new Category();
         $category->title = $data['title'];
+        $category->slug = $data['slug'];
         $category->save();
     }
 
@@ -113,6 +114,7 @@ class ElementController extends Controller
         $data = request()->all();
         $category = Category::find($data['id']);
         $category->title = $data['title'];
+        $category->slug = $data['slug'];
         $category->save();
     }
 

@@ -2725,6 +2725,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2733,7 +2740,7 @@ __webpack_require__.r(__webpack_exports__);
       price_total: {},
       comment: '',
       selected_elements: [],
-      selected_elements_amounts: [],
+      selected_elements_dop: [],
       boxes: {},
       types: {},
       selected_types: '',
@@ -2794,12 +2801,166 @@ __webpack_require__.r(__webpack_exports__);
           return {
             id: element.id
           };
-        })
+        }).concat(this.selected_elements_dop.map(function (element) {
+          return {
+            id: element.id
+          };
+        }))
       }).then(function (response) {
         return _this4.$router.push({
           path: '/calculations'
         });
       });
+    }
+  },
+  watch: {},
+  components: {}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      calculation: {},
+      categories: [],
+      elements: [],
+      price_total: {},
+      comment: '',
+      selected_elements: [],
+      selected_elements_dop: [],
+      boxes: {},
+      types: {},
+      selected_types: '',
+      selected_boxes: {},
+      moment: moment
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    axios.get("/api/calculation/".concat(this.$route.params.id)).then(function (response) {
+      return _this.calculation = response.data, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment;
+    });
+    axios.get('/api/categories').then(function (response) {
+      return _this.categories = response.data;
+    });
+    axios.get('/api/elements').then(function (response) {
+      return _this.elements = response.data;
+    });
+    axios.get('/api/types').then(function (response) {
+      return _this.types = response.data;
+    });
+    axios.get('/api/boxes').then(function (response) {
+      return _this.boxes = response.data;
+    });
+  },
+  methods: {
+    onChange: function onChange(index, event) {
+      this.price_total = parseInt(this.selected_boxes.price) + this.selected_elements.reduce(function (acc, curr) {
+        return acc + parseInt(curr.price);
+      }, 0);
+
+      if (document.getElementById('index' + (index + 1))) {
+        document.getElementById('index' + (index + 1)).style.display = "block";
+      }
+    },
+    onTypeChange: function onTypeChange() {
+      var _this2 = this;
+
+      axios.get("/api/boxes/filter/".concat(this.selected_types.id)).then(function (response) {
+        return _this2.boxes = response.data;
+      });
+    },
+    onBoxChange: function onBoxChange() {
+      var _this3 = this;
+
+      // Берем цену корпуса
+      axios.get("/api/box/".concat(this.selected_boxes)).then(function (response) {
+        return _this3.price_total = response.data.price;
+      }); // Фильтруем остальные детали относительно корпуса
+
+      axios.get("/api/elements/filter/box/".concat(this.selected_boxes)).then(function (response) {
+        return _this3.elements = response.data;
+      });
+    },
+    saveCalculation: function saveCalculation() {
+      console.log();
+      /*axios
+      .post('/api/calculations', { comment: this.comment, price_total: this.price_total, boxes: this.selected_boxes.id, elements: this.selected_elements.map(element=>({id:element.id})).concat(this.selected_elements_dop.map(element=>({id:element.id}))) })
+      .then(response => (
+          this.$router.push({path: '/calculations'}) 
+      ));*/
     }
   },
   watch: {},
@@ -2819,6 +2980,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2937,6 +3106,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2999,10 +3172,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      title: ''
+      title: '',
+      slug: ''
     };
   },
   created: function created() {},
@@ -3011,7 +3188,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post('/api/categories', {
-        title: this.title
+        title: this.title,
+        slug: this.slug
       }).then(function (response) {
         return _this.$router.push({
           path: '/elements'
@@ -4288,14 +4466,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_categories_CategoryEdit_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/categories/CategoryEdit.vue */ "./resources/js/components/categories/CategoryEdit.vue");
 /* harmony import */ var _components_calculations_CalculationsAll_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/calculations/CalculationsAll.vue */ "./resources/js/components/calculations/CalculationsAll.vue");
 /* harmony import */ var _components_calculations_CalculationCreate_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/calculations/CalculationCreate.vue */ "./resources/js/components/calculations/CalculationCreate.vue");
-/* harmony import */ var _components_calculations_CalculationItem_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/calculations/CalculationItem.vue */ "./resources/js/components/calculations/CalculationItem.vue");
-/* harmony import */ var _components_offers_OffersAll_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/offers/OffersAll.vue */ "./resources/js/components/offers/OffersAll.vue");
-/* harmony import */ var _components_offers_OfferCreate_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/offers/OfferCreate.vue */ "./resources/js/components/offers/OfferCreate.vue");
-/* harmony import */ var _components_offers_OfferItem_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/offers/OfferItem.vue */ "./resources/js/components/offers/OfferItem.vue");
-/* harmony import */ var _components_tasks_TasksAll_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/tasks/TasksAll.vue */ "./resources/js/components/tasks/TasksAll.vue");
-/* harmony import */ var _components_tasks_TaskCreate_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/tasks/TaskCreate.vue */ "./resources/js/components/tasks/TaskCreate.vue");
-/* harmony import */ var _components_announcements_AnnouncementsAll_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/announcements/AnnouncementsAll.vue */ "./resources/js/components/announcements/AnnouncementsAll.vue");
-/* harmony import */ var _components_announcements_AnnouncementCreate_vue__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/announcements/AnnouncementCreate.vue */ "./resources/js/components/announcements/AnnouncementCreate.vue");
+/* harmony import */ var _components_calculations_CalculationEdit_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/calculations/CalculationEdit.vue */ "./resources/js/components/calculations/CalculationEdit.vue");
+/* harmony import */ var _components_calculations_CalculationItem_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/calculations/CalculationItem.vue */ "./resources/js/components/calculations/CalculationItem.vue");
+/* harmony import */ var _components_offers_OffersAll_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/offers/OffersAll.vue */ "./resources/js/components/offers/OffersAll.vue");
+/* harmony import */ var _components_offers_OfferCreate_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/offers/OfferCreate.vue */ "./resources/js/components/offers/OfferCreate.vue");
+/* harmony import */ var _components_offers_OfferItem_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/offers/OfferItem.vue */ "./resources/js/components/offers/OfferItem.vue");
+/* harmony import */ var _components_tasks_TasksAll_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/tasks/TasksAll.vue */ "./resources/js/components/tasks/TasksAll.vue");
+/* harmony import */ var _components_tasks_TaskCreate_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/tasks/TaskCreate.vue */ "./resources/js/components/tasks/TaskCreate.vue");
+/* harmony import */ var _components_announcements_AnnouncementsAll_vue__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/announcements/AnnouncementsAll.vue */ "./resources/js/components/announcements/AnnouncementsAll.vue");
+/* harmony import */ var _components_announcements_AnnouncementCreate_vue__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/announcements/AnnouncementCreate.vue */ "./resources/js/components/announcements/AnnouncementCreate.vue");
+
 
 
 
@@ -4385,37 +4565,41 @@ var routes = [{
   name: 'CalculationCreate',
   component: _components_calculations_CalculationCreate_vue__WEBPACK_IMPORTED_MODULE_15__.default
 }, {
+  path: '/calculation/:id/edit',
+  name: 'CalculationEdit',
+  component: _components_calculations_CalculationEdit_vue__WEBPACK_IMPORTED_MODULE_16__.default
+}, {
   path: '/calculation/:id',
   name: 'CalculationItem',
-  component: _components_calculations_CalculationItem_vue__WEBPACK_IMPORTED_MODULE_16__.default
+  component: _components_calculations_CalculationItem_vue__WEBPACK_IMPORTED_MODULE_17__.default
 }, {
   path: '/offers',
   name: 'Offers',
-  component: _components_offers_OffersAll_vue__WEBPACK_IMPORTED_MODULE_17__.default
+  component: _components_offers_OffersAll_vue__WEBPACK_IMPORTED_MODULE_18__.default
 }, {
   path: '/offers/create',
   name: 'OfferCreate',
-  component: _components_offers_OfferCreate_vue__WEBPACK_IMPORTED_MODULE_18__.default
+  component: _components_offers_OfferCreate_vue__WEBPACK_IMPORTED_MODULE_19__.default
 }, {
   path: '/offer/:id',
   name: 'OfferItem',
-  component: _components_offers_OfferItem_vue__WEBPACK_IMPORTED_MODULE_19__.default
+  component: _components_offers_OfferItem_vue__WEBPACK_IMPORTED_MODULE_20__.default
 }, {
   path: '/tasks',
   name: 'Tasks',
-  component: _components_tasks_TasksAll_vue__WEBPACK_IMPORTED_MODULE_20__.default
+  component: _components_tasks_TasksAll_vue__WEBPACK_IMPORTED_MODULE_21__.default
 }, {
   path: '/tasks/create',
   name: 'TaskCreate',
-  component: _components_tasks_TaskCreate_vue__WEBPACK_IMPORTED_MODULE_21__.default
+  component: _components_tasks_TaskCreate_vue__WEBPACK_IMPORTED_MODULE_22__.default
 }, {
   path: '/announcements',
   name: 'Announcements',
-  component: _components_announcements_AnnouncementsAll_vue__WEBPACK_IMPORTED_MODULE_22__.default
+  component: _components_announcements_AnnouncementsAll_vue__WEBPACK_IMPORTED_MODULE_23__.default
 }, {
   path: '/announcements/create',
   name: 'AnnouncementCreate',
-  component: _components_announcements_AnnouncementCreate_vue__WEBPACK_IMPORTED_MODULE_23__.default
+  component: _components_announcements_AnnouncementCreate_vue__WEBPACK_IMPORTED_MODULE_24__.default
 }];
 
 /***/ }),
@@ -4462,6 +4646,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.w-45[data-v-162aba0b] {\n    width: 45%;\n}\n.w-40[data-v-162aba0b] {\n    width: 40%;\n}\n.w-35[data-v-162aba0b] {\n    width: 35%;\n}\n.w-30[data-v-162aba0b] {\n    width: 30%;\n}\n.w-25[data-v-162aba0b] {\n    width: 25%;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.w-45[data-v-f59ffc4e] {\n    width: 45%;\n}\n.w-40[data-v-f59ffc4e] {\n    width: 40%;\n}\n.w-35[data-v-f59ffc4e] {\n    width: 35%;\n}\n.w-30[data-v-f59ffc4e] {\n    width: 30%;\n}\n.w-25[data-v-f59ffc4e] {\n    width: 25%;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36149,6 +36357,47 @@ component.options.__file = "resources/js/components/calculations/CalculationCrea
 
 /***/ }),
 
+/***/ "./resources/js/components/calculations/CalculationEdit.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/calculations/CalculationEdit.vue ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _CalculationEdit_vue_vue_type_template_id_f59ffc4e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CalculationEdit.vue?vue&type=template&id=f59ffc4e&scoped=true& */ "./resources/js/components/calculations/CalculationEdit.vue?vue&type=template&id=f59ffc4e&scoped=true&");
+/* harmony import */ var _CalculationEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CalculationEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/calculations/CalculationEdit.vue?vue&type=script&lang=js&");
+/* harmony import */ var _CalculationEdit_vue_vue_type_style_index_0_id_f59ffc4e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css& */ "./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
+  _CalculationEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _CalculationEdit_vue_vue_type_template_id_f59ffc4e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _CalculationEdit_vue_vue_type_template_id_f59ffc4e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "f59ffc4e",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/calculations/CalculationEdit.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/calculations/CalculationItem.vue":
 /*!******************************************************************!*\
   !*** ./resources/js/components/calculations/CalculationItem.vue ***!
@@ -36966,6 +37215,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/calculations/CalculationEdit.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/calculations/CalculationEdit.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CalculationEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/calculations/CalculationItem.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************!*\
   !*** ./resources/js/components/calculations/CalculationItem.vue?vue&type=script&lang=js& ***!
@@ -37392,6 +37657,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/calculations/CalculationEdit.vue?vue&type=template&id=f59ffc4e&scoped=true&":
+/*!*************************************************************************************************************!*\
+  !*** ./resources/js/components/calculations/CalculationEdit.vue?vue&type=template&id=f59ffc4e&scoped=true& ***!
+  \*************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_template_id_f59ffc4e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_template_id_f59ffc4e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_template_id_f59ffc4e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CalculationEdit.vue?vue&type=template&id=f59ffc4e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=template&id=f59ffc4e&scoped=true&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/calculations/CalculationItem.vue?vue&type=template&id=6be26262&":
 /*!*************************************************************************************************!*\
   !*** ./resources/js/components/calculations/CalculationItem.vue?vue&type=template&id=6be26262& ***!
@@ -37710,6 +37992,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationCreate_vue_vue_type_style_index_0_id_162aba0b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationCreate_vue_vue_type_style_index_0_id_162aba0b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationCreate_vue_vue_type_style_index_0_id_162aba0b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationCreate_vue_vue_type_style_index_0_id_162aba0b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css&":
+/*!***************************************************************************************************************************!*\
+  !*** ./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_style_index_0_id_f59ffc4e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css& */ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_style_index_0_id_f59ffc4e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_style_index_0_id_f59ffc4e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_style_index_0_id_f59ffc4e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CalculationEdit_vue_vue_type_style_index_0_id_f59ffc4e_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -39731,11 +40030,12 @@ var render = function() {
               _c(
                 "div",
                 {
+                  staticClass: "col-lg-4",
                   staticStyle: { display: "none" },
                   attrs: { id: "index" + index }
                 },
                 [
-                  _c("div", { staticClass: "col-12 col-lg-4" }, [
+                  _c("div", [
                     _vm._v(
                       "\n                        " +
                         _vm._s(category.title) +
@@ -39743,7 +40043,7 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-12 col-lg-4" }, [
+                  _c("div", [
                     _c(
                       "select",
                       {
@@ -39769,6 +40069,77 @@ var render = function() {
                                 })
                               _vm.$set(
                                 _vm.selected_elements,
+                                index,
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            function($event) {
+                              return _vm.onChange(index, $event)
+                            }
+                          ]
+                        }
+                      },
+                      [
+                        _vm._l(_vm.elements, function(element) {
+                          return [
+                            _vm._l(element.categories, function(ect) {
+                              return [
+                                ect.id === category.id
+                                  ? _c(
+                                      "option",
+                                      {
+                                        domProps: {
+                                          value: {
+                                            id: element.id,
+                                            price: element.price
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(element.title) +
+                                            " — " +
+                                            _vm._s(element.price) +
+                                            " ₽"
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            })
+                          ]
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selected_elements_dop[index],
+                            expression: "selected_elements_dop[index]"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.selected_elements_dop,
                                 index,
                                 $event.target.multiple
                                   ? $$selectedVal
@@ -39896,6 +40267,258 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=template&id=f59ffc4e&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=template&id=f59ffc4e&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "row align-items-center mb-4" }, [
+      _c("div", { staticClass: "col-12 col-lg-6" }, [
+        _c("h1", { staticClass: "h3 m-0" }, [
+          _vm._v(
+            "Расчет №" +
+              _vm._s(_vm.calculation.id) +
+              " от " +
+              _vm._s(
+                _vm.moment(_vm.calculation.created_at).format("D MMMM YYYY")
+              )
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        [
+          _c("label", [_vm._v("Тип")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.selected_types,
+                  expression: "selected_types"
+                }
+              ],
+              staticClass: "form-control mb-3",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selected_types = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  function($event) {
+                    return _vm.onTypeChange()
+                  }
+                ]
+              }
+            },
+            _vm._l(_vm.types, function(type) {
+              return _c(
+                "option",
+                { domProps: { value: { id: type.id, title: type.title } } },
+                [_vm._v(_vm._s(type.title))]
+              )
+            }),
+            0
+          ),
+          _vm._v(" "),
+          _c("label", [_vm._v("Корпус")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.selected_boxes,
+                  expression: "selected_boxes"
+                }
+              ],
+              staticClass: "form-control mb-3",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selected_boxes = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  function($event) {
+                    return _vm.onBoxChange()
+                  }
+                ]
+              }
+            },
+            [
+              _vm._l(_vm.boxes, function(box) {
+                return [
+                  _c("option", { domProps: { value: box.id } }, [
+                    _vm._v(_vm._s(box.title))
+                  ])
+                ]
+              })
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _vm._l(_vm.categories, function(category, index) {
+            return _c(
+              "div",
+              { key: "category_" + category.id, staticClass: "mb-3" },
+              [
+                _c("label", [_vm._v(_vm._s(category.title))]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    staticClass: "form-control mb-3",
+                    attrs: { name: category.slug }
+                  },
+                  [
+                    _vm._l(_vm.elements, function(element) {
+                      return [
+                        _vm._l(element.categories, function(ect) {
+                          return [
+                            _vm.calculation.elements &&
+                            _vm.calculation.elements.find(function(e) {
+                              return e.id === element.id
+                            })
+                              ? [
+                                  ect.id === category.id
+                                    ? _c(
+                                        "option",
+                                        {
+                                          attrs: { selected: "" },
+                                          domProps: { value: element.id }
+                                        },
+                                        [_vm._v(_vm._s(element.title))]
+                                      )
+                                    : _vm._e()
+                                ]
+                              : [
+                                  ect.id === category.id
+                                    ? _c(
+                                        "option",
+                                        { domProps: { value: element.id } },
+                                        [_vm._v(_vm._s(element.title))]
+                                      )
+                                    : _vm._e()
+                                ]
+                          ]
+                        })
+                      ]
+                    })
+                  ],
+                  2
+                )
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v("\n\n            Комментарий:\n            "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.comment,
+                expression: "comment"
+              }
+            ],
+            staticClass: "form-control mb-2",
+            domProps: { value: _vm.comment },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.comment = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm.price_total > 0
+            ? _c("div", { staticClass: "row align-items-center my-4" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-10 text-right",
+                    staticStyle: { color: "#888" }
+                  },
+                  [_vm._v("\n                    Итого:\n                ")]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-2 text-end" }, [
+                  _c("h4", { staticClass: "text-primary m-0" }, [
+                    _vm._v(_vm._s(_vm.price_total) + " ₽")
+                  ])
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              on: {
+                click: function($event) {
+                  return _vm.saveCalculation()
+                }
+              }
+            },
+            [_vm._v("Сохранить")]
+          )
+        ],
+        2
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationItem.vue?vue&type=template&id=6be26262&":
 /*!****************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationItem.vue?vue&type=template&id=6be26262& ***!
@@ -39913,12 +40536,39 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", { staticClass: "h3 mb-4" }, [
-      _vm._v(
-        "Расчет №" +
-          _vm._s(_vm.calculation.id) +
-          " от " +
-          _vm._s(_vm.moment(_vm.calculation.created_at).format("D MMMM YYYY"))
+    _c("div", { staticClass: "row align-items-center mb-4" }, [
+      _c("div", { staticClass: "col-12 col-lg-6" }, [
+        _c("h1", { staticClass: "h3 m-0" }, [
+          _vm._v(
+            "Расчет №" +
+              _vm._s(_vm.calculation.id) +
+              " от " +
+              _vm._s(
+                _vm.moment(_vm.calculation.created_at).format("D MMMM YYYY")
+              )
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-12 col-lg-6 text-end" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-warning",
+              attrs: {
+                to: {
+                  name: "CalculationEdit",
+                  params: { id: _vm.calculation.id }
+                }
+              }
+            },
+            [_vm._v("Изменить")]
+          )
+        ],
+        1
       )
     ]),
     _vm._v(" "),
@@ -40077,6 +40727,14 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", { staticClass: "align-middle" }, [
                       _vm._v(
+                        "\n                            Расчет №" +
+                          _vm._s(calculation.id) +
+                          "\n                        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "align-middle" }, [
+                      _vm._v(
                         "\n                            " +
                           _vm._s(calculation.comment) +
                           "\n                        "
@@ -40121,6 +40779,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Автор расчета")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("№")]),
         _vm._v(" "),
         _c("th", [_vm._v("Комментарий")]),
         _vm._v(" "),
@@ -40193,6 +40853,30 @@ var render = function() {
                 return
               }
               _vm.title = $event.target.value
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("label", { attrs: { id: "title_label" } }, [_vm._v("Код")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.slug,
+              expression: "slug"
+            }
+          ],
+          staticClass: "form-control mb-3",
+          attrs: { type: "text" },
+          domProps: { value: _vm.slug },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.slug = $event.target.value
             }
           }
         }),
@@ -45840,6 +46524,27 @@ if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = __webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "./node_modules/vue-style-loader/lib/addStylesClient.js").default
 var update = add("5a8a4570", content, false, {});
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/calculations/CalculationEdit.vue?vue&type=style&index=0&id=f59ffc4e&scoped=true&lang=css&");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.id, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "./node_modules/vue-style-loader/lib/addStylesClient.js").default
+var update = add("792a2402", content, false, {});
 // Hot Module Replacement
 if(false) {}
 

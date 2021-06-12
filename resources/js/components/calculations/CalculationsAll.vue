@@ -16,6 +16,7 @@
                     <thead>
                         <tr>
                             <th>Автор расчета</th>
+                            <th>№</th>
                             <th>Комментарий</th>
                             <th class="text-end">Дата расчета</th>
                         </tr>
@@ -24,6 +25,9 @@
                         <tr v-for="calculation in calculations" :key="calculation.id" @click="goTo(calculation.id)">
                             <td class="align-middle">
                                 <img src="https://appstack.bootlab.io/img/avatars/avatar-3.jpg" width="48" height="48" class="rounded-circle me-2" alt="Avatar"> Петр Иванов
+                            </td>
+                            <td class="align-middle">
+                                Расчет №{{ calculation.id }}
                             </td>
                             <td class="align-middle">
                                 {{ calculation.comment }}

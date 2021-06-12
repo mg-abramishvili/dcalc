@@ -11,6 +11,9 @@
                 <label id="title_label">Название</label>
                 <input v-model="title" type="text" class="form-control mb-3">
 
+                <label id="title_label">Код</label>
+                <input v-model="slug" type="text" class="form-control mb-3">
+
                 <div>
                     <button @click="saveCategory()" class="btn btn-primary">Сохранить</button>
                     <router-link :to="{name: 'Elements'}" class="btn btn-default">Отмена</router-link>
@@ -25,6 +28,7 @@
         data() {
             return {
                 title: '',
+                slug: '',
             }
         },
         created() {
@@ -32,7 +36,7 @@
         methods: {
             saveCategory() {
                 axios
-                .post('/api/categories', { title: this.title })
+                .post('/api/categories', { title: this.title, slug: this.slug })
                 .then(response => (
                     this.$router.push({path: '/elements'}) 
                 ));

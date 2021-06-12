@@ -18,6 +18,7 @@ import CategoryEdit from './components/categories/CategoryEdit.vue';
 
 import Calculations from './components/calculations/CalculationsAll.vue';
 import CalculationCreate from './components/calculations/CalculationCreate.vue';
+import CalculationEdit from './components/calculations/CalculationEdit.vue';
 import CalculationItem from './components/calculations/CalculationItem.vue';
 import Offers from './components/offers/OffersAll.vue';
 import OfferCreate from './components/offers/OfferCreate.vue';
@@ -107,6 +108,11 @@ export const routes = [
         path: '/calculations/create',
         name: 'CalculationCreate',
         component: CalculationCreate
+    },
+    {
+        path: '/calculation/:id/edit',
+        name: 'CalculationEdit',
+        component: CalculationEdit
     },
     {
         path: '/calculation/:id',
