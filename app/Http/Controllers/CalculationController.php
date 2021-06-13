@@ -31,6 +31,7 @@ class CalculationController extends Controller
         $calculation->price_total = $data['price_total'];
         $calculation->save();
 
+        $calculation->types()->attach($request->types, ['calculation_id' => $calculation->id]);
         $calculation->boxes()->attach($request->boxes, ['calculation_id' => $calculation->id]);
 
         $elements = $request->input('elements', []);
@@ -39,7 +40,6 @@ class CalculationController extends Controller
             if ($elements[$element] != '') {
                 $calculation->elements()->attach($elements[$element], [
                     //'amount' => '1',
-                    //'price' => '0'
                 ]);
             }
         }

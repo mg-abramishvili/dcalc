@@ -19,6 +19,11 @@ class Calculation extends Model
         return $this->belongsToMany('App\Models\Element');
     }
 
+    public function types()
+    {
+        return $this->belongsToMany('App\Models\Type');
+    }
+
     public function boxes()
     {
         return $this->belongsToMany('App\Models\Box');
