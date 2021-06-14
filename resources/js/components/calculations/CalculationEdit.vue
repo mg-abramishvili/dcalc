@@ -27,35 +27,44 @@
 
                 <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" :class="'index' + index + ' mb-3'">
                     
-                    <label>{{ category.title }}</label>
-                    
-                    <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
-                    <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
-                    
+                    <template v-if="reset_form === false && ele_cat && ele_cat.find(c => c === category.id)">
+                        <label>{{ category.title }}</label>
+                        
+                        <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
+                        <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
+                        
 
-                    <select v-if="reset_form === false && ele_cat && ele_cat.find(c => c === category.id)" :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
-                        <option value selected>&nbsp;</option>
-                        <template v-for="element in elements">
-                            <template v-for="ect in element.categories">
-                                <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
-                                    <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price" selected>{{ element.title }} - {{ element.price }}₽</option>
+                        <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
+                            <option value selected>&nbsp;</option>
+                            <template v-for="element in elements">
+                                <template v-for="ect in element.categories">
+                                    <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
+                                        <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price" selected>{{ element.title }} - {{ element.price }}₽</option>
+                                    </template>
+                                    <template v-else>
+                                        <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
+                                    </template>
                                 </template>
-                                <template v-else>
+                            </template>
+                        </select>
+                    </template>
+
+                    <template v-if="reset_form">
+                        <label>{{ category.title }}</label>
+                        
+                        <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
+                        <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
+                        
+                        <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
+                            <option value selected>&nbsp;</option>
+                            <template v-for="element in elements">
+                                <template v-for="ect in element.categories">
                                     <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
                                 </template>
                             </template>
-                        </template>
-                    </select>
-                    
-                    <select v-if="reset_form" :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
-                        <option value selected>&nbsp;</option>
-                        <template v-for="element in elements">
-                            <template v-for="ect in element.categories">
-                                <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
-                            </template>
-                        </template>
-                    </select>
-                        
+                        </select>
+                    </template>
+
                 </div>
 
                 <hr>
@@ -70,8 +79,8 @@
                         <h4 class="text-primary m-0">{{ price_total }} ₽</h4>
                     </div>
                 </div>
-                <button class="btn btn-primary" @click="calc()">Пересчитать</button>
-                <!--<button @click="clear()">Сбросить</button>-->
+                <button @click="calc()">Пересчитать</button>
+                <button @click="clear()">Сбросить</button>
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
@@ -180,11 +189,9 @@
                 this.price_total = parseInt(this.selected_boxes_price) + pr_to
             },
             onChange(category, index) {
-                document.getElementsByName(category.slug + '[]').forEach((child) => {
-                    if(child.value && document.getElementsByClassName('index' + (index + 1))[0]) {
-                        document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-                    }
-                });
+                if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
+                    document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+                }
 
                 var all_numbers = [
                     index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10
@@ -213,6 +220,8 @@
                 );
             },
             onBoxChange() {
+                this.clear()
+
                 // Берем цену корпуса
                 axios
                 .get(`/api/box/${this.selected_boxes}`)

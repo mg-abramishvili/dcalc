@@ -2910,6 +2910,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2992,11 +3001,10 @@ __webpack_require__.r(__webpack_exports__);
       this.price_total = parseInt(this.selected_boxes_price) + pr_to;
     },
     onChange: function onChange(category, index) {
-      document.getElementsByName(category.slug + '[]').forEach(function (child) {
-        if (child.value && document.getElementsByClassName('index' + (index + 1))[0]) {
-          document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-        }
-      });
+      if (document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
+        document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+      }
+
       var all_numbers = [index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10];
 
       if (!document.getElementsByName(category.slug + '[]')[0].value.length) {
@@ -3022,7 +3030,8 @@ __webpack_require__.r(__webpack_exports__);
     onBoxChange: function onBoxChange() {
       var _this3 = this;
 
-      // Берем цену корпуса
+      this.clear(); // Берем цену корпуса
+
       axios.get("/api/box/".concat(this.selected_boxes)).then(function (response) {
         return _this3.selected_boxes_price = response.data.price;
       }); // Фильтруем остальные детали относительно корпуса
@@ -40511,174 +40520,221 @@ var render = function() {
                 attrs: { id: "section_" + category.slug }
               },
               [
-                _c("label", [_vm._v(_vm._s(category.title))]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-sm btn-outline-secondary",
-                    staticStyle: {
-                      padding: "0",
-                      height: "15px",
-                      "line-height": "10px",
-                      width: "15px"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.dopElementsClone(category)
-                      }
-                    }
-                  },
-                  [_vm._v("+")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-sm btn-outline-secondary",
-                    staticStyle: {
-                      padding: "0",
-                      height: "15px",
-                      "line-height": "10px",
-                      width: "15px"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.dopElementsRemove(category)
-                      }
-                    }
-                  },
-                  [_vm._v("-")]
-                ),
-                _vm._v(" "),
                 _vm.reset_form === false &&
                 _vm.ele_cat &&
                 _vm.ele_cat.find(function(c) {
                   return c === category.id
                 })
-                  ? _c(
-                      "select",
-                      {
-                        staticClass: "form-control mb-3",
-                        attrs: { name: category.slug + "[]" },
-                        on: {
-                          change: function($event) {
-                            return _vm.onChange(category, index)
+                  ? [
+                      _c("label", [_vm._v(_vm._s(category.title))]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-outline-secondary",
+                          staticStyle: {
+                            padding: "0",
+                            height: "15px",
+                            "line-height": "10px",
+                            width: "15px"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.dopElementsClone(category)
+                            }
                           }
-                        }
-                      },
-                      [
-                        _c("option", { attrs: { value: "", selected: "" } }, [
-                          _vm._v(" ")
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(_vm.elements, function(element) {
-                          return [
-                            _vm._l(element.categories, function(ect) {
-                              return [
-                                _vm.calculation.elements &&
-                                _vm.calculation.elements.find(function(e) {
-                                  return e.id === element.id
-                                })
-                                  ? [
-                                      ect.id === category.id
-                                        ? _c(
-                                            "option",
-                                            {
-                                              attrs: {
-                                                "data-price": element.price,
-                                                selected: ""
+                        },
+                        [_vm._v("+")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-outline-secondary",
+                          staticStyle: {
+                            padding: "0",
+                            height: "15px",
+                            "line-height": "10px",
+                            width: "15px"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.dopElementsRemove(category)
+                            }
+                          }
+                        },
+                        [_vm._v("-")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          staticClass: "form-control mb-3",
+                          attrs: { name: category.slug + "[]" },
+                          on: {
+                            change: function($event) {
+                              return _vm.onChange(category, index)
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "", selected: "" } }, [
+                            _vm._v(" ")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.elements, function(element) {
+                            return [
+                              _vm._l(element.categories, function(ect) {
+                                return [
+                                  _vm.calculation.elements &&
+                                  _vm.calculation.elements.find(function(e) {
+                                    return e.id === element.id
+                                  })
+                                    ? [
+                                        ect.id === category.id
+                                          ? _c(
+                                              "option",
+                                              {
+                                                attrs: {
+                                                  "data-price": element.price,
+                                                  selected: ""
+                                                },
+                                                domProps: { value: element.id }
                                               },
-                                              domProps: { value: element.id }
-                                            },
-                                            [
-                                              _vm._v(
-                                                _vm._s(element.title) +
-                                                  " - " +
-                                                  _vm._s(element.price) +
-                                                  "₽"
-                                              )
-                                            ]
-                                          )
-                                        : _vm._e()
-                                    ]
-                                  : [
-                                      ect.id === category.id
-                                        ? _c(
-                                            "option",
-                                            {
-                                              attrs: {
-                                                "data-price": element.price
+                                              [
+                                                _vm._v(
+                                                  _vm._s(element.title) +
+                                                    " - " +
+                                                    _vm._s(element.price) +
+                                                    "₽"
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    : [
+                                        ect.id === category.id
+                                          ? _c(
+                                              "option",
+                                              {
+                                                attrs: {
+                                                  "data-price": element.price
+                                                },
+                                                domProps: { value: element.id }
                                               },
-                                              domProps: { value: element.id }
-                                            },
-                                            [
-                                              _vm._v(
-                                                _vm._s(element.title) +
-                                                  " - " +
-                                                  _vm._s(element.price) +
-                                                  "₽"
-                                              )
-                                            ]
-                                          )
-                                        : _vm._e()
-                                    ]
-                              ]
-                            })
-                          ]
-                        })
-                      ],
-                      2
-                    )
+                                              [
+                                                _vm._v(
+                                                  _vm._s(element.title) +
+                                                    " - " +
+                                                    _vm._s(element.price) +
+                                                    "₽"
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                ]
+                              })
+                            ]
+                          })
+                        ],
+                        2
+                      )
+                    ]
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.reset_form
-                  ? _c(
-                      "select",
-                      {
-                        staticClass: "form-control mb-3",
-                        attrs: { name: category.slug + "[]" },
-                        on: {
-                          change: function($event) {
-                            return _vm.onChange(category, index)
+                  ? [
+                      _c("label", [_vm._v(_vm._s(category.title))]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-outline-secondary",
+                          staticStyle: {
+                            padding: "0",
+                            height: "15px",
+                            "line-height": "10px",
+                            width: "15px"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.dopElementsClone(category)
+                            }
                           }
-                        }
-                      },
-                      [
-                        _c("option", { attrs: { value: "", selected: "" } }, [
-                          _vm._v(" ")
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(_vm.elements, function(element) {
-                          return [
-                            _vm._l(element.categories, function(ect) {
-                              return [
-                                ect.id === category.id
-                                  ? _c(
-                                      "option",
-                                      {
-                                        attrs: { "data-price": element.price },
-                                        domProps: { value: element.id }
-                                      },
-                                      [
-                                        _vm._v(
-                                          _vm._s(element.title) +
-                                            " - " +
-                                            _vm._s(element.price) +
-                                            "₽"
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ]
-                            })
-                          ]
-                        })
-                      ],
-                      2
-                    )
+                        },
+                        [_vm._v("+")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-outline-secondary",
+                          staticStyle: {
+                            padding: "0",
+                            height: "15px",
+                            "line-height": "10px",
+                            width: "15px"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.dopElementsRemove(category)
+                            }
+                          }
+                        },
+                        [_vm._v("-")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          staticClass: "form-control mb-3",
+                          attrs: { name: category.slug + "[]" },
+                          on: {
+                            change: function($event) {
+                              return _vm.onChange(category, index)
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "", selected: "" } }, [
+                            _vm._v(" ")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.elements, function(element) {
+                            return [
+                              _vm._l(element.categories, function(ect) {
+                                return [
+                                  ect.id === category.id
+                                    ? _c(
+                                        "option",
+                                        {
+                                          attrs: {
+                                            "data-price": element.price
+                                          },
+                                          domProps: { value: element.id }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(element.title) +
+                                              " - " +
+                                              _vm._s(element.price) +
+                                              "₽"
+                                          )
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ]
+                              })
+                            ]
+                          })
+                        ],
+                        2
+                      )
+                    ]
                   : _vm._e()
-              ]
+              ],
+              2
             )
           }),
           _vm._v(" "),
@@ -40727,7 +40783,6 @@ var render = function() {
           _c(
             "button",
             {
-              staticClass: "btn btn-primary",
               on: {
                 click: function($event) {
                   return _vm.calc()
@@ -40735,6 +40790,18 @@ var render = function() {
               }
             },
             [_vm._v("Пересчитать")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.clear()
+                }
+              }
+            },
+            [_vm._v("Сбросить")]
           ),
           _vm._v(" "),
           _c(
