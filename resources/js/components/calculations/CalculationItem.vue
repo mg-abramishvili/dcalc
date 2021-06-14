@@ -5,7 +5,7 @@
                 <h1 class="h3 m-0">Расчет №{{ calculation.id }} от {{moment(calculation.created_at).format('D MMMM YYYY')}}</h1>
             </div>
             <div class="col-12 col-lg-6 text-end">
-                <router-link :to="{name: 'CalculationEdit', params: {id: calculation.id}}" class="btn btn-warning">Изменить</router-link>
+                <!--<router-link :to="{name: 'CalculationEdit', params: {id: calculation.id}}" class="btn btn-warning">Изменить</router-link>-->
             </div>
         </div>
 
@@ -16,6 +16,9 @@
                 <table class="table table-striped table-hover dataTable no-footer dtr-inline">
                     <thead>
                         <th>
+                            
+                        </th>
+                        <th>
                             Наименование
                         </th>
                         <th class="text-end">
@@ -24,10 +27,12 @@
                     </thead>
                     <tbody>
                         <tr v-for="box in calculation.boxes">
+                            <td>Корпус</td>
                             <td>{{ box.title }}</td>
                             <td class="text-end">{{ box.price }} ₽</td>
                         </tr>
                         <tr v-for="element in calculation.elements">
+                            <td>{{ element.categories[0].title }}</td>
                             <td>{{ element.title }}</td>
                             <td class="text-end">{{ element.price }} ₽</td>
                         </tr>

@@ -34,7 +34,7 @@
                     <label>{{ category.title }}</label>
                     
                     <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
-                    <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
+                    <!--<button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>-->
 
                     <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
                         <option value selected>&nbsp;</option>
@@ -57,7 +57,7 @@
                         <h4 class="text-primary m-0">{{ price_total }} ₽</h4>
                     </div>
                 </div>
-                <button @click="calc()">Пересчитать</button>
+                <!--<button @click="calc()">Пересчитать</button>-->
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
@@ -73,8 +73,6 @@
                 elements: [],
                 price_total: {},
                 comment: '',
-                selected_elements: [],
-                selected_elements_dop: [],
                 boxes: {},
                 types: {},
                 selected_types: '',
@@ -145,7 +143,9 @@
             onChange(category, index) {
                 if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
                     document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-                    document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
+                    if(document.getElementsByClassName('index' + (index + 1))[0].querySelector("select")) {
+                        document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
+                    }
                 }
 
                 var all_numbers = [
@@ -174,7 +174,14 @@
                     }
                 );
 
+                var indexes = document.querySelectorAll('[class^="index"]');
+                [].forEach.call(indexes, function(index) {
+                index.style.display = "none";
+                });
+
                 document.getElementById('selected_boxes').style.display = "block";
+
+                this.selected_boxes = ''
             },
             onBoxChange() {
                 // Берем цену корпуса
@@ -212,11 +219,6 @@
                 var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
                 document.getElementById('section_' + category.slug).appendChild(cln)
             },
-            dopElementsRemove(category) {
-                if(document.getElementById('section_' + category.slug).childElementCount > 4) {
-                    document.getElementById('section_' + category.slug).lastElementChild.remove()
-                }
-            },
             saveCalculation() {
                 var megred_select_form_values = [];
                 this.categories.forEach(function(category) {
@@ -237,7 +239,10 @@
                 .then(response => (
                     this.$router.push({path: '/calculations'})
                 ));
-            }
+            },
+        },
+        mounted() {
+            setInterval(this.calc,500);
         },
         watch: {
         },

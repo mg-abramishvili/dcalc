@@ -2745,8 +2745,6 @@ __webpack_require__.r(__webpack_exports__);
       elements: [],
       price_total: {},
       comment: '',
-      selected_elements: [],
-      selected_elements_dop: [],
       boxes: {},
       types: {},
       selected_types: '',
@@ -2807,7 +2805,10 @@ __webpack_require__.r(__webpack_exports__);
     onChange: function onChange(category, index) {
       if (document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
         document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-        document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
+
+        if (document.getElementsByClassName('index' + (index + 1))[0].querySelector("select")) {
+          document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
+        }
       }
 
       var all_numbers = [index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10];
@@ -2831,7 +2832,12 @@ __webpack_require__.r(__webpack_exports__);
           document.getElementById('section_' + category.slug).lastElementChild.remove();
         }
       });
+      var indexes = document.querySelectorAll('[class^="index"]');
+      [].forEach.call(indexes, function (index) {
+        index.style.display = "none";
+      });
       document.getElementById('selected_boxes').style.display = "block";
+      this.selected_boxes = '';
     },
     onBoxChange: function onBoxChange() {
       var _this3 = this;
@@ -2861,11 +2867,6 @@ __webpack_require__.r(__webpack_exports__);
       var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
       document.getElementById('section_' + category.slug).appendChild(cln);
     },
-    dopElementsRemove: function dopElementsRemove(category) {
-      if (document.getElementById('section_' + category.slug).childElementCount > 4) {
-        document.getElementById('section_' + category.slug).lastElementChild.remove();
-      }
-    },
     saveCalculation: function saveCalculation() {
       var _this4 = this;
 
@@ -2892,6 +2893,9 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     }
+  },
+  mounted: function mounted() {
+    setInterval(this.calc, 500);
   },
   watch: {},
   components: {}
@@ -2999,14 +3003,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       calculation: {},
       categories: [],
       elements: [],
+      elements_o: [],
       price_total: {},
       comment: '',
       selected_elements: [],
@@ -3033,12 +3036,15 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/boxes').then(function (response) {
       return _this.boxes = response.data;
     });
+    axios.get('/api/elements').then(function (response) {
+      return _this.elements = response.data;
+    });
     axios.get("/api/calculation/".concat(this.$route.params.id)).then(function (response) {
-      _this.calculation = response.data, _this.elements = response.data.elements, _this.selected_types = response.data.types[0].id, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
+      _this.calculation = response.data, _this.elements_o = response.data.elements, _this.selected_types = response.data.types[0].id, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
       var ele_cat = [];
       _this.ele_cat = ele_cat;
 
-      _this.elements.forEach(function (element) {
+      _this.elements_o.forEach(function (element) {
         ele_cat.push(element.categories[0].id);
       });
 
@@ -3087,18 +3093,30 @@ __webpack_require__.r(__webpack_exports__);
     onChange: function onChange(category, index) {
       if (document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
         document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-        document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
+
+        if (document.getElementsByClassName('index' + (index + 1))[0].querySelector("select")) {
+          document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
+        }
       }
 
       var all_numbers = [index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10];
-
-      if (!document.getElementsByName(category.slug + '[]')[0].value.length) {
-        all_numbers.forEach(function (number) {
-          if (document.getElementsByClassName('index' + number)[0]) {
-            document.getElementsByClassName('index' + number)[0].style.display = "none";
+      document.getElementsByName(category.slug + '[]').forEach(function (cat_slu, index) {
+        if (index === 0) {
+          if (!cat_slu.value) {
+            all_numbers.forEach(function (number) {
+              if (document.getElementsByClassName('index' + number)[0]) {
+                document.getElementsByClassName('index' + number)[0].style.display = "none";
+              }
+            });
           }
-        });
-      }
+        } else {
+          if (!cat_slu.value) {
+            /*if(document.getElementById('section_' + category.slug).childElementCount > 3) {
+                document.getElementById('section_' + category.slug).lastElementChild.remove()
+            }*/
+          }
+        }
+      });
     },
     onTypeChange: function onTypeChange() {
       var _this2 = this;
@@ -3174,6 +3192,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
+  mounted: function mounted() {
+    setInterval(this.calc, 500);
+  },
   watch: {},
   components: {}
 });
@@ -3191,6 +3212,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3608,6 +3634,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -3644,8 +3673,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onChange: function onChange(index, event) {},
-    saveCalculation: function saveCalculation() {
+    selectAllCat: function selectAllCat() {
       var _this2 = this;
+
+      axios.get('/api/boxes').then(function (response) {
+        return _this2.selected_boxes = response.data.map(function (box) {
+          return box.id;
+        });
+      });
+    },
+    saveCalculation: function saveCalculation() {
+      var _this3 = this;
 
       for (var i = 0; i < document.querySelectorAll('label').length; i++) {
         if (document.querySelectorAll('label')[i].classList.contains('text-danger') === true) {
@@ -3673,12 +3711,13 @@ __webpack_require__.r(__webpack_exports__);
         categories: this.categories_selected,
         boxes: this.selected_boxes
       }).then(function (response) {
-        return _this2.$router.push({
+        return _this3.$router.push({
           path: '/elements'
         });
       })["catch"](function (error) {
         if (error.response) {
           for (var key in error.response.data.errors) {
+            console.log(key);
             document.getElementById(key + '_label').classList.add('text-danger');
             document.getElementById(key + '_input').classList.add('border-danger');
           }
@@ -3835,6 +3874,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -3875,8 +3917,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onChange: function onChange(index, event) {},
-    saveCalculation: function saveCalculation() {
+    selectAllCat: function selectAllCat() {
       var _this2 = this;
+
+      axios.get('/api/boxes').then(function (response) {
+        return _this2.selected_boxes = response.data.map(function (box) {
+          return box.id;
+        });
+      });
+    },
+    saveCalculation: function saveCalculation() {
+      var _this3 = this;
 
       for (var i = 0; i < document.querySelectorAll('label').length; i++) {
         if (document.querySelectorAll('label')[i].classList.contains('text-danger') === true) {
@@ -3905,7 +3956,7 @@ __webpack_require__.r(__webpack_exports__);
         categories: this.selected_category,
         boxes: this.selected_boxes
       }).then(function (response) {
-        return _this2.$router.push({
+        return _this3.$router.push({
           path: '/elements'
         });
       })["catch"](function (error) {
@@ -40284,25 +40335,6 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-sm btn-outline-secondary",
-                    staticStyle: {
-                      padding: "0",
-                      height: "15px",
-                      "line-height": "10px",
-                      width: "15px"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.dopElementsRemove(category)
-                      }
-                    }
-                  },
-                  [_vm._v("-")]
-                ),
-                _vm._v(" "),
-                _c(
                   "select",
                   {
                     staticClass: "form-control mb-3",
@@ -40389,18 +40421,6 @@ var render = function() {
                 ])
               ])
             : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              on: {
-                click: function($event) {
-                  return _vm.calc()
-                }
-              }
-            },
-            [_vm._v("Пересчитать")]
-          ),
           _vm._v(" "),
           _c(
             "button",
@@ -40608,99 +40628,63 @@ var render = function() {
                         [_vm._v("+")]
                       ),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-outline-secondary",
-                          staticStyle: {
-                            padding: "0",
-                            height: "15px",
-                            "line-height": "10px",
-                            width: "15px"
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.dopElementsRemove(category)
-                            }
-                          }
-                        },
-                        [_vm._v("-")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          staticClass: "form-control mb-3",
-                          attrs: { name: category.slug + "[]" },
-                          on: {
-                            change: function($event) {
-                              return _vm.onChange(category, index)
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "", selected: "" } }, [
-                            _vm._v(" ")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.elements, function(element) {
+                      _vm._l(_vm.elements, function(element) {
+                        return [
+                          _vm._l(element.categories, function(ect) {
                             return [
-                              _vm._l(element.categories, function(ect) {
-                                return [
-                                  _vm.calculation.elements &&
-                                  _vm.calculation.elements.find(function(e) {
-                                    return e.id === element.id
-                                  })
-                                    ? [
-                                        ect.id === category.id
-                                          ? _c(
-                                              "option",
-                                              {
-                                                attrs: {
-                                                  "data-price": element.price,
-                                                  selected: ""
-                                                },
-                                                domProps: { value: element.id }
+                              ect.id === category.id
+                                ? [
+                                    [
+                                      _c(
+                                        "select",
+                                        {
+                                          staticClass: "form-control mb-3",
+                                          attrs: { name: category.slug + "[]" },
+                                          on: {
+                                            change: function($event) {
+                                              return _vm.onChange(
+                                                category,
+                                                index
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "option",
+                                            {
+                                              attrs: { value: "", selected: "" }
+                                            },
+                                            [_vm._v(" ")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "option",
+                                            {
+                                              attrs: {
+                                                "data-price": element.price,
+                                                selected: ""
                                               },
-                                              [
-                                                _vm._v(
-                                                  _vm._s(element.title) +
-                                                    " - " +
-                                                    _vm._s(element.price) +
-                                                    "₽"
-                                                )
-                                              ]
-                                            )
-                                          : _vm._e()
-                                      ]
-                                    : [
-                                        ect.id === category.id
-                                          ? _c(
-                                              "option",
-                                              {
-                                                attrs: {
-                                                  "data-price": element.price
-                                                },
-                                                domProps: { value: element.id }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  _vm._s(element.title) +
-                                                    " - " +
-                                                    _vm._s(element.price) +
-                                                    "₽"
-                                                )
-                                              ]
-                                            )
-                                          : _vm._e()
-                                      ]
-                                ]
-                              })
+                                              domProps: { value: element.id }
+                                            },
+                                            [
+                                              _vm._v(
+                                                _vm._s(element.title) +
+                                                  " - " +
+                                                  _vm._s(element.price) +
+                                                  "₽"
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ]
+                                : _vm._e()
                             ]
                           })
-                        ],
-                        2
-                      )
+                        ]
+                      })
                     ]
                   : _vm._e(),
                 _vm._v(" "),
@@ -40725,25 +40709,6 @@ var render = function() {
                           }
                         },
                         [_vm._v("+")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-outline-secondary",
-                          staticStyle: {
-                            padding: "0",
-                            height: "15px",
-                            "line-height": "10px",
-                            width: "15px"
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.dopElementsRemove(category)
-                            }
-                          }
-                        },
-                        [_vm._v("-")]
                       ),
                       _vm._v(" "),
                       _c(
@@ -40842,18 +40807,7 @@ var render = function() {
           _c(
             "button",
             {
-              on: {
-                click: function($event) {
-                  return _vm.calc()
-                }
-              }
-            },
-            [_vm._v("Пересчитать")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
+              staticClass: "btn btn-outline-primary",
               on: {
                 click: function($event) {
                   return _vm.clear()
@@ -40919,26 +40873,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-12 col-lg-6 text-end" },
-        [
-          _c(
-            "router-link",
-            {
-              staticClass: "btn btn-warning",
-              attrs: {
-                to: {
-                  name: "CalculationEdit",
-                  params: { id: _vm.calculation.id }
-                }
-              }
-            },
-            [_vm._v("Изменить")]
-          )
-        ],
-        1
-      )
+      _c("div", { staticClass: "col-12 col-lg-6 text-end" })
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
@@ -40957,6 +40892,8 @@ var render = function() {
               [
                 _vm._l(_vm.calculation.boxes, function(box) {
                   return _c("tr", [
+                    _c("td", [_vm._v("Корпус")]),
+                    _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(box.title))]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-end" }, [
@@ -40967,6 +40904,8 @@ var render = function() {
                 _vm._v(" "),
                 _vm._l(_vm.calculation.elements, function(element) {
                   return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(element.categories[0].title))]),
+                    _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(element.title))]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-end" }, [
@@ -41014,6 +40953,8 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("thead", [
+      _c("th"),
+      _vm._v(" "),
       _c("th", [
         _vm._v("\n                        Наименование\n                    ")
       ]),
@@ -41546,7 +41487,9 @@ var render = function() {
           { staticClass: "row", staticStyle: { position: "relative" } },
           [
             _c("div", { staticClass: "col-6" }, [
-              _c("label", [_vm._v("Цена RUB")]),
+              _c("label", { attrs: { id: "pre_rub_label" } }, [
+                _vm._v("Цена RUB")
+              ]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -41558,7 +41501,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control mb-3",
-                attrs: { type: "text" },
+                attrs: { type: "text", id: "pre_rub_input" },
                 domProps: { value: _vm.pre_rub },
                 on: {
                   input: function($event) {
@@ -41572,7 +41515,9 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-6" }, [
-              _c("label", [_vm._v("Цена USD")]),
+              _c("label", { attrs: { id: "pre_usd_label" } }, [
+                _vm._v("Цена USD")
+              ]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -41584,7 +41529,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control mb-3",
-                attrs: { type: "text" },
+                attrs: { type: "text", id: "pre_usd_input" },
                 domProps: { value: _vm.pre_usd },
                 on: {
                   input: function($event) {
@@ -41717,8 +41662,23 @@ var render = function() {
           2
         ),
         _vm._v(" "),
-        _c("label", { attrs: { id: "boxes_label" } }, [
-          _vm._v("Совместимость")
+        _c("div", { staticClass: "d-flex justify-content-between" }, [
+          _c("label", { attrs: { id: "boxes_label" } }, [
+            _vm._v("Совместимость")
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-sm",
+              on: {
+                click: function($event) {
+                  return _vm.selectAllCat()
+                }
+              }
+            },
+            [_vm._v("выбрать все")]
+          )
         ]),
         _vm._v(" "),
         _c(
@@ -41929,7 +41889,9 @@ var render = function() {
           { staticClass: "row", staticStyle: { position: "relative" } },
           [
             _c("div", { staticClass: "col-6" }, [
-              _c("label", [_vm._v("Цена RUB")]),
+              _c("label", { attrs: { id: "pre_rub_label" } }, [
+                _vm._v("Цена RUB")
+              ]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -41941,7 +41903,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control mb-3",
-                attrs: { type: "text" },
+                attrs: { type: "text", id: "pre_rub_input" },
                 domProps: { value: _vm.pre_rub },
                 on: {
                   input: function($event) {
@@ -41955,7 +41917,9 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-6" }, [
-              _c("label", [_vm._v("Цена USD")]),
+              _c("label", { attrs: { id: "pre_usd_label" } }, [
+                _vm._v("Цена USD")
+              ]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -41967,7 +41931,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control mb-3",
-                attrs: { type: "text" },
+                attrs: { type: "text", id: "pre_usd_input" },
                 domProps: { value: _vm.pre_usd },
                 on: {
                   input: function($event) {
@@ -42100,8 +42064,23 @@ var render = function() {
           2
         ),
         _vm._v(" "),
-        _c("label", { attrs: { id: "boxes_label" } }, [
-          _vm._v("Совместимость")
+        _c("div", { staticClass: "d-flex justify-content-between" }, [
+          _c("label", { attrs: { id: "boxes_label" } }, [
+            _vm._v("Совместимость")
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-sm",
+              on: {
+                click: function($event) {
+                  return _vm.selectAllCat()
+                }
+              }
+            },
+            [_vm._v("выбрать все")]
+          )
         ]),
         _vm._v(" "),
         _c(

@@ -35,29 +35,27 @@
                         <label>{{ category.title }}</label>
                         
                         <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
-                        <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
+                        <!--<button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>-->
                         
-
-                        <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
-                            <option value selected>&nbsp;</option>
-                            <template v-for="element in elements">
-                                <template v-for="ect in element.categories">
-                                    <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
-                                        <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price" selected>{{ element.title }} - {{ element.price }}₽</option>
-                                    </template>
-                                    <template v-else>
-                                        <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
+                        <template v-for="element in elements">
+                            <template v-for="ect in element.categories">
+                                <template v-if="ect.id === category.id">
+                                    <template>
+                                        <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
+                                            <option value selected>&nbsp;</option>
+                                            <option :value="element.id" :data-price="element.price" selected>{{ element.title }} - {{ element.price }}₽</option>
+                                        </select>
                                     </template>
                                 </template>
                             </template>
-                        </select>
+                        </template>
                     </template>
 
                     <template v-if="reset_form">
                         <label>{{ category.title }}</label>
                         
                         <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
-                        <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
+                        <!--<button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>-->
 
                         <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
                             <option value selected>&nbsp;</option>
@@ -81,8 +79,8 @@
                         <h4 class="text-primary m-0">{{ price_total }} ₽</h4>
                     </div>
                 </div>
-                <button @click="calc()">Пересчитать</button>
-                <button @click="clear()">Сбросить</button>
+                <!--<button @click="calc()">Пересчитать</button>-->
+                <button @click="clear()" class="btn btn-outline-primary">Сбросить</button>
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
@@ -96,6 +94,7 @@
                 calculation: {},
                 categories: [],
                 elements: [],
+                elements_o: [],
                 price_total: {},
                 comment: '',
                 selected_elements: [],
@@ -127,10 +126,15 @@
                     this.boxes = response.data
                 ));
             axios
+                .get('/api/elements')
+                .then(response => (
+                    this.elements = response.data
+                ));
+            axios
                 .get(`/api/calculation/${this.$route.params.id}`)
                 .then((response) => {
                     this.calculation = response.data,
-                    this.elements = response.data.elements,
+                    this.elements_o = response.data.elements,
                     this.selected_types = response.data.types[0].id,
                     this.selected_boxes = response.data.boxes[0].id,
                     this.comment = response.data.comment,
@@ -138,7 +142,7 @@
 
                     var ele_cat =  [];
                     this.ele_cat = ele_cat
-                    this.elements.forEach((element) => {
+                    this.elements_o.forEach((element) => {
                         ele_cat.push(element.categories[0].id)
                     })
                     console.log(ele_cat)
@@ -197,19 +201,34 @@
             onChange(category, index) {
                 if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
                     document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-                    document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
+                    if(document.getElementsByClassName('index' + (index + 1))[0].querySelector("select")) {
+                        document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
+                    }
                 }
 
                 var all_numbers = [
                     index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10
                 ]
-                if(!document.getElementsByName(category.slug + '[]')[0].value.length) {
-                    all_numbers.forEach(function(number) {
-                        if(document.getElementsByClassName('index' + (number))[0]) {
-                            document.getElementsByClassName('index' + (number))[0].style.display = "none";
+                document.getElementsByName(category.slug + '[]').forEach((cat_slu,index) => {
+                    if(index===0) {
+                        if(!cat_slu.value) {
+                            all_numbers.forEach(function(number) {
+                                if(document.getElementsByClassName('index' + (number))[0]) {
+                                    document.getElementsByClassName('index' + (number))[0].style.display = "none";
+                                }
+                            });
+                            
                         }
-                    });
-                }
+                    } else {
+                        if(!cat_slu.value) {
+                            /*if(document.getElementById('section_' + category.slug).childElementCount > 3) {
+                                document.getElementById('section_' + category.slug).lastElementChild.remove()
+                            }*/
+                            
+                        }
+                    }
+                });
+
             },
             onTypeChange() {
                 axios
@@ -290,6 +309,9 @@
                     this.$router.push({path: '/calculations'})
                 ));
             }
+        },
+        mounted() {
+            setInterval(this.calc,500);
         },
         watch: {
         },

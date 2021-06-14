@@ -16,12 +16,12 @@
 
                 <div class="row" style="position: relative">
                     <div class="col-6">
-                        <label>Цена RUB</label>
-                        <input type="text" class="form-control mb-3" v-model="pre_rub">
+                        <label id="pre_rub_label">Цена RUB</label>
+                        <input type="text" id="pre_rub_input" class="form-control mb-3" v-model="pre_rub">
                     </div>
                     <div class="col-6">
-                        <label>Цена USD</label>
-                        <input type="text" class="form-control mb-3" v-model="pre_usd">
+                        <label id="pre_usd_label">Цена USD</label>
+                        <input type="text" id="pre_usd_input" class="form-control mb-3" v-model="pre_usd">
                     </div>
                     <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: block; width: 10px; padding: 0; margin: 0; margin-top: 2px;">+</span>
                 </div>
@@ -39,7 +39,10 @@
                     </template>
                 </select>
 
-                <label id="boxes_label">Совместимость</label>
+                <div class="d-flex justify-content-between">
+                    <label id="boxes_label">Совместимость</label>
+                    <button @click="selectAllCat()" class="btn btn-sm">выбрать все</button>
+                </div>
                 <select v-model="selected_boxes" id="boxes_input" class="form-control mb-3" multiple>
                     <template v-for="box in boxes">
                         <option :value="box.id">{{ box.title }}</option>
@@ -106,6 +109,13 @@
         methods: {
             onChange(index, event) {
                 
+            },
+            selectAllCat() {
+                axios
+                .get('/api/boxes')
+                .then(response => (
+                    this.selected_boxes = response.data.map(box => box.id)
+                ));
             },
             saveCalculation() {
                 for (var i = 0; i < document.querySelectorAll('label').length; i++) {
