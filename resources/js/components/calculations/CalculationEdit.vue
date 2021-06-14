@@ -11,7 +11,9 @@
 
                 <label>Тип</label>
                 <select v-model="selected_types" @change="onTypeChange()" class="form-control mb-3">
-                    <option v-for="type in types" v-bind:value="{ id: type.id, title: type.title }">{{ type.title }}</option>
+                    <template v-for="type in types">
+                        <option :value="type.id">{{ type.title }}</option>
+                    </template>
                 </select>
 
                 <label>Корпус</label>
@@ -82,6 +84,7 @@
                 .get(`/api/calculation/${this.$route.params.id}`)
                 .then(response => (
                     this.calculation = response.data,
+                    this.selected_types = response.data.types[0].id,
                     this.selected_boxes = response.data.boxes[0].id,
                     this.comment = response.data.comment,
                     this.price_total = response.data.price_total
@@ -113,7 +116,7 @@
             },
             onTypeChange() {
                 axios
-                .get(`/api/boxes/filter/${this.selected_types.id}`)
+                .get(`/api/boxes/filter/${this.selected_types}`)
                 .then(response => (
                     this.boxes = response.data
                 ));
@@ -143,12 +146,12 @@
                         }
                     }
                 );
-                console.log(megred_select_form_values)
-                /*axios
-                .post('/api/calculations', { comment: this.comment, price_total: this.price_total, boxes: this.selected_boxes.id, elements: this.selected_elements.map(element=>({id:element.id})).concat(this.selected_elements_dop.map(element=>({id:element.id}))) })
+                
+                axios
+                .post(`/api/calculation/${this.$route.params.id}/edit`, { id: this.$route.params.id, comment: this.comment, price_total: this.price_total, types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
                 .then(response => (
-                    this.$router.push({path: '/calculations'}) 
-                ));*/
+                    this.$router.push({path: '/calculations'})
+                ));
             }
         },
         watch: {

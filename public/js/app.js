@@ -2890,6 +2890,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2912,7 +2914,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get("/api/calculation/".concat(this.$route.params.id)).then(function (response) {
-      return _this.calculation = response.data, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
+      return _this.calculation = response.data, _this.selected_types = response.data.types[0].id, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
     });
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
@@ -2934,7 +2936,7 @@ __webpack_require__.r(__webpack_exports__);
     onTypeChange: function onTypeChange() {
       var _this2 = this;
 
-      axios.get("/api/boxes/filter/".concat(this.selected_types.id)).then(function (response) {
+      axios.get("/api/boxes/filter/".concat(this.selected_types)).then(function (response) {
         return _this2.boxes = response.data;
       });
     },
@@ -2951,6 +2953,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     saveCalculation: function saveCalculation() {
+      var _this4 = this;
+
       var megred_select_form_values = [];
       this.categories.forEach(function (category) {
         if (document.getElementsByName(category.slug)[0].value !== 'none') {
@@ -2959,12 +2963,18 @@ __webpack_require__.r(__webpack_exports__);
           console.log(category.slug + '- none');
         }
       });
-      console.log(megred_select_form_values);
-      /*axios
-      .post('/api/calculations', { comment: this.comment, price_total: this.price_total, boxes: this.selected_boxes.id, elements: this.selected_elements.map(element=>({id:element.id})).concat(this.selected_elements_dop.map(element=>({id:element.id}))) })
-      .then(response => (
-          this.$router.push({path: '/calculations'}) 
-      ));*/
+      axios.post("/api/calculation/".concat(this.$route.params.id, "/edit"), {
+        id: this.$route.params.id,
+        comment: this.comment,
+        price_total: this.price_total,
+        types: this.selected_types,
+        boxes: this.selected_boxes,
+        elements: megred_select_form_values
+      }).then(function (response) {
+        return _this4.$router.push({
+          path: '/calculations'
+        });
+      });
     }
   },
   watch: {},
@@ -40343,14 +40353,16 @@ var render = function() {
                 ]
               }
             },
-            _vm._l(_vm.types, function(type) {
-              return _c(
-                "option",
-                { domProps: { value: { id: type.id, title: type.title } } },
-                [_vm._v(_vm._s(type.title))]
-              )
-            }),
-            0
+            [
+              _vm._l(_vm.types, function(type) {
+                return [
+                  _c("option", { domProps: { value: type.id } }, [
+                    _vm._v(_vm._s(type.title))
+                  ])
+                ]
+              })
+            ],
+            2
           ),
           _vm._v(" "),
           _c("label", [_vm._v("Корпус")]),

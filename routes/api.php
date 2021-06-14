@@ -33,6 +33,7 @@ Route::get('/box/{id}/delete','App\Http\Controllers\BoxController@box_delete');
 Route::get('/calculations','App\Http\Controllers\CalculationController@index');
 Route::get('/calculation/{id}','App\Http\Controllers\CalculationController@show');
 Route::post('/calculations','App\Http\Controllers\CalculationController@store');
+Route::post('/calculation/{id}/edit','App\Http\Controllers\CalculationController@edit');
 
 // КП
 Route::get('/offers','App\Http\Controllers\OfferController@index');

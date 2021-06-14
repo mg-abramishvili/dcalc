@@ -45,23 +45,35 @@ class CalculationController extends Controller
         }
     }
 
+    public function edit(Request $request)
+    {
+        $data = request()->all();
+        $calculation = Calculation::find($data['id']);
+        $calculation->comment = $data['comment'];
+        $calculation->price_total = $data['price_total'];
+        $calculation->save();
+
+        $calculation->types()->detach();
+        $calculation->types()->attach($request->types, ['calculation_id' => $calculation->id]);
+        $calculation->boxes()->detach();
+        $calculation->boxes()->attach($request->boxes, ['calculation_id' => $calculation->id]);
+
+        $calculation->elements()->detach();
+
+        $elements = $request->input('elements', []);
+
+        for ($element=0; $element < count($elements); $element++) {
+            if ($elements[$element] != '') {
+                $calculation->elements()->attach($elements[$element], [
+                    //'amount' => '1',
+                ]);
+            }
+        }
+    }
+
     public function show($id)
     {
-        return Calculation::with('elements', 'boxes')->find($id);
+        return Calculation::with('elements', 'boxes', 'types')->find($id);
     }
 
-    public function edit(Calculation $calculation)
-    {
-        //
-    }
-
-    public function update(Request $request, Calculation $calculation)
-    {
-        //
-    }
-
-    public function destroy(Calculation $calculation)
-    {
-        //
-    }
 }
