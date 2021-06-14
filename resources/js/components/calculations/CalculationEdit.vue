@@ -26,6 +26,7 @@
                 <hr>
 
                 <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" :class="'index' + index + ' mb-3'">
+                    
                     <label>{{ category.title }}</label>
                     
                     <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
@@ -33,7 +34,7 @@
                     
 
                     <select v-if="reset_form === false && ele_cat && ele_cat.find(c => c === category.id)" :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
-                        <!--<option value="none">&nbsp;</option>-->
+                        <option value selected>&nbsp;</option>
                         <template v-for="element in elements">
                             <template v-for="ect in element.categories">
                                 <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
@@ -69,8 +70,8 @@
                         <h4 class="text-primary m-0">{{ price_total }} ₽</h4>
                     </div>
                 </div>
-                <button @click="calc()">Пересчитать</button>
-                <button @click="clear()">Сбросить</button>
+                <button class="btn btn-primary" @click="calc()">Пересчитать</button>
+                <!--<button @click="clear()">Сбросить</button>-->
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
@@ -162,6 +163,7 @@
                 this.reset_form = true
             },
             calc() {
+                this.price_total = 0
                 var pr_to =  [];
                 this.price_total = pr_to
 
@@ -178,9 +180,11 @@
                 this.price_total = parseInt(this.selected_boxes_price) + pr_to
             },
             onChange(category, index) {
-                if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
-                    document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-                }
+                document.getElementsByName(category.slug + '[]').forEach((child) => {
+                    if(child.value && document.getElementsByClassName('index' + (index + 1))[0]) {
+                        document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+                    }
+                });
 
                 var all_numbers = [
                     index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10
@@ -192,10 +196,6 @@
                         }
                     });
                 }
-
-                setTimeout(function(){
-                    this.calc()
-                }.bind(this), 500);
             },
             onTypeChange() {
                 axios
@@ -211,11 +211,6 @@
                         }
                     }
                 );
-
-                setTimeout(function(){
-                    this.clear(),
-                    this.calc()
-                }.bind(this), 500);
             },
             onBoxChange() {
                 // Берем цену корпуса
@@ -238,25 +233,14 @@
                         }
                     }
                 );
-
-                setTimeout(function(){
-                    this.clear(),
-                    this.calc()
-                }.bind(this), 500);
             },
             dopElementsClone(category) {
                 var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
                 document.getElementById('section_' + category.slug).appendChild(cln)
-                setTimeout(function(){
-                    this.calc()
-                }.bind(this), 500);
             },
             dopElementsRemove(category) {
                 if(document.getElementById('section_' + category.slug).childElementCount > 4) {
                     document.getElementById('section_' + category.slug).lastElementChild.remove()
-                    setTimeout(function(){
-                        this.calc()
-                    }.bind(this), 500);
                 }
             },
             saveCalculation() {

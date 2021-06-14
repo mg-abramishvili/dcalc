@@ -2909,6 +2909,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2975,6 +2976,7 @@ __webpack_require__.r(__webpack_exports__);
       this.reset_form = true;
     },
     calc: function calc() {
+      this.price_total = 0;
       var pr_to = [];
       this.price_total = pr_to;
       this.categories.forEach(function (category) {
@@ -2990,10 +2992,11 @@ __webpack_require__.r(__webpack_exports__);
       this.price_total = parseInt(this.selected_boxes_price) + pr_to;
     },
     onChange: function onChange(category, index) {
-      if (document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
-        document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-      }
-
+      document.getElementsByName(category.slug + '[]').forEach(function (child) {
+        if (child.value && document.getElementsByClassName('index' + (index + 1))[0]) {
+          document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+        }
+      });
       var all_numbers = [index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10];
 
       if (!document.getElementsByName(category.slug + '[]')[0].value.length) {
@@ -3003,10 +3006,6 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       }
-
-      setTimeout(function () {
-        this.calc();
-      }.bind(this), 500);
     },
     onTypeChange: function onTypeChange() {
       var _this2 = this;
@@ -3019,9 +3018,6 @@ __webpack_require__.r(__webpack_exports__);
           document.getElementById('section_' + category.slug).lastElementChild.remove();
         }
       });
-      setTimeout(function () {
-        this.clear(), this.calc();
-      }.bind(this), 500);
     },
     onBoxChange: function onBoxChange() {
       var _this3 = this;
@@ -3039,23 +3035,14 @@ __webpack_require__.r(__webpack_exports__);
           document.getElementById('section_' + category.slug).lastElementChild.remove();
         }
       });
-      setTimeout(function () {
-        this.clear(), this.calc();
-      }.bind(this), 500);
     },
     dopElementsClone: function dopElementsClone(category) {
       var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
       document.getElementById('section_' + category.slug).appendChild(cln);
-      setTimeout(function () {
-        this.calc();
-      }.bind(this), 500);
     },
     dopElementsRemove: function dopElementsRemove(category) {
       if (document.getElementById('section_' + category.slug).childElementCount > 4) {
         document.getElementById('section_' + category.slug).lastElementChild.remove();
-        setTimeout(function () {
-          this.calc();
-        }.bind(this), 500);
       }
     },
     saveCalculation: function saveCalculation() {
@@ -40581,6 +40568,10 @@ var render = function() {
                         }
                       },
                       [
+                        _c("option", { attrs: { value: "", selected: "" } }, [
+                          _vm._v(" ")
+                        ]),
+                        _vm._v(" "),
                         _vm._l(_vm.elements, function(element) {
                           return [
                             _vm._l(element.categories, function(ect) {
@@ -40736,6 +40727,7 @@ var render = function() {
           _c(
             "button",
             {
+              staticClass: "btn btn-primary",
               on: {
                 click: function($event) {
                   return _vm.calc()
@@ -40743,18 +40735,6 @@ var render = function() {
               }
             },
             [_vm._v("Пересчитать")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              on: {
-                click: function($event) {
-                  return _vm.clear()
-                }
-              }
-            },
-            [_vm._v("Сбросить")]
           ),
           _vm._v(" "),
           _c(
