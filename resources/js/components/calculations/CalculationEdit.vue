@@ -9,21 +9,24 @@
         <div class="card">
             <div class="card-body">
 
-                <label>Тип</label>
-                <select v-model="selected_types" @change="onTypeChange()" class="form-control mb-3">
-                    <template v-for="type in types">
-                        <option :value="type.id">{{ type.title }}</option>
-                    </template>
-                </select>
+                <div id="selected_types">
+                    <label>Тип</label>
+                    <select v-model="selected_types" @change="onTypeChange()" class="form-control mb-3">
+                        <option value selected>&nbsp;</option>
+                        <template v-for="type in types">
+                            <option :value="type.id">{{ type.title }}</option>
+                        </template>
+                    </select>
+                </div>
 
-                <label>Корпус</label>
-                <select v-model="selected_boxes" id="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
-                    <template v-for="box in boxes">
-                        <option :value="box.id">{{ box.title }} - {{ box.price }}₽</option>
-                    </template>
-                </select>
-
-                <hr>
+                <div id="selected_boxes">
+                    <label>Корпус</label>
+                    <select v-model="selected_boxes" id="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                        <template v-for="box in boxes">
+                            <option :value="box.id">{{ box.title }} - {{ box.price }}₽</option>
+                        </template>
+                    </select>
+                </div>
 
                 <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" :class="'index' + index + ' mb-3'">
                     
@@ -54,7 +57,7 @@
                         
                         <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
                         <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
-                        
+
                         <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
                             <option value selected>&nbsp;</option>
                             <template v-for="element in elements">
@@ -66,8 +69,6 @@
                     </template>
 
                 </div>
-
-                <hr>
 
                 Комментарий:
                 <textarea class="form-control mb-2" v-model="comment"></textarea>
@@ -167,7 +168,10 @@
                 [].forEach.call(indexes, function(index) {
                 index.style.display = "none";
                 });
-                document.getElementsByClassName('index0')[0].style.display = "block";
+
+                document.getElementById('selected_boxes').style.display = "none";
+
+                this.selected_types = ''
 
                 this.reset_form = true
             },
@@ -189,6 +193,7 @@
                 this.price_total = parseInt(this.selected_boxes_price) + pr_to
             },
             onChange(category, index) {
+                console.log('change')
                 if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
                     document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
                 }
@@ -218,10 +223,10 @@
                         }
                     }
                 );
+
+                document.getElementById('selected_boxes').style.display = "block";
             },
             onBoxChange() {
-                this.clear()
-
                 // Берем цену корпуса
                 axios
                 .get(`/api/box/${this.selected_boxes}`)
@@ -242,6 +247,16 @@
                         }
                     }
                 );
+
+                var all_numbers = [
+                    0,1,2,3,4,5,6,7,8,9,10
+                ]
+                all_numbers.forEach(function(number) {
+                    if(document.getElementsByClassName('index' + (number))[0]) {
+                        document.getElementsByClassName('index' + (number))[0].style.display = "none";
+                    }
+                });
+                document.getElementsByClassName('index0')[0].style.display = "block";
             },
             dopElementsClone(category) {
                 var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
@@ -267,11 +282,11 @@
 
                 console.log(megred_select_form_values)
                 
-                /*axios
+                axios
                 .post(`/api/calculation/${this.$route.params.id}/edit`, { id: this.$route.params.id, comment: this.comment, price_total: this.price_total, types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
                 .then(response => (
                     this.$router.push({path: '/calculations'})
-                ));*/
+                ));
             }
         },
         watch: {

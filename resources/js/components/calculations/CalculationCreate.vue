@@ -11,37 +11,39 @@
 
                 <label>Тип</label>
                 <select v-model="selected_types" @change="onTypeChange()" class="form-control mb-3">
-                    <option v-for="type in types" v-bind:value="{ id: type.id, title: type.title }">{{ type.title }}</option>
+                    <template v-for="type in types">
+                        <option :value="type.id">{{ type.title }}</option>
+                    </template>
                 </select>
 
-                <label v-if="boxes.length">Корпус</label>
-                <select v-if="boxes.length" v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
-                    <option v-for="box in boxes" v-bind:value="{ id: box.id, title: box.title, price: box.price }">{{ box.title }}  — {{ box.price }} ₽</option>
+                <label>Корпус</label>
+                <select v-model="selected_boxes" id="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                    <template v-for="box in boxes">
+                        <option :value="box.id">{{ box.title }} - {{ box.price }}₽</option>
+                    </template>
                 </select>
 
-                <div v-for="(category, index) in categories" :key="index" class="mb-3">
-                    <div :id="'index' + index" class="col-lg-4" style="display:none">
-                        <div>
-                            {{ category.title }}
-                        </div>
-                        <div>
-                            <select v-model="selected_elements[index]" @change="onChange(index, $event)" class="form-control">
-                                <template v-for="element in elements">
-                                    <template v-for="ect in element.categories">
-                                        <option v-if="ect.id === category.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }} — {{ element.price }} ₽</option>
-                                    </template>
-                                </template>
-                            </select>
-                            <select v-model="selected_elements_dop[index]" @change="onChange(index, $event)" class="form-control">
-                                <template v-for="element in elements">
-                                    <template v-for="ect in element.categories">
-                                        <option v-if="ect.id === category.id" v-bind:value="{ id: element.id, price: element.price }">{{ element.title }} — {{ element.price }} ₽</option>
-                                    </template>
-                                </template>
-                            </select>
-                        </div>
-                    </div>
+                <hr>
+
+                <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" :class="'index' + index + ' mb-3'">
+
+                    <label>{{ category.title }}</label>
+                    
+                    <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
+                    <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
+                    
+                    <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
+                        <option value selected>&nbsp;</option>
+                        <template v-for="element in elements">
+                            <template v-for="ect in element.categories">
+                                <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
+                            </template>
+                        </template>
+                    </select>
+
                 </div>
+
+                <hr>
 
                 Комментарий:
                 <textarea class="form-control mb-2" v-model="comment"></textarea>
@@ -53,6 +55,7 @@
                         <h4 class="text-primary m-0">{{ price_total }} ₽</h4>
                     </div>
                 </div>
+                <button @click="calc()">Пересчитать</button>
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
@@ -63,6 +66,7 @@
     export default {
         data() {
             return {
+                calculation: {},
                 categories: [],
                 elements: [],
                 price_total: {},
@@ -72,7 +76,11 @@
                 boxes: {},
                 types: {},
                 selected_types: '',
-                selected_boxes: '',
+                selected_boxes: {},
+                selected_boxes_price: '',
+                moment: moment,
+                ele_cat: [],
+                reset_form: false,
             }
         },
         created() {
@@ -82,49 +90,134 @@
                     this.categories = response.data
                 ));
             axios
-                .get('/api/elements')
-                .then(response => (
-                    this.elements = response.data
-                ));
-            axios
                 .get('/api/types')
                 .then(response => (
                     this.types = response.data
                 ));
+            axios
+                .get('/api/boxes')
+                .then(response => (
+                    this.boxes = response.data,
+                    this.clear()
+                ));
         },
         methods: {
-            onChange(index, event) {
-                this.price_total =  parseInt(this.selected_boxes.price) + this.selected_elements.reduce((acc, curr) => acc + parseInt(curr.price), 0);
-                if(document.getElementById('index' + (index + 1))) {
-                    document.getElementById('index' + (index + 1)).style.display = "block";
+            clear() {
+                this.categories.forEach(function(category) {
+                        while(document.getElementById('section_' + category.slug).childElementCount > 4) {
+                            document.getElementById('section_' + category.slug).lastElementChild.remove()
+                        }
+                    }
+                );
+
+                var indexes = document.querySelectorAll('[class^="index"]');
+                [].forEach.call(indexes, function(index) {
+                index.style.display = "none";
+                });
+                document.getElementsByClassName('index0')[0].style.display = "block";
+
+                this.reset_form = true
+            },
+            calc() {
+                this.price_total = 0
+                var pr_to =  [];
+                this.price_total = pr_to
+
+                this.categories.forEach(function(category) {
+                        document.getElementsByName(category.slug + '[]').forEach((child) => {
+                            if(child.options[child.selectedIndex].getAttribute('data-price')) {
+                                pr_to.push(parseInt(child.options[child.selectedIndex].getAttribute('data-price')))
+                            }
+                        });
+                    }
+                );
+
+                pr_to = pr_to.reduce((a, b) => a + b, 0)
+                this.price_total = parseInt(this.selected_boxes_price) + pr_to
+            },
+            onChange(category, index) {
+                if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
+                    document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+                }
+
+                var all_numbers = [
+                    index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10
+                ]
+                if(!document.getElementsByName(category.slug + '[]')[0].value.length) {
+                    all_numbers.forEach(function(number) {
+                        if(document.getElementsByClassName('index' + (number))[0]) {
+                            document.getElementsByClassName('index' + (number))[0].style.display = "none";
+                        }
+                    });
                 }
             },
             onTypeChange() {
                 axios
-                .get(`/api/boxes/filter/${this.selected_types.id}`)
+                .get(`/api/boxes/filter/${this.selected_types}`)
                 .then(response => (
-                    this.boxes = response.data
+                    this.boxes = response.data,
+                    this.price_total = 0
                 ));
+
+                this.categories.forEach(function(category) {
+                        while(document.getElementById('section_' + category.slug).childElementCount > 4) {
+                            document.getElementById('section_' + category.slug).lastElementChild.remove()
+                        }
+                    }
+                );
             },
             onBoxChange() {
+                this.clear()
+
+                // Берем цену корпуса
                 axios
-                .get(`/api/elements/filter/box/${this.selected_boxes.id}`)
+                .get(`/api/box/${this.selected_boxes}`)
+                .then(response => (
+                    this.selected_boxes_price = response.data.price
+                ));
+
+                // Фильтруем остальные детали относительно корпуса
+                axios
+                .get(`/api/elements/filter/box/${this.selected_boxes}`)
                 .then(response => (
                     this.elements = response.data
                 ));
-                var indexes = document.querySelectorAll('[id^="index"]');
-                [].forEach.call(indexes, function(index) {
-                index.style.display = "none";
-                });
-                document.getElementById('index0').style.display = "block";
-                this.selected_elements = [],
-                this.price_total =  parseInt(this.selected_boxes.price)
+
+                this.categories.forEach(function(category) {
+                        while(document.getElementById('section_' + category.slug).childElementCount > 4) {
+                            document.getElementById('section_' + category.slug).lastElementChild.remove()
+                        }
+                    }
+                );
+            },
+            dopElementsClone(category) {
+                var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
+                document.getElementById('section_' + category.slug).appendChild(cln)
+            },
+            dopElementsRemove(category) {
+                if(document.getElementById('section_' + category.slug).childElementCount > 4) {
+                    document.getElementById('section_' + category.slug).lastElementChild.remove()
+                }
             },
             saveCalculation() {
+                var megred_select_form_values = [];
+                this.categories.forEach(function(category) {
+                        document.getElementsByName(category.slug + '[]').forEach((child) => {
+                            if(document.getElementsByName(category.slug + '[]')[0].value) {
+                                megred_select_form_values.push(child.value)
+                            } else {
+                                console.log(category.slug + ' - none')
+                            }
+                        });
+                    }
+                );
+
+                console.log(megred_select_form_values)
+                
                 axios
-                .post('/api/calculations', { comment: this.comment, price_total: this.price_total, boxes: this.selected_boxes.id, elements: this.selected_elements.map(element=>({id:element.id})).concat(this.selected_elements_dop.map(element=>({id:element.id}))) })
+                .post(`/api/calculations`, { comment: this.comment, price_total: this.price_total, types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
                 .then(response => (
-                    this.$router.push({path: '/calculations'}) 
+                    this.$router.push({path: '/calculations'})
                 ));
             }
         },

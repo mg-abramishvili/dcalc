@@ -2732,9 +2732,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      calculation: {},
       categories: [],
       elements: [],
       price_total: {},
@@ -2744,7 +2748,11 @@ __webpack_require__.r(__webpack_exports__);
       boxes: {},
       types: {},
       selected_types: '',
-      selected_boxes: ''
+      selected_boxes: {},
+      selected_boxes_price: '',
+      moment: moment,
+      ele_cat: [],
+      reset_form: false
     };
   },
   created: function created() {
@@ -2753,59 +2761,117 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
     });
-    axios.get('/api/elements').then(function (response) {
-      return _this.elements = response.data;
-    });
     axios.get('/api/types').then(function (response) {
       return _this.types = response.data;
     });
+    axios.get('/api/boxes').then(function (response) {
+      return _this.boxes = response.data, _this.clear();
+    });
   },
   methods: {
-    onChange: function onChange(index, event) {
-      this.price_total = parseInt(this.selected_boxes.price) + this.selected_elements.reduce(function (acc, curr) {
-        return acc + parseInt(curr.price);
+    clear: function clear() {
+      this.categories.forEach(function (category) {
+        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
+          document.getElementById('section_' + category.slug).lastElementChild.remove();
+        }
+      });
+      var indexes = document.querySelectorAll('[class^="index"]');
+      [].forEach.call(indexes, function (index) {
+        index.style.display = "none";
+      });
+      document.getElementsByClassName('index0')[0].style.display = "block";
+      this.reset_form = true;
+    },
+    calc: function calc() {
+      this.price_total = 0;
+      var pr_to = [];
+      this.price_total = pr_to;
+      this.categories.forEach(function (category) {
+        document.getElementsByName(category.slug + '[]').forEach(function (child) {
+          if (child.options[child.selectedIndex].getAttribute('data-price')) {
+            pr_to.push(parseInt(child.options[child.selectedIndex].getAttribute('data-price')));
+          }
+        });
+      });
+      pr_to = pr_to.reduce(function (a, b) {
+        return a + b;
       }, 0);
+      this.price_total = parseInt(this.selected_boxes_price) + pr_to;
+    },
+    onChange: function onChange(category, index) {
+      if (document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
+        document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+      }
 
-      if (document.getElementById('index' + (index + 1))) {
-        document.getElementById('index' + (index + 1)).style.display = "block";
+      var all_numbers = [index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10];
+
+      if (!document.getElementsByName(category.slug + '[]')[0].value.length) {
+        all_numbers.forEach(function (number) {
+          if (document.getElementsByClassName('index' + number)[0]) {
+            document.getElementsByClassName('index' + number)[0].style.display = "none";
+          }
+        });
       }
     },
     onTypeChange: function onTypeChange() {
       var _this2 = this;
 
-      axios.get("/api/boxes/filter/".concat(this.selected_types.id)).then(function (response) {
-        return _this2.boxes = response.data;
+      axios.get("/api/boxes/filter/".concat(this.selected_types)).then(function (response) {
+        return _this2.boxes = response.data, _this2.price_total = 0;
+      });
+      this.categories.forEach(function (category) {
+        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
+          document.getElementById('section_' + category.slug).lastElementChild.remove();
+        }
       });
     },
     onBoxChange: function onBoxChange() {
       var _this3 = this;
 
-      axios.get("/api/elements/filter/box/".concat(this.selected_boxes.id)).then(function (response) {
+      this.clear(); // Берем цену корпуса
+
+      axios.get("/api/box/".concat(this.selected_boxes)).then(function (response) {
+        return _this3.selected_boxes_price = response.data.price;
+      }); // Фильтруем остальные детали относительно корпуса
+
+      axios.get("/api/elements/filter/box/".concat(this.selected_boxes)).then(function (response) {
         return _this3.elements = response.data;
       });
-      var indexes = document.querySelectorAll('[id^="index"]');
-      [].forEach.call(indexes, function (index) {
-        index.style.display = "none";
+      this.categories.forEach(function (category) {
+        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
+          document.getElementById('section_' + category.slug).lastElementChild.remove();
+        }
       });
-      document.getElementById('index0').style.display = "block";
-      this.selected_elements = [], this.price_total = parseInt(this.selected_boxes.price);
+    },
+    dopElementsClone: function dopElementsClone(category) {
+      var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
+      document.getElementById('section_' + category.slug).appendChild(cln);
+    },
+    dopElementsRemove: function dopElementsRemove(category) {
+      if (document.getElementById('section_' + category.slug).childElementCount > 4) {
+        document.getElementById('section_' + category.slug).lastElementChild.remove();
+      }
     },
     saveCalculation: function saveCalculation() {
       var _this4 = this;
 
-      axios.post('/api/calculations', {
+      var megred_select_form_values = [];
+      this.categories.forEach(function (category) {
+        document.getElementsByName(category.slug + '[]').forEach(function (child) {
+          if (document.getElementsByName(category.slug + '[]')[0].value) {
+            megred_select_form_values.push(child.value);
+          } else {
+            console.log(category.slug + ' - none');
+          }
+        });
+      });
+      console.log(megred_select_form_values);
+      axios.post("/api/calculations", {
         comment: this.comment,
         price_total: this.price_total,
-        boxes: this.selected_boxes.id,
-        elements: this.selected_elements.map(function (element) {
-          return {
-            id: element.id
-          };
-        }).concat(this.selected_elements_dop.map(function (element) {
-          return {
-            id: element.id
-          };
-        }))
+        types: this.selected_types,
+        boxes: this.selected_boxes,
+        elements: megred_select_form_values
       }).then(function (response) {
         return _this4.$router.push({
           path: '/calculations'
@@ -2830,6 +2896,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
 //
 //
 //
@@ -2981,7 +3048,8 @@ __webpack_require__.r(__webpack_exports__);
       [].forEach.call(indexes, function (index) {
         index.style.display = "none";
       });
-      document.getElementsByClassName('index0')[0].style.display = "block";
+      document.getElementById('selected_boxes').style.display = "none";
+      this.selected_types = '';
       this.reset_form = true;
     },
     calc: function calc() {
@@ -3001,6 +3069,8 @@ __webpack_require__.r(__webpack_exports__);
       this.price_total = parseInt(this.selected_boxes_price) + pr_to;
     },
     onChange: function onChange(category, index) {
+      console.log('change');
+
       if (document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
         document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
       }
@@ -3026,12 +3096,12 @@ __webpack_require__.r(__webpack_exports__);
           document.getElementById('section_' + category.slug).lastElementChild.remove();
         }
       });
+      document.getElementById('selected_boxes').style.display = "block";
     },
     onBoxChange: function onBoxChange() {
       var _this3 = this;
 
-      this.clear(); // Берем цену корпуса
-
+      // Берем цену корпуса
       axios.get("/api/box/".concat(this.selected_boxes)).then(function (response) {
         return _this3.selected_boxes_price = response.data.price;
       }); // Фильтруем остальные детали относительно корпуса
@@ -3044,6 +3114,13 @@ __webpack_require__.r(__webpack_exports__);
           document.getElementById('section_' + category.slug).lastElementChild.remove();
         }
       });
+      var all_numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      all_numbers.forEach(function (number) {
+        if (document.getElementsByClassName('index' + number)[0]) {
+          document.getElementsByClassName('index' + number)[0].style.display = "none";
+        }
+      });
+      document.getElementsByClassName('index0')[0].style.display = "block";
     },
     dopElementsClone: function dopElementsClone(category) {
       var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
@@ -3055,6 +3132,8 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     saveCalculation: function saveCalculation() {
+      var _this4 = this;
+
       var megred_select_form_values = [];
       this.categories.forEach(function (category) {
         document.getElementsByName(category.slug + '[]').forEach(function (child) {
@@ -3066,11 +3145,18 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
       console.log(megred_select_form_values);
-      /*axios
-      .post(`/api/calculation/${this.$route.params.id}/edit`, { id: this.$route.params.id, comment: this.comment, price_total: this.price_total, types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
-      .then(response => (
-          this.$router.push({path: '/calculations'})
-      ));*/
+      axios.post("/api/calculation/".concat(this.$route.params.id, "/edit"), {
+        id: this.$route.params.id,
+        comment: this.comment,
+        price_total: this.price_total,
+        types: this.selected_types,
+        boxes: this.selected_boxes,
+        elements: megred_select_form_values
+      }).then(function (response) {
+        return _this4.$router.push({
+          path: '/calculations'
+        });
+      });
     }
   },
   watch: {},
@@ -40066,240 +40152,166 @@ var render = function() {
                 ]
               }
             },
-            _vm._l(_vm.types, function(type) {
-              return _c(
-                "option",
-                { domProps: { value: { id: type.id, title: type.title } } },
-                [_vm._v(_vm._s(type.title))]
-              )
-            }),
-            0
-          ),
-          _vm._v(" "),
-          _vm.boxes.length ? _c("label", [_vm._v("Корпус")]) : _vm._e(),
-          _vm._v(" "),
-          _vm.boxes.length
-            ? _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.selected_boxes,
-                      expression: "selected_boxes"
-                    }
-                  ],
-                  staticClass: "form-control mb-3",
-                  on: {
-                    change: [
-                      function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.selected_boxes = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      },
-                      function($event) {
-                        return _vm.onBoxChange()
-                      }
-                    ]
-                  }
-                },
-                _vm._l(_vm.boxes, function(box) {
-                  return _c(
-                    "option",
-                    {
-                      domProps: {
-                        value: {
-                          id: box.id,
-                          title: box.title,
-                          price: box.price
-                        }
-                      }
-                    },
-                    [
-                      _vm._v(
-                        _vm._s(box.title) + "  — " + _vm._s(box.price) + " ₽"
-                      )
-                    ]
-                  )
-                }),
-                0
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm._l(_vm.categories, function(category, index) {
-            return _c("div", { key: index, staticClass: "mb-3" }, [
-              _c(
-                "div",
-                {
-                  staticClass: "col-lg-4",
-                  staticStyle: { display: "none" },
-                  attrs: { id: "index" + index }
-                },
-                [
-                  _c("div", [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(category.title) +
-                        "\n                    "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", [
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.selected_elements[index],
-                            expression: "selected_elements[index]"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.selected_elements,
-                                index,
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            },
-                            function($event) {
-                              return _vm.onChange(index, $event)
-                            }
-                          ]
-                        }
-                      },
-                      [
-                        _vm._l(_vm.elements, function(element) {
-                          return [
-                            _vm._l(element.categories, function(ect) {
-                              return [
-                                ect.id === category.id
-                                  ? _c(
-                                      "option",
-                                      {
-                                        domProps: {
-                                          value: {
-                                            id: element.id,
-                                            price: element.price
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          _vm._s(element.title) +
-                                            " — " +
-                                            _vm._s(element.price) +
-                                            " ₽"
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ]
-                            })
-                          ]
-                        })
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.selected_elements_dop[index],
-                            expression: "selected_elements_dop[index]"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.selected_elements_dop,
-                                index,
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            },
-                            function($event) {
-                              return _vm.onChange(index, $event)
-                            }
-                          ]
-                        }
-                      },
-                      [
-                        _vm._l(_vm.elements, function(element) {
-                          return [
-                            _vm._l(element.categories, function(ect) {
-                              return [
-                                ect.id === category.id
-                                  ? _c(
-                                      "option",
-                                      {
-                                        domProps: {
-                                          value: {
-                                            id: element.id,
-                                            price: element.price
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          _vm._s(element.title) +
-                                            " — " +
-                                            _vm._s(element.price) +
-                                            " ₽"
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ]
-                            })
-                          ]
-                        })
-                      ],
-                      2
-                    )
+            [
+              _vm._l(_vm.types, function(type) {
+                return [
+                  _c("option", { domProps: { value: type.id } }, [
+                    _vm._v(_vm._s(type.title))
                   ])
                 ]
-              )
-            ])
+              })
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("label", [_vm._v("Корпус")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.selected_boxes,
+                  expression: "selected_boxes"
+                }
+              ],
+              staticClass: "form-control mb-3",
+              attrs: { id: "selected_boxes" },
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selected_boxes = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  function($event) {
+                    return _vm.onBoxChange()
+                  }
+                ]
+              }
+            },
+            [
+              _vm._l(_vm.boxes, function(box) {
+                return [
+                  _c("option", { domProps: { value: box.id } }, [
+                    _vm._v(_vm._s(box.title) + " - " + _vm._s(box.price) + "₽")
+                  ])
+                ]
+              })
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _vm._l(_vm.categories, function(category, index) {
+            return _c(
+              "div",
+              {
+                key: "category_" + category.id,
+                class: "index" + index + " mb-3",
+                attrs: { id: "section_" + category.slug }
+              },
+              [
+                _c("label", [_vm._v(_vm._s(category.title))]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-outline-secondary",
+                    staticStyle: {
+                      padding: "0",
+                      height: "15px",
+                      "line-height": "10px",
+                      width: "15px"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.dopElementsClone(category)
+                      }
+                    }
+                  },
+                  [_vm._v("+")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-outline-secondary",
+                    staticStyle: {
+                      padding: "0",
+                      height: "15px",
+                      "line-height": "10px",
+                      width: "15px"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.dopElementsRemove(category)
+                      }
+                    }
+                  },
+                  [_vm._v("-")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    staticClass: "form-control mb-3",
+                    attrs: { name: category.slug + "[]" },
+                    on: {
+                      change: function($event) {
+                        return _vm.onChange(category, index)
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "", selected: "" } }, [
+                      _vm._v(" ")
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.elements, function(element) {
+                      return [
+                        _vm._l(element.categories, function(ect) {
+                          return [
+                            ect.id === category.id
+                              ? _c(
+                                  "option",
+                                  {
+                                    attrs: { "data-price": element.price },
+                                    domProps: { value: element.id }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(element.title) +
+                                        " - " +
+                                        _vm._s(element.price) +
+                                        "₽"
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        })
+                      ]
+                    })
+                  ],
+                  2
+                )
+              ]
+            )
           }),
+          _vm._v(" "),
+          _c("hr"),
           _vm._v("\n\n            Комментарий:\n            "),
           _c("textarea", {
             directives: [
@@ -40340,6 +40352,18 @@ var render = function() {
                 ])
               ])
             : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.calc()
+                }
+              }
+            },
+            [_vm._v("Пересчитать")]
+          ),
           _vm._v(" "),
           _c(
             "button",
@@ -40414,102 +40438,110 @@ var render = function() {
         "div",
         { staticClass: "card-body" },
         [
-          _c("label", [_vm._v("Тип")]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.selected_types,
-                  expression: "selected_types"
-                }
-              ],
-              staticClass: "form-control mb-3",
-              on: {
-                change: [
-                  function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.selected_types = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  },
-                  function($event) {
-                    return _vm.onTypeChange()
+          _c("div", { attrs: { id: "selected_types" } }, [
+            _c("label", [_vm._v("Тип")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selected_types,
+                    expression: "selected_types"
                   }
-                ]
-              }
-            },
-            [
-              _vm._l(_vm.types, function(type) {
-                return [
-                  _c("option", { domProps: { value: type.id } }, [
-                    _vm._v(_vm._s(type.title))
-                  ])
-                ]
-              })
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _c("label", [_vm._v("Корпус")]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.selected_boxes,
-                  expression: "selected_boxes"
+                ],
+                staticClass: "form-control mb-3",
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selected_types = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    },
+                    function($event) {
+                      return _vm.onTypeChange()
+                    }
+                  ]
                 }
+              },
+              [
+                _c("option", { attrs: { value: "", selected: "" } }, [
+                  _vm._v(" ")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.types, function(type) {
+                  return [
+                    _c("option", { domProps: { value: type.id } }, [
+                      _vm._v(_vm._s(type.title))
+                    ])
+                  ]
+                })
               ],
-              staticClass: "form-control mb-3",
-              attrs: { id: "selected_boxes" },
-              on: {
-                change: [
-                  function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.selected_boxes = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  },
-                  function($event) {
-                    return _vm.onBoxChange()
-                  }
-                ]
-              }
-            },
-            [
-              _vm._l(_vm.boxes, function(box) {
-                return [
-                  _c("option", { domProps: { value: box.id } }, [
-                    _vm._v(_vm._s(box.title) + " - " + _vm._s(box.price) + "₽")
-                  ])
-                ]
-              })
-            ],
-            2
-          ),
+              2
+            )
+          ]),
           _vm._v(" "),
-          _c("hr"),
+          _c("div", { attrs: { id: "selected_boxes" } }, [
+            _c("label", [_vm._v("Корпус")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selected_boxes,
+                    expression: "selected_boxes"
+                  }
+                ],
+                staticClass: "form-control mb-3",
+                attrs: { id: "selected_boxes" },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selected_boxes = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    },
+                    function($event) {
+                      return _vm.onBoxChange()
+                    }
+                  ]
+                }
+              },
+              [
+                _vm._l(_vm.boxes, function(box) {
+                  return [
+                    _c("option", { domProps: { value: box.id } }, [
+                      _vm._v(
+                        _vm._s(box.title) + " - " + _vm._s(box.price) + "₽"
+                      )
+                    ])
+                  ]
+                })
+              ],
+              2
+            )
+          ]),
           _vm._v(" "),
           _vm._l(_vm.categories, function(category, index) {
             return _c(
@@ -40737,8 +40769,6 @@ var render = function() {
               2
             )
           }),
-          _vm._v(" "),
-          _c("hr"),
           _vm._v("\n\n            Комментарий:\n            "),
           _c("textarea", {
             directives: [
