@@ -25,31 +25,36 @@
 
                 <hr>
 
-                <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" class="mb-3">
+                <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" :class="'index' + index + ' mb-3'">
                     <label>{{ category.title }}</label>
                     
                     <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
                     <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
                     
-                    <template v-for="cal_el in calculation.elements">
-                        <template v-for="cal_el_cat in cal_el.categories">
-                            <template v-if="cal_el_cat.id === category.id">
-                                <select :name="category.slug + '[]'" class="form-control mb-3">
-                                    <!--<option value="none">&nbsp;</option>-->
-                                    <template v-for="element in elements">
-                                        <template v-for="ect in element.categories">
-                                            <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
-                                                <option v-if="ect.id === category.id" :value="element.id" selected>{{ element.title }} - {{ element.price }}₽</option>
-                                            </template>
-                                            <template v-else>
-                                                <option v-if="ect.id === category.id" :value="element.id">{{ element.title }} - {{ element.price }}₽</option>
-                                            </template>
-                                        </template>
-                                    </template>
-                                </select>
+
+                    <select v-if="reset_form === false && ele_cat && ele_cat.find(c => c === category.id)" :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
+                        <!--<option value="none">&nbsp;</option>-->
+                        <template v-for="element in elements">
+                            <template v-for="ect in element.categories">
+                                <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
+                                    <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price" selected>{{ element.title }} - {{ element.price }}₽</option>
+                                </template>
+                                <template v-else>
+                                    <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
+                                </template>
                             </template>
                         </template>
-                    </template>
+                    </select>
+                    
+                    <select v-if="reset_form" :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
+                        <option value selected>&nbsp;</option>
+                        <template v-for="element in elements">
+                            <template v-for="ect in element.categories">
+                                <option v-if="ect.id === category.id" :value="element.id" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
+                            </template>
+                        </template>
+                    </select>
+                        
                 </div>
 
                 <hr>
@@ -64,6 +69,8 @@
                         <h4 class="text-primary m-0">{{ price_total }} ₽</h4>
                     </div>
                 </div>
+                <button @click="calc()">Пересчитать</button>
+                <button @click="clear()">Сбросить</button>
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
@@ -87,34 +94,15 @@
                 selected_boxes: {},
                 selected_boxes_price: '',
                 moment: moment,
+                ele_cat: [],
+                reset_form: false,
             }
         },
         created() {
             axios
-                .get(`/api/calculation/${this.$route.params.id}`)
-                .then((response) => {
-                    this.calculation = response.data,
-                    this.selected_types = response.data.types[0].id,
-                    this.selected_boxes = response.data.boxes[0].id,
-                    this.comment = response.data.comment,
-                    this.price_total = response.data.price_total
-                })
-                .then(() => {
-                    axios
-                        .get(`/api/elements/filter/box/${this.selected_boxes}`)
-                        .then(response => (
-                            this.elements = response.data
-                        ))
-                });
-            axios
                 .get('/api/categories')
                 .then(response => (
                     this.categories = response.data
-                ));
-            axios
-                .get('/api/elements')
-                .then(response => (
-                    this.elements = response.data
                 ));
             axios
                 .get('/api/types')
@@ -126,47 +114,156 @@
                 .then(response => (
                     this.boxes = response.data
                 ));
+            axios
+                .get(`/api/calculation/${this.$route.params.id}`)
+                .then((response) => {
+                    this.calculation = response.data,
+                    this.elements = response.data.elements,
+                    this.selected_types = response.data.types[0].id,
+                    this.selected_boxes = response.data.boxes[0].id,
+                    this.comment = response.data.comment,
+                    this.price_total = response.data.price_total
+
+                    var ele_cat =  [];
+                    this.ele_cat = ele_cat
+                    this.elements.forEach((element) => {
+                        ele_cat.push(element.categories[0].id)
+                    })
+                    console.log(ele_cat)
+                })
+                .then(() => {
+                    axios
+                        .get(`/api/elements/filter/box/${this.selected_boxes}`)
+                        .then((response => {
+                            this.elements = response.data
+                        }))
+                    axios
+                        .get(`/api/box/${this.selected_boxes}`)
+                        .then(response => (
+                            this.selected_boxes_price = response.data.price
+                        ));
+                });
         },
         methods: {
-            onChange(index, event) {
-                this.price_total =  parseInt(this.selected_boxes_price);
+            clear() {
+                this.categories.forEach(function(category) {
+                        while(document.getElementById('section_' + category.slug).childElementCount > 4) {
+                            document.getElementById('section_' + category.slug).lastElementChild.remove()
+                        }
+                    }
+                );
+
+                var indexes = document.querySelectorAll('[class^="index"]');
+                [].forEach.call(indexes, function(index) {
+                index.style.display = "none";
+                });
+                document.getElementsByClassName('index0')[0].style.display = "block";
+
+                this.reset_form = true
+            },
+            calc() {
+                var pr_to =  [];
+                this.price_total = pr_to
+
+                this.categories.forEach(function(category) {
+                        document.getElementsByName(category.slug + '[]').forEach((child) => {
+                            if(child.options[child.selectedIndex].getAttribute('data-price')) {
+                                pr_to.push(parseInt(child.options[child.selectedIndex].getAttribute('data-price')))
+                            }
+                        });
+                    }
+                );
+
+                pr_to = pr_to.reduce((a, b) => a + b, 0)
+                this.price_total = parseInt(this.selected_boxes_price) + pr_to
+            },
+            onChange(category, index) {
+                if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
+                    document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+                }
+
+                var all_numbers = [
+                    index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10
+                ]
+                if(!document.getElementsByName(category.slug + '[]')[0].value.length) {
+                    all_numbers.forEach(function(number) {
+                        if(document.getElementsByClassName('index' + (number))[0]) {
+                            document.getElementsByClassName('index' + (number))[0].style.display = "none";
+                        }
+                    });
+                }
+
+                setTimeout(function(){
+                    this.calc()
+                }.bind(this), 500);
             },
             onTypeChange() {
                 axios
                 .get(`/api/boxes/filter/${this.selected_types}`)
                 .then(response => (
-                    this.boxes = response.data
+                    this.boxes = response.data,
+                    this.price_total = 0
                 ));
+
+                this.categories.forEach(function(category) {
+                        while(document.getElementById('section_' + category.slug).childElementCount > 4) {
+                            document.getElementById('section_' + category.slug).lastElementChild.remove()
+                        }
+                    }
+                );
+
+                setTimeout(function(){
+                    this.clear(),
+                    this.calc()
+                }.bind(this), 500);
             },
             onBoxChange() {
                 // Берем цену корпуса
                 axios
                 .get(`/api/box/${this.selected_boxes}`)
                 .then(response => (
-                    this.selected_boxes_price =  response.data.price,
-                    this.price_total =  response.data.price
+                    this.selected_boxes_price = response.data.price
                 ));
+
                 // Фильтруем остальные детали относительно корпуса
                 axios
                 .get(`/api/elements/filter/box/${this.selected_boxes}`)
                 .then(response => (
                     this.elements = response.data
                 ));
+
+                this.categories.forEach(function(category) {
+                        while(document.getElementById('section_' + category.slug).childElementCount > 4) {
+                            document.getElementById('section_' + category.slug).lastElementChild.remove()
+                        }
+                    }
+                );
+
+                setTimeout(function(){
+                    this.clear(),
+                    this.calc()
+                }.bind(this), 500);
             },
             dopElementsClone(category) {
                 var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
                 document.getElementById('section_' + category.slug).appendChild(cln)
+                setTimeout(function(){
+                    this.calc()
+                }.bind(this), 500);
             },
             dopElementsRemove(category) {
                 if(document.getElementById('section_' + category.slug).childElementCount > 4) {
-                    document.getElementById('section_' + category.slug).lastChild.remove()
+                    document.getElementById('section_' + category.slug).lastElementChild.remove()
+                    setTimeout(function(){
+                        this.calc()
+                    }.bind(this), 500);
                 }
             },
             saveCalculation() {
                 var megred_select_form_values = [];
                 this.categories.forEach(function(category) {
                         document.getElementsByName(category.slug + '[]').forEach((child) => {
-                            if(document.getElementsByName(category.slug + '[]')[0].value !== 'none') {
+                            if(document.getElementsByName(category.slug + '[]')[0].value) {
                                 megred_select_form_values.push(child.value)
                             } else {
                                 console.log(category.slug + ' - none')

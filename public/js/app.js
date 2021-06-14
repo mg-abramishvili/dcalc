@@ -2902,6 +2902,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2917,24 +2924,16 @@ __webpack_require__.r(__webpack_exports__);
       selected_types: '',
       selected_boxes: {},
       selected_boxes_price: '',
-      moment: moment
+      moment: moment,
+      ele_cat: [],
+      reset_form: false
     };
   },
   created: function created() {
     var _this = this;
 
-    axios.get("/api/calculation/".concat(this.$route.params.id)).then(function (response) {
-      _this.calculation = response.data, _this.selected_types = response.data.types[0].id, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
-    }).then(function () {
-      axios.get("/api/elements/filter/box/".concat(_this.selected_boxes)).then(function (response) {
-        return _this.elements = response.data;
-      });
-    });
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
-    });
-    axios.get('/api/elements').then(function (response) {
-      return _this.elements = response.data;
     });
     axios.get('/api/types').then(function (response) {
       return _this.types = response.data;
@@ -2942,44 +2941,128 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/boxes').then(function (response) {
       return _this.boxes = response.data;
     });
+    axios.get("/api/calculation/".concat(this.$route.params.id)).then(function (response) {
+      _this.calculation = response.data, _this.elements = response.data.elements, _this.selected_types = response.data.types[0].id, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
+      var ele_cat = [];
+      _this.ele_cat = ele_cat;
+
+      _this.elements.forEach(function (element) {
+        ele_cat.push(element.categories[0].id);
+      });
+
+      console.log(ele_cat);
+    }).then(function () {
+      axios.get("/api/elements/filter/box/".concat(_this.selected_boxes)).then(function (response) {
+        _this.elements = response.data;
+      });
+      axios.get("/api/box/".concat(_this.selected_boxes)).then(function (response) {
+        return _this.selected_boxes_price = response.data.price;
+      });
+    });
   },
   methods: {
-    onChange: function onChange(index, event) {
-      this.price_total = parseInt(this.selected_boxes_price);
+    clear: function clear() {
+      this.categories.forEach(function (category) {
+        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
+          document.getElementById('section_' + category.slug).lastElementChild.remove();
+        }
+      });
+      var indexes = document.querySelectorAll('[class^="index"]');
+      [].forEach.call(indexes, function (index) {
+        index.style.display = "none";
+      });
+      document.getElementsByClassName('index0')[0].style.display = "block";
+      this.reset_form = true;
+    },
+    calc: function calc() {
+      var pr_to = [];
+      this.price_total = pr_to;
+      this.categories.forEach(function (category) {
+        document.getElementsByName(category.slug + '[]').forEach(function (child) {
+          if (child.options[child.selectedIndex].getAttribute('data-price')) {
+            pr_to.push(parseInt(child.options[child.selectedIndex].getAttribute('data-price')));
+          }
+        });
+      });
+      pr_to = pr_to.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      this.price_total = parseInt(this.selected_boxes_price) + pr_to;
+    },
+    onChange: function onChange(category, index) {
+      if (document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
+        document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+      }
+
+      var all_numbers = [index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10];
+
+      if (!document.getElementsByName(category.slug + '[]')[0].value.length) {
+        all_numbers.forEach(function (number) {
+          if (document.getElementsByClassName('index' + number)[0]) {
+            document.getElementsByClassName('index' + number)[0].style.display = "none";
+          }
+        });
+      }
+
+      setTimeout(function () {
+        this.calc();
+      }.bind(this), 500);
     },
     onTypeChange: function onTypeChange() {
       var _this2 = this;
 
       axios.get("/api/boxes/filter/".concat(this.selected_types)).then(function (response) {
-        return _this2.boxes = response.data;
+        return _this2.boxes = response.data, _this2.price_total = 0;
       });
+      this.categories.forEach(function (category) {
+        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
+          document.getElementById('section_' + category.slug).lastElementChild.remove();
+        }
+      });
+      setTimeout(function () {
+        this.clear(), this.calc();
+      }.bind(this), 500);
     },
     onBoxChange: function onBoxChange() {
       var _this3 = this;
 
       // Берем цену корпуса
       axios.get("/api/box/".concat(this.selected_boxes)).then(function (response) {
-        return _this3.selected_boxes_price = response.data.price, _this3.price_total = response.data.price;
+        return _this3.selected_boxes_price = response.data.price;
       }); // Фильтруем остальные детали относительно корпуса
 
       axios.get("/api/elements/filter/box/".concat(this.selected_boxes)).then(function (response) {
         return _this3.elements = response.data;
       });
+      this.categories.forEach(function (category) {
+        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
+          document.getElementById('section_' + category.slug).lastElementChild.remove();
+        }
+      });
+      setTimeout(function () {
+        this.clear(), this.calc();
+      }.bind(this), 500);
     },
     dopElementsClone: function dopElementsClone(category) {
       var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
       document.getElementById('section_' + category.slug).appendChild(cln);
+      setTimeout(function () {
+        this.calc();
+      }.bind(this), 500);
     },
     dopElementsRemove: function dopElementsRemove(category) {
       if (document.getElementById('section_' + category.slug).childElementCount > 4) {
-        document.getElementById('section_' + category.slug).lastChild.remove();
+        document.getElementById('section_' + category.slug).lastElementChild.remove();
+        setTimeout(function () {
+          this.calc();
+        }.bind(this), 500);
       }
     },
     saveCalculation: function saveCalculation() {
       var megred_select_form_values = [];
       this.categories.forEach(function (category) {
         document.getElementsByName(category.slug + '[]').forEach(function (child) {
-          if (document.getElementsByName(category.slug + '[]')[0].value !== 'none') {
+          if (document.getElementsByName(category.slug + '[]')[0].value) {
             megred_select_form_values.push(child.value);
           } else {
             console.log(category.slug + ' - none');
@@ -40437,7 +40520,7 @@ var render = function() {
               "div",
               {
                 key: "category_" + category.id,
-                staticClass: "mb-3",
+                class: "index" + index + " mb-3",
                 attrs: { id: "section_" + category.slug }
               },
               [
@@ -40481,93 +40564,130 @@ var render = function() {
                   [_vm._v("-")]
                 ),
                 _vm._v(" "),
-                _vm._l(_vm.calculation.elements, function(cal_el) {
-                  return [
-                    _vm._l(cal_el.categories, function(cal_el_cat) {
-                      return [
-                        cal_el_cat.id === category.id
-                          ? [
-                              _c(
-                                "select",
-                                {
-                                  staticClass: "form-control mb-3",
-                                  attrs: { name: category.slug + "[]" }
-                                },
-                                [
-                                  _vm._l(_vm.elements, function(element) {
-                                    return [
-                                      _vm._l(element.categories, function(ect) {
-                                        return [
-                                          _vm.calculation.elements &&
-                                          _vm.calculation.elements.find(
-                                            function(e) {
-                                              return e.id === element.id
-                                            }
-                                          )
-                                            ? [
-                                                ect.id === category.id
-                                                  ? _c(
-                                                      "option",
-                                                      {
-                                                        attrs: { selected: "" },
-                                                        domProps: {
-                                                          value: element.id
-                                                        }
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          _vm._s(
-                                                            element.title
-                                                          ) +
-                                                            " - " +
-                                                            _vm._s(
-                                                              element.price
-                                                            ) +
-                                                            "₽"
-                                                        )
-                                                      ]
-                                                    )
-                                                  : _vm._e()
-                                              ]
-                                            : [
-                                                ect.id === category.id
-                                                  ? _c(
-                                                      "option",
-                                                      {
-                                                        domProps: {
-                                                          value: element.id
-                                                        }
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          _vm._s(
-                                                            element.title
-                                                          ) +
-                                                            " - " +
-                                                            _vm._s(
-                                                              element.price
-                                                            ) +
-                                                            "₽"
-                                                        )
-                                                      ]
-                                                    )
-                                                  : _vm._e()
-                                              ]
-                                        ]
-                                      })
-                                    ]
-                                  })
-                                ],
-                                2
-                              )
-                            ]
-                          : _vm._e()
-                      ]
-                    })
-                  ]
+                _vm.reset_form === false &&
+                _vm.ele_cat &&
+                _vm.ele_cat.find(function(c) {
+                  return c === category.id
                 })
-              ],
-              2
+                  ? _c(
+                      "select",
+                      {
+                        staticClass: "form-control mb-3",
+                        attrs: { name: category.slug + "[]" },
+                        on: {
+                          change: function($event) {
+                            return _vm.onChange(category, index)
+                          }
+                        }
+                      },
+                      [
+                        _vm._l(_vm.elements, function(element) {
+                          return [
+                            _vm._l(element.categories, function(ect) {
+                              return [
+                                _vm.calculation.elements &&
+                                _vm.calculation.elements.find(function(e) {
+                                  return e.id === element.id
+                                })
+                                  ? [
+                                      ect.id === category.id
+                                        ? _c(
+                                            "option",
+                                            {
+                                              attrs: {
+                                                "data-price": element.price,
+                                                selected: ""
+                                              },
+                                              domProps: { value: element.id }
+                                            },
+                                            [
+                                              _vm._v(
+                                                _vm._s(element.title) +
+                                                  " - " +
+                                                  _vm._s(element.price) +
+                                                  "₽"
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e()
+                                    ]
+                                  : [
+                                      ect.id === category.id
+                                        ? _c(
+                                            "option",
+                                            {
+                                              attrs: {
+                                                "data-price": element.price
+                                              },
+                                              domProps: { value: element.id }
+                                            },
+                                            [
+                                              _vm._v(
+                                                _vm._s(element.title) +
+                                                  " - " +
+                                                  _vm._s(element.price) +
+                                                  "₽"
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e()
+                                    ]
+                              ]
+                            })
+                          ]
+                        })
+                      ],
+                      2
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.reset_form
+                  ? _c(
+                      "select",
+                      {
+                        staticClass: "form-control mb-3",
+                        attrs: { name: category.slug + "[]" },
+                        on: {
+                          change: function($event) {
+                            return _vm.onChange(category, index)
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "", selected: "" } }, [
+                          _vm._v(" ")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.elements, function(element) {
+                          return [
+                            _vm._l(element.categories, function(ect) {
+                              return [
+                                ect.id === category.id
+                                  ? _c(
+                                      "option",
+                                      {
+                                        attrs: { "data-price": element.price },
+                                        domProps: { value: element.id }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(element.title) +
+                                            " - " +
+                                            _vm._s(element.price) +
+                                            "₽"
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            })
+                          ]
+                        })
+                      ],
+                      2
+                    )
+                  : _vm._e()
+              ]
             )
           }),
           _vm._v(" "),
@@ -40612,6 +40732,30 @@ var render = function() {
                 ])
               ])
             : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.calc()
+                }
+              }
+            },
+            [_vm._v("Пересчитать")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.clear()
+                }
+              }
+            },
+            [_vm._v("Сбросить")]
+          ),
           _vm._v(" "),
           _c(
             "button",
