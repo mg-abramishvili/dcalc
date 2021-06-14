@@ -73,7 +73,7 @@ class CalculationController extends Controller
 
     public function show($id)
     {
-        return Calculation::with('elements', 'boxes', 'types')->find($id);
+        return Calculation::with('elements.categories', 'boxes', 'types')->find($id);
     }
 
 }

@@ -25,21 +25,31 @@
 
                 <hr>
 
-                <div v-for="(category, index) in categories" :key="'category_' + category.id" class="mb-3">
+                <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" class="mb-3">
                     <label>{{ category.title }}</label>
-                    <select :name="category.slug" class="form-control mb-3">
-                        <option value="none">&nbsp;</option>
-                        <template v-for="element in elements">
-                            <template v-for="ect in element.categories">
-                                <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
-                                    <option v-if="ect.id === category.id" :value="element.id" selected>{{ element.title }} - {{ element.price }}₽</option>
-                                </template>
-                                <template v-else>
-                                    <option v-if="ect.id === category.id" :value="element.id">{{ element.title }} - {{ element.price }}₽</option>
-                                </template>
+                    
+                    <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
+                    <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
+                    
+                    <template v-for="cal_el in calculation.elements">
+                        <template v-for="cal_el_cat in cal_el.categories">
+                            <template v-if="cal_el_cat.id === category.id">
+                                <select :name="category.slug + '[]'" class="form-control mb-3">
+                                    <!--<option value="none">&nbsp;</option>-->
+                                    <template v-for="element in elements">
+                                        <template v-for="ect in element.categories">
+                                            <template v-if="calculation.elements && calculation.elements.find(e => e.id === element.id)">
+                                                <option v-if="ect.id === category.id" :value="element.id" selected>{{ element.title }} - {{ element.price }}₽</option>
+                                            </template>
+                                            <template v-else>
+                                                <option v-if="ect.id === category.id" :value="element.id">{{ element.title }} - {{ element.price }}₽</option>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </select>
                             </template>
                         </template>
-                    </select>
+                    </template>
                 </div>
 
                 <hr>
@@ -82,13 +92,20 @@
         created() {
             axios
                 .get(`/api/calculation/${this.$route.params.id}`)
-                .then(response => (
+                .then((response) => {
                     this.calculation = response.data,
                     this.selected_types = response.data.types[0].id,
                     this.selected_boxes = response.data.boxes[0].id,
                     this.comment = response.data.comment,
                     this.price_total = response.data.price_total
-                ));
+                })
+                .then(() => {
+                    axios
+                        .get(`/api/elements/filter/box/${this.selected_boxes}`)
+                        .then(response => (
+                            this.elements = response.data
+                        ))
+                });
             axios
                 .get('/api/categories')
                 .then(response => (
@@ -136,22 +153,35 @@
                     this.elements = response.data
                 ));
             },
+            dopElementsClone(category) {
+                var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
+                document.getElementById('section_' + category.slug).appendChild(cln)
+            },
+            dopElementsRemove(category) {
+                if(document.getElementById('section_' + category.slug).childElementCount > 4) {
+                    document.getElementById('section_' + category.slug).lastChild.remove()
+                }
+            },
             saveCalculation() {
                 var megred_select_form_values = [];
                 this.categories.forEach(function(category) {
-                        if(document.getElementsByName(category.slug)[0].value !== 'none') {
-                            megred_select_form_values.push(document.getElementsByName(category.slug)[0].value)
-                        } else {
-                            console.log(category.slug + '- none')
-                        }
+                        document.getElementsByName(category.slug + '[]').forEach((child) => {
+                            if(document.getElementsByName(category.slug + '[]')[0].value !== 'none') {
+                                megred_select_form_values.push(child.value)
+                            } else {
+                                console.log(category.slug + ' - none')
+                            }
+                        });
                     }
                 );
+
+                console.log(megred_select_form_values)
                 
-                axios
+                /*axios
                 .post(`/api/calculation/${this.$route.params.id}/edit`, { id: this.$route.params.id, comment: this.comment, price_total: this.price_total, types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
                 .then(response => (
                     this.$router.push({path: '/calculations'})
-                ));
+                ));*/
             }
         },
         watch: {

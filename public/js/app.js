@@ -2892,6 +2892,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2914,7 +2924,11 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get("/api/calculation/".concat(this.$route.params.id)).then(function (response) {
-      return _this.calculation = response.data, _this.selected_types = response.data.types[0].id, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
+      _this.calculation = response.data, _this.selected_types = response.data.types[0].id, _this.selected_boxes = response.data.boxes[0].id, _this.comment = response.data.comment, _this.price_total = response.data.price_total;
+    }).then(function () {
+      axios.get("/api/elements/filter/box/".concat(_this.selected_boxes)).then(function (response) {
+        return _this.elements = response.data;
+      });
     });
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
@@ -2952,29 +2966,32 @@ __webpack_require__.r(__webpack_exports__);
         return _this3.elements = response.data;
       });
     },
+    dopElementsClone: function dopElementsClone(category) {
+      var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
+      document.getElementById('section_' + category.slug).appendChild(cln);
+    },
+    dopElementsRemove: function dopElementsRemove(category) {
+      if (document.getElementById('section_' + category.slug).childElementCount > 4) {
+        document.getElementById('section_' + category.slug).lastChild.remove();
+      }
+    },
     saveCalculation: function saveCalculation() {
-      var _this4 = this;
-
       var megred_select_form_values = [];
       this.categories.forEach(function (category) {
-        if (document.getElementsByName(category.slug)[0].value !== 'none') {
-          megred_select_form_values.push(document.getElementsByName(category.slug)[0].value);
-        } else {
-          console.log(category.slug + '- none');
-        }
-      });
-      axios.post("/api/calculation/".concat(this.$route.params.id, "/edit"), {
-        id: this.$route.params.id,
-        comment: this.comment,
-        price_total: this.price_total,
-        types: this.selected_types,
-        boxes: this.selected_boxes,
-        elements: megred_select_form_values
-      }).then(function (response) {
-        return _this4.$router.push({
-          path: '/calculations'
+        document.getElementsByName(category.slug + '[]').forEach(function (child) {
+          if (document.getElementsByName(category.slug + '[]')[0].value !== 'none') {
+            megred_select_form_values.push(child.value);
+          } else {
+            console.log(category.slug + ' - none');
+          }
         });
       });
+      console.log(megred_select_form_values);
+      /*axios
+      .post(`/api/calculation/${this.$route.params.id}/edit`, { id: this.$route.params.id, comment: this.comment, price_total: this.price_total, types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
+      .then(response => (
+          this.$router.push({path: '/calculations'})
+      ));*/
     }
   },
   watch: {},
@@ -40418,70 +40435,139 @@ var render = function() {
           _vm._l(_vm.categories, function(category, index) {
             return _c(
               "div",
-              { key: "category_" + category.id, staticClass: "mb-3" },
+              {
+                key: "category_" + category.id,
+                staticClass: "mb-3",
+                attrs: { id: "section_" + category.slug }
+              },
               [
                 _c("label", [_vm._v(_vm._s(category.title))]),
                 _vm._v(" "),
                 _c(
-                  "select",
+                  "button",
                   {
-                    staticClass: "form-control mb-3",
-                    attrs: { name: category.slug }
+                    staticClass: "btn btn-sm btn-outline-secondary",
+                    staticStyle: {
+                      padding: "0",
+                      height: "15px",
+                      "line-height": "10px",
+                      width: "15px"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.dopElementsClone(category)
+                      }
+                    }
                   },
-                  [
-                    _c("option", { attrs: { value: "none" } }, [_vm._v(" ")]),
-                    _vm._v(" "),
-                    _vm._l(_vm.elements, function(element) {
+                  [_vm._v("+")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-outline-secondary",
+                    staticStyle: {
+                      padding: "0",
+                      height: "15px",
+                      "line-height": "10px",
+                      width: "15px"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.dopElementsRemove(category)
+                      }
+                    }
+                  },
+                  [_vm._v("-")]
+                ),
+                _vm._v(" "),
+                _vm._l(_vm.calculation.elements, function(cal_el) {
+                  return [
+                    _vm._l(cal_el.categories, function(cal_el_cat) {
                       return [
-                        _vm._l(element.categories, function(ect) {
-                          return [
-                            _vm.calculation.elements &&
-                            _vm.calculation.elements.find(function(e) {
-                              return e.id === element.id
-                            })
-                              ? [
-                                  ect.id === category.id
-                                    ? _c(
-                                        "option",
-                                        {
-                                          attrs: { selected: "" },
-                                          domProps: { value: element.id }
-                                        },
-                                        [
-                                          _vm._v(
-                                            _vm._s(element.title) +
-                                              " - " +
-                                              _vm._s(element.price) +
-                                              "₽"
+                        cal_el_cat.id === category.id
+                          ? [
+                              _c(
+                                "select",
+                                {
+                                  staticClass: "form-control mb-3",
+                                  attrs: { name: category.slug + "[]" }
+                                },
+                                [
+                                  _vm._l(_vm.elements, function(element) {
+                                    return [
+                                      _vm._l(element.categories, function(ect) {
+                                        return [
+                                          _vm.calculation.elements &&
+                                          _vm.calculation.elements.find(
+                                            function(e) {
+                                              return e.id === element.id
+                                            }
                                           )
+                                            ? [
+                                                ect.id === category.id
+                                                  ? _c(
+                                                      "option",
+                                                      {
+                                                        attrs: { selected: "" },
+                                                        domProps: {
+                                                          value: element.id
+                                                        }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(
+                                                            element.title
+                                                          ) +
+                                                            " - " +
+                                                            _vm._s(
+                                                              element.price
+                                                            ) +
+                                                            "₽"
+                                                        )
+                                                      ]
+                                                    )
+                                                  : _vm._e()
+                                              ]
+                                            : [
+                                                ect.id === category.id
+                                                  ? _c(
+                                                      "option",
+                                                      {
+                                                        domProps: {
+                                                          value: element.id
+                                                        }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(
+                                                            element.title
+                                                          ) +
+                                                            " - " +
+                                                            _vm._s(
+                                                              element.price
+                                                            ) +
+                                                            "₽"
+                                                        )
+                                                      ]
+                                                    )
+                                                  : _vm._e()
+                                              ]
                                         ]
-                                      )
-                                    : _vm._e()
-                                ]
-                              : [
-                                  ect.id === category.id
-                                    ? _c(
-                                        "option",
-                                        { domProps: { value: element.id } },
-                                        [
-                                          _vm._v(
-                                            _vm._s(element.title) +
-                                              " - " +
-                                              _vm._s(element.price) +
-                                              "₽"
-                                          )
-                                        ]
-                                      )
-                                    : _vm._e()
-                                ]
-                          ]
-                        })
+                                      })
+                                    ]
+                                  })
+                                ],
+                                2
+                              )
+                            ]
+                          : _vm._e()
                       ]
                     })
-                  ],
-                  2
-                )
-              ]
+                  ]
+                })
+              ],
+              2
             )
           }),
           _vm._v(" "),
