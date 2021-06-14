@@ -21,7 +21,8 @@
 
                 <div id="selected_boxes">
                     <label>Корпус</label>
-                    <select v-model="selected_boxes" id="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                    <select v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                        <option value selected>&nbsp;</option>
                         <template v-for="box in boxes">
                             <option :value="box.id">{{ box.title }} - {{ box.price }}₽</option>
                         </template>
@@ -172,6 +173,7 @@
                 document.getElementById('selected_boxes').style.display = "none";
 
                 this.selected_types = ''
+                this.selected_boxes = ''
 
                 this.reset_form = true
             },
@@ -193,9 +195,9 @@
                 this.price_total = parseInt(this.selected_boxes_price) + pr_to
             },
             onChange(category, index) {
-                console.log('change')
                 if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
                     document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+                    document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
                 }
 
                 var all_numbers = [

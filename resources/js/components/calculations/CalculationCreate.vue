@@ -2,28 +2,32 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0">Новый расчет</h1>
+                <h1 class="h3 m-0">Расчет №{{ calculation.id }} от {{moment(calculation.created_at).format('D MMMM YYYY')}}</h1>
             </div>
         </div>
 
         <div class="card">
             <div class="card-body">
 
-                <label>Тип</label>
-                <select v-model="selected_types" @change="onTypeChange()" class="form-control mb-3">
-                    <template v-for="type in types">
-                        <option :value="type.id">{{ type.title }}</option>
-                    </template>
-                </select>
+                <div id="selected_types">
+                    <label>Тип</label>
+                    <select v-model="selected_types" @change="onTypeChange()" class="form-control mb-3">
+                        <option value selected>&nbsp;</option>
+                        <template v-for="type in types">
+                            <option :value="type.id">{{ type.title }}</option>
+                        </template>
+                    </select>
+                </div>
 
-                <label>Корпус</label>
-                <select v-model="selected_boxes" id="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
-                    <template v-for="box in boxes">
-                        <option :value="box.id">{{ box.title }} - {{ box.price }}₽</option>
-                    </template>
-                </select>
-
-                <hr>
+                <div id="selected_boxes">
+                    <label>Корпус</label>
+                    <select v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                        <option value selected>&nbsp;</option>
+                        <template v-for="box in boxes">
+                            <option :value="box.id">{{ box.title }} - {{ box.price }}₽</option>
+                        </template>
+                    </select>
+                </div>
 
                 <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" :class="'index' + index + ' mb-3'">
 
@@ -31,7 +35,7 @@
                     
                     <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">+</button>
                     <button @click="dopElementsRemove(category)" class="btn btn-sm btn-outline-secondary" style="padding: 0; height: auto; line-height: 10px; width: 15px; height: 15px;">-</button>
-                    
+
                     <select :name="category.slug + '[]'" @change="onChange(category, index)" class="form-control mb-3">
                         <option value selected>&nbsp;</option>
                         <template v-for="element in elements">
@@ -42,8 +46,6 @@
                     </select>
 
                 </div>
-
-                <hr>
 
                 Комментарий:
                 <textarea class="form-control mb-2" v-model="comment"></textarea>
@@ -80,7 +82,6 @@
                 selected_boxes_price: '',
                 moment: moment,
                 ele_cat: [],
-                reset_form: false,
             }
         },
         created() {
@@ -97,9 +98,11 @@
             axios
                 .get('/api/boxes')
                 .then(response => (
-                    this.boxes = response.data,
-                    this.clear()
+                    this.boxes = response.data
                 ));
+            setTimeout(function(){
+                this.clear()
+            }.bind(this), 500);
         },
         methods: {
             clear() {
@@ -114,7 +117,11 @@
                 [].forEach.call(indexes, function(index) {
                 index.style.display = "none";
                 });
-                document.getElementsByClassName('index0')[0].style.display = "block";
+
+                document.getElementById('selected_boxes').style.display = "none";
+
+                this.selected_types = ''
+                this.selected_boxes = ''
 
                 this.reset_form = true
             },
@@ -138,6 +145,7 @@
             onChange(category, index) {
                 if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
                     document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
+                    document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
                 }
 
                 var all_numbers = [
@@ -165,10 +173,10 @@
                         }
                     }
                 );
+
+                document.getElementById('selected_boxes').style.display = "block";
             },
             onBoxChange() {
-                this.clear()
-
                 // Берем цену корпуса
                 axios
                 .get(`/api/box/${this.selected_boxes}`)
@@ -189,6 +197,16 @@
                         }
                     }
                 );
+
+                var all_numbers = [
+                    0,1,2,3,4,5,6,7,8,9,10
+                ]
+                all_numbers.forEach(function(number) {
+                    if(document.getElementsByClassName('index' + (number))[0]) {
+                        document.getElementsByClassName('index' + (number))[0].style.display = "none";
+                    }
+                });
+                document.getElementsByClassName('index0')[0].style.display = "block";
             },
             dopElementsClone(category) {
                 var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
