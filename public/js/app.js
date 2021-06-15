@@ -42197,7 +42197,7 @@ var render = function() {
                 "tbody",
                 [
                   _vm._l(_vm.boxes, function(box) {
-                    return _c("tr", { key: box.id }, [
+                    return _c("tr", { key: "box_" + box.id }, [
                       _c("td", { staticClass: "align-middle" }, [
                         _vm._v(_vm._s(box.id))
                       ]),
@@ -42319,7 +42319,7 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _vm._l(_vm.elements, function(element) {
-                    return _c("tr", { key: element.id }, [
+                    return _c("tr", { key: "element_" + element.id }, [
                       _c("td", { staticClass: "align-middle" }, [
                         _vm._v(_vm._s(element.id))
                       ]),

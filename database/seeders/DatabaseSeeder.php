@@ -13,6 +13,10 @@ class DatabaseSeeder extends Seeder
             TypeSeeder::class,
             BoxSeeder::class,
             BoxTypeSeeder::class,
+            ElementSeeder::class,
+            BoxElementSeeder::class,
+            CategorySeeder::class,
+            CategoryElementSeeder::class,
         ]);
     }
 }
