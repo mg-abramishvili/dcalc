@@ -1946,9 +1946,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -38569,67 +38566,6 @@ var render = function() {
                   _c(
                     "a",
                     {
-                      staticClass: "nav-icon dropdown-toggle",
-                      class: { show: _vm.bell_icon === true },
-                      attrs: { id: "messagesDropdown" },
-                      on: {
-                        click: function($event) {
-                          return _vm.bell_icon_toggle()
-                        }
-                      }
-                    },
-                    [
-                      _c("div", { staticClass: "position-relative" }, [
-                        _c(
-                          "svg",
-                          {
-                            staticClass:
-                              "feather feather-bell align-middle me-2",
-                            attrs: {
-                              xmlns: "http://www.w3.org/2000/svg",
-                              width: "24",
-                              height: "24",
-                              viewBox: "0 0 24 24",
-                              fill: "none",
-                              stroke: "currentColor",
-                              "stroke-width": "2",
-                              "stroke-linecap": "round",
-                              "stroke-linejoin": "round"
-                            }
-                          },
-                          [
-                            _c("path", {
-                              attrs: {
-                                d: "M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
-                              }
-                            }),
-                            _c("path", {
-                              attrs: { d: "M13.73 21a2 2 0 0 1-3.46 0" }
-                            })
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "indicator" }, [_vm._v("4")])
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "dropdown-menu dropdown-menu-lg dropdown-menu-end py-0",
-                      class: { show: _vm.bell_icon === true },
-                      attrs: { "aria-labelledby": "messagesDropdown" }
-                    },
-                    [_vm._m(0), _vm._v(" "), _vm._m(1)]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", { staticClass: "nav-item dropdown" }, [
-                  _c(
-                    "a",
-                    {
                       staticClass:
                         "nav-icon dropdown-toggle d-inline-block d-sm-none",
                       attrs: { href: "#", "data-bs-toggle": "dropdown" }
@@ -38666,7 +38602,7 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(2),
+                  _vm._m(0),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -38789,92 +38725,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "dropdown-menu-header" }, [
-      _c("div", { staticClass: "position-relative" }, [
-        _vm._v("\n\t\t\t\t\t\t\t\t\t\tНовые уведомления\n\t\t\t\t\t\t\t\t\t")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "list-group" }, [
-      _c("a", { staticClass: "list-group-item", attrs: { href: "#" } }, [
-        _c("div", { staticClass: "row g-0 align-items-center" }, [
-          _c("div", { staticClass: "col-2" }, [
-            _c("img", {
-              staticClass: "avatar img-fluid rounded-circle",
-              attrs: {
-                src: "https://appstack.bootlab.io/img/avatars/avatar-3.jpg",
-                alt: "Carl Jenkins"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-10 ps-2" }, [
-            _c("div", { staticClass: "text-dark" }, [_vm._v("Игорь Васильев")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "text-muted small mt-1" }, [
-              _vm._v("создал новое КП")
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "list-group-item", attrs: { href: "#" } }, [
-        _c("div", { staticClass: "row g-0 align-items-center" }, [
-          _c("div", { staticClass: "col-2" }, [
-            _c("img", {
-              staticClass: "avatar img-fluid rounded-circle",
-              attrs: {
-                src: "https://appstack.bootlab.io/img/avatars/avatar-3.jpg",
-                alt: "Carl Jenkins"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-10 ps-2" }, [
-            _c("div", { staticClass: "text-dark" }, [_vm._v("Игорь Васильев")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "text-muted small mt-1" }, [
-              _vm._v("создал новый расчет")
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "list-group-item", attrs: { href: "#" } }, [
-        _c("div", { staticClass: "row g-0 align-items-center" }, [
-          _c("div", { staticClass: "col-2" }, [
-            _c("img", {
-              staticClass: "avatar img-fluid rounded-circle",
-              attrs: {
-                src: "https://appstack.bootlab.io/img/avatars/avatar.jpg",
-                alt: "Carl Jenkins"
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-10 ps-2" }, [
-            _c("div", { staticClass: "text-dark" }, [_vm._v("Петр Иванов")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "text-muted small mt-1" }, [
-              _vm._v("Иван Петров выполнил задачу")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "text-muted small mt-1" }, [
-              _vm._v('"Создай расчет киоска для РЖД"')
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
