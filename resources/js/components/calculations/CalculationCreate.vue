@@ -83,7 +83,7 @@
                     </div>
                 </div>
 
-                <div v-if="parseInt(pek_price) > 0" class="row align-items-center my-0 mb-1">
+                <div v-if="pek_price > 0" class="row align-items-center my-0 mb-1">
                     <div class="col-10 text-end" style="color: #888;">
                         <p v-if="pek_response" class="m-0">
                             Доставка
@@ -94,11 +94,11 @@
                         </p>
                     </div>
                     <div class="col-2 text-end">
-                        <h4 class="text-primary m-0">{{ parseInt(pek_price) }} ₽</h4>
+                        <h4 class="text-primary m-0">{{ pek_price }} ₽</h4>
                     </div>
                 </div>
 
-                <div v-if="price_subtotal > 0 && parseInt(pek_price) > 0" class="row align-items-center mb-0">
+                <div v-if="price_subtotal > 0 && pek_price > 0" class="row align-items-center mb-0">
                     <div class="col-10 text-end" style="color: #888;">
                         Итого:
                     </div>
@@ -359,7 +359,7 @@
                     })
                     .then(response => (
                         this.pek_response = response.data,
-                        this.pek_price = response.data.auto[2] + response.data.ADD[0],
+                        this.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[0]),
                         this.pek_loading = false,
                         console.log(response.data)
                     ));

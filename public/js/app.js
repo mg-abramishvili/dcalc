@@ -3057,7 +3057,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           'deliver[town]': "".concat(this.pek_city_sub_selected)
         }
       }).then(function (response) {
-        return _this5.pek_response = response.data, _this5.pek_price = response.data.auto[2] + response.data.ADD[0], _this5.pek_loading = false, console.log(response.data);
+        return _this5.pek_response = response.data, _this5.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[0]), _this5.pek_loading = false, console.log(response.data);
       });
     },
     checkDelivery: function checkDelivery() {
@@ -41389,7 +41389,7 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
-          parseInt(_vm.pek_price) > 0
+          _vm.pek_price > 0
             ? _c("div", { staticClass: "row align-items-center my-0 mb-1" }, [
                 _c(
                   "div",
@@ -41470,13 +41470,13 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "col-2 text-end" }, [
                   _c("h4", { staticClass: "text-primary m-0" }, [
-                    _vm._v(_vm._s(parseInt(_vm.pek_price)) + " ₽")
+                    _vm._v(_vm._s(_vm.pek_price) + " ₽")
                   ])
                 ])
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm.price_subtotal > 0 && parseInt(_vm.pek_price) > 0
+          _vm.price_subtotal > 0 && _vm.pek_price > 0
             ? _c("div", { staticClass: "row align-items-center mb-0" }, [
                 _c(
                   "div",
