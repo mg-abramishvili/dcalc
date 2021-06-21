@@ -8,6 +8,7 @@ Route::get('/users','App\Http\Controllers\UserController@index');
 
 // Проекты
 Route::get('/projects','App\Http\Controllers\ProjectController@projects');
+Route::get('/project/{id}','App\Http\Controllers\ProjectController@project_item');
 Route::post('/projects','App\Http\Controllers\ProjectController@projects_store');
 
 // Клиенты

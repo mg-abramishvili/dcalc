@@ -4,6 +4,7 @@ import UserCreate from './components/users/UserCreate.vue';
 
 import Projects from './components/projects/ProjectsAll.vue';
 import ProjectCreate from './components/projects/ProjectCreate.vue';
+import ProjectItem from './components/projects/ProjectItem.vue';
 
 import Clients from './components/clients/ClientsAll.vue';
 import ClientCreate from './components/clients/ClientCreate.vue';
@@ -56,9 +57,14 @@ export const routes = [
         component: Projects
     },
     {
-        path: '/projects/create',
+        path: '/projects/create/:calculation_id',
         name: 'ProjectCreate',
         component: ProjectCreate
+    },
+    {
+        path: '/project/:id',
+        name: 'ProjectItem',
+        component: ProjectItem
     },
     {
         path: '/clients',

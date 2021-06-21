@@ -17,4 +17,9 @@ class Project extends Model
         'payment',
         'description',
     ];
+
+    public function calculations()
+    {
+        return $this->belongsToMany('App\Models\Calculation');
+    }
 }

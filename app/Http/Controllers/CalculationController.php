@@ -34,13 +34,13 @@ class CalculationController extends Controller
         $calculation->types()->attach($request->types, ['calculation_id' => $calculation->id]);
         $calculation->boxes()->attach($request->boxes, ['calculation_id' => $calculation->id]);
 
+        return $calculation->id;
+        
         $elements = $request->input('elements', []);
         
         for ($element=0; $element < count($elements); $element++) {
             if ($elements[$element] != '') {
-                $calculation->elements()->attach($elements[$element], [
-                    //'amount' => '1',
-                ]);
+                $calculation->elements()->attach($elements[$element], []);
             }
         }
     }

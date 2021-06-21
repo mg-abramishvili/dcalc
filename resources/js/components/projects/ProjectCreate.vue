@@ -6,12 +6,7 @@
             </div>
         </div>
 
-        <div v-if="inn_check" class="card">
-            <input v-model="inn" type="text" class="form-control mb-3">
-            <button @click="checkINN()" class="btn btn-primary">Проверить</button>
-        </div>
-
-        <div v-else class="card">
+        <div class="card">
             <div class="card-body">
                 <div class="form-group">
                     <label id="name_label">Название</label>
@@ -74,15 +69,16 @@
                 payment: '',
                 description: '',
 
-                inn_check: true,
+                calculation_id: '',
             }
         },
         created() {
+            this.calculation_id = this.$route.params.calculation_id
         },
         methods: {
             saveProject() {
                 axios
-                .post('/api/projects', { name: this.name })
+                .post('/api/projects', { name: this.name, status: this.status, priority: this.priority, deadline: this.deadline, payment: this.payment, description: this.description, calculation_id: this.calculation_id })
                 .then(response => (
                     this.$router.push({path: '/projects'}) 
                 ));

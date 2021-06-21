@@ -2,7 +2,7 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0">Расчет №{{ calculation.id }} от {{moment(calculation.created_at).format('D MMMM YYYY')}}</h1>
+                <h1 class="h3 m-0">Новый расчёт</h1>
             </div>
         </div>
 
@@ -148,7 +148,7 @@
                 pek_cities_sub: {},
                 pek_city_sub_selected: '',
                 pek_response: '',
-                pek_price: '',
+                pek_price: 0,
                 pek_loading: false,
 
             }
@@ -329,7 +329,7 @@
                 axios
                 .post(`/api/calculations`, { comment: this.comment, price_total: this.price_subtotal + this.pek_price.toFixed(0), types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
                 .then(response => (
-                    this.$router.push({path: '/calculations'})
+                    this.$router.push({name: 'ProjectCreate', params: {calculation_id: response.data}})
                 ));
             },
             onCityChange() {
@@ -365,9 +365,9 @@
                     ));
             },
             checkDelivery() {
-                if(document.getElementsByName('delivery[]')[0].value === '55') {
+                if(document.getElementsByName('delivery[]')[0] && document.getElementsByName('delivery[]')[0].value === '55') {
                     document.getElementById('delivery').style.display = 'block'
-                } else {
+                } else if(document.getElementById('delivery')) {
                     document.getElementById('delivery').style.display = 'none'
                 }
             },

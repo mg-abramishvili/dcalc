@@ -5,7 +5,7 @@
                 <h1 class="h3 m-0">Проекты</h1>
             </div>
             <div class="col-12 col-lg-6 text-end">
-                <router-link :to="{name: 'ProjectCreate'}" class="btn btn-primary">Добавить</router-link>
+                <!--<router-link :to="{name: 'ProjectCreate'}" class="btn btn-primary">Добавить</router-link>-->
             </div>
         </div>
         <div class="card">
@@ -20,7 +20,9 @@
                     <tbody>
                         <tr v-for="project in projects" :key="project.id">
                             <td class="align-middle">{{ project.id }}</td>
-                            <td class="align-middle">{{ project.name }}</td>
+                            <td class="align-middle">
+                                <router-link :to="{name: 'ProjectItem', params: {id: project.id}}">{{ project.name }}</router-link>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

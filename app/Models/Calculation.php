@@ -33,4 +33,9 @@ class Calculation extends Model
     {
         return $this->belongsToMany('App\Models\Offer');
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany('App\Models\Project');
+    }
 }
