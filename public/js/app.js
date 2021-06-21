@@ -3063,9 +3063,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     },
     checkDelivery: function checkDelivery() {
       if (document.getElementsByName('delivery[]')[0].value === '55') {
-        document.getElementsByName('delivery[]')[0].style.display = 'block';
+        document.getElementById('delivery').style.display = 'block';
       } else {
-        document.getElementsByName('delivery[]')[0].style.display = 'none';
+        document.getElementById('delivery').style.display = 'none';
       }
     }
   },
