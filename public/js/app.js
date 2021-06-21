@@ -3057,7 +3057,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           'deliver[town]': "".concat(this.pek_city_sub_selected)
         }
       }).then(function (response) {
-        return _this5.pek_response = response.data, _this5.pek_price = response.data.auto[2], _this5.pek_loading = false, console.log(response.data);
+        return _this5.pek_response = response.data, _this5.pek_price = response.data.auto[2] + response.data.ADD[0], _this5.pek_loading = false, console.log(response.data);
       });
     },
     checkDelivery: function checkDelivery() {
