@@ -113,8 +113,6 @@
                 <!--<button @click="calc()">Пересчитать</button>-->
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
 
-
-                <button @click="checkDelivery()">check</button>
             </div>
         </div>
     </div>
