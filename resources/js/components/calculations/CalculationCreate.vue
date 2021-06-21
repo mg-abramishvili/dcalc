@@ -47,7 +47,7 @@
 
                 </div>
 
-                <div class="delivery mt-4">
+                <div class="delivery mt-4" id="delivery">
                     <div class="alert alert-primary alert-outline">
                         <div></div>
                         <div class="alert-message">
@@ -103,7 +103,7 @@
                         Итого:
                     </div>
                     <div class="col-2 text-end">
-                        <h4 class="text-primary m-0">{{ price_subtotal + pek_price }} ₽</h4>
+                        <h4 class="text-primary m-0">{{ (price_subtotal + pek_price).toFixed(0) }} ₽</h4>
                     </div>
                 </div>
 
@@ -113,6 +113,8 @@
                 <!--<button @click="calc()">Пересчитать</button>-->
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
 
+
+                <button @click="checkDelivery()">check</button>
             </div>
         </div>
     </div>
@@ -351,7 +353,7 @@
                 axios
                     .get('http://calc.pecom.ru/bitrix/components/pecom/calc/ajax.php', {
                         params: {
-                            'places[0]': [ `${this.selected_boxes_width}`, `${this.selected_boxes_length}`, `${this.selected_boxes_height}`, `${this.selected_boxes_width * this.selected_boxes_height * this.selected_boxes_length}`, `${this.selected_boxes_weight}`, 0, 0 ],
+                            'places[0]': [ `${this.selected_boxes_width}`, `${this.selected_boxes_length}`, `${this.selected_boxes_height}`, `${(this.selected_boxes_width * this.selected_boxes_height * this.selected_boxes_length).toFixed(2)}`, `${this.selected_boxes_weight}`, 0, 0 ],
                             'take[town]': '-463',
                             'deliver[town]': `${this.pek_city_sub_selected}`
                         }
@@ -363,9 +365,17 @@
                         console.log(response.data)
                     ));
             },
+            checkDelivery() {
+                if(document.getElementsByName('delivery[]')[0].value === '55') {
+                    document.getElementsByName('delivery[]')[0].style.display = 'block'
+                } else {
+                    document.getElementsByName('delivery[]')[0].style.display = 'none'
+                }
+            },
         },
         mounted() {
             setInterval(this.calc,500);
+            setInterval(this.checkDelivery,500);
         },
         watch: {
         },
