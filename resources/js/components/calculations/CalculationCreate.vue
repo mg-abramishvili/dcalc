@@ -352,7 +352,7 @@
                 axios
                     .get('http://calc.pecom.ru/bitrix/components/pecom/calc/ajax.php', {
                         params: {
-                            'places[0]': [ `${this.selected_boxes_width}`, `${this.selected_boxes_length}`, `${this.selected_boxes_height}`, `${(this.selected_boxes_width * this.selected_boxes_height * this.selected_boxes_length).toFixed(2)}`, `${this.selected_boxes_weight}`, 0, 0 ],
+                            'places[0]': [ `${this.selected_boxes_width}`, `${this.selected_boxes_length}`, `${this.selected_boxes_height}`, `${(this.selected_boxes_width * this.selected_boxes_height * this.selected_boxes_length).toFixed(2)}`, `${this.selected_boxes_weight}`, 0, 1 ],
                             'take[town]': '-463',
                             'deliver[town]': `${this.pek_city_sub_selected}`
                         }

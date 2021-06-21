@@ -3052,7 +3052,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       this.pek_loading = true;
       axios.get('http://calc.pecom.ru/bitrix/components/pecom/calc/ajax.php', {
         params: {
-          'places[0]': ["".concat(this.selected_boxes_width), "".concat(this.selected_boxes_length), "".concat(this.selected_boxes_height), "".concat((this.selected_boxes_width * this.selected_boxes_height * this.selected_boxes_length).toFixed(2)), "".concat(this.selected_boxes_weight), 0, 0],
+          'places[0]': ["".concat(this.selected_boxes_width), "".concat(this.selected_boxes_length), "".concat(this.selected_boxes_height), "".concat((this.selected_boxes_width * this.selected_boxes_height * this.selected_boxes_length).toFixed(2)), "".concat(this.selected_boxes_weight), 0, 1],
           'take[town]': '-463',
           'deliver[town]': "".concat(this.pek_city_sub_selected)
         }
