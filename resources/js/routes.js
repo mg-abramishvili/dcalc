@@ -2,6 +2,12 @@ import Home from './components/Home.vue';
 import Users from './components/users/UsersAll.vue';
 import UserCreate from './components/users/UserCreate.vue';
 
+import Projects from './components/projects/ProjectsAll.vue';
+import ProjectCreate from './components/projects/ProjectCreate.vue';
+
+import Clients from './components/clients/ClientsAll.vue';
+import ClientCreate from './components/clients/ClientCreate.vue';
+
 import Elements from './components/elements/ElementsAll.vue';
 import ElementsByCategory from './components/elements/ElementsByCategory.vue';
 import ElementCreate from './components/elements/ElementCreate.vue';
@@ -43,6 +49,26 @@ export const routes = [
         path: '/users/create',
         name: 'UserCreate',
         component: UserCreate
+    },
+    {
+        path: '/projects',
+        name: 'Projects',
+        component: Projects
+    },
+    {
+        path: '/projects/create',
+        name: 'ProjectCreate',
+        component: ProjectCreate
+    },
+    {
+        path: '/clients',
+        name: 'Clients',
+        component: Clients
+    },
+    {
+        path: '/clients/create',
+        name: 'ClientCreate',
+        component: ClientCreate
     },
     {
         path: '/elements',

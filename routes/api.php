@@ -6,6 +6,14 @@ use Illuminate\Support\Facades\Route;
 // Пользователи
 Route::get('/users','App\Http\Controllers\UserController@index');
 
+// Проекты
+Route::get('/projects','App\Http\Controllers\ProjectController@projects');
+Route::post('/projects','App\Http\Controllers\ProjectController@projects_store');
+
+// Клиенты
+Route::get('/clients','App\Http\Controllers\ClientController@clients');
+Route::post('/clients','App\Http\Controllers\ClientController@clients_store');
+
 // Элементы
 Route::get('/categories','App\Http\Controllers\ElementController@categories');
 Route::get('/category/{id}/','App\Http\Controllers\ElementController@category_item');

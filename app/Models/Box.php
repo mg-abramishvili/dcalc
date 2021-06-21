@@ -13,7 +13,11 @@ class Box extends Model
         'title',
         'pre_rub',
         'pre_usd',
-        'price'
+        'price',
+        'length',
+        'width',
+        'height',
+        'weight',
     ];
 
     public function types()

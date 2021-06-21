@@ -11,6 +11,25 @@
                 <label id="title_label">Название</label>
                 <input v-model="title" id="title_input" type="text" class="form-control mb-3">
 
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        <label id="length_label">Длина</label>
+                        <input v-model="length" id="length_input" type="text" class="form-control mb-3">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label id="width_label">Ширина</label>
+                        <input v-model="width" id="width_input" type="text" class="form-control mb-3">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label id="height_label">Высота</label>
+                        <input v-model="height" id="height_input" type="text" class="form-control mb-3">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label id="weight_label">Вес</label>
+                        <input v-model="weight" id="weight_input" type="text" class="form-control mb-3">
+                    </div>
+                </div>
+
                 <label>Курс USD <small>(на {{moment(currencies_date).format('DD.MM.YYYY')}})</small></label>
                 <input type="text" class="form-control mb-3" :value="currencies.Value" disabled>
 
@@ -59,6 +78,11 @@
                 moment: moment,
                 types: {},
                 selected_types: [],
+
+                width: '',
+                height: '',
+                length: '',
+                weight: '',
             }
         },
         created() {
@@ -70,7 +94,11 @@
                     this.pre_rub = response.data.pre_rub,
                     this.pre_usd = response.data.pre_usd,
                     this.price = response.data.price,
-                    this.selected_types = response.data.types.map(type => type.id)
+                    this.selected_types = response.data.types.map(type => type.id),
+                    this.width = response.data.width,
+                    this.height = response.data.height,
+                    this.length = response.data.length,
+                    this.weight = response.data.weight
                 ));
             axios
                 .get('https://www.cbr-xml-daily.ru/daily_json.js')
@@ -113,6 +141,10 @@
                     pre_usd: this.pre_usd,
                     price: this.price,
                     types: this.selected_types,
+                    length: this.length,
+                    width: this.width,
+                    height: this.height,
+                    weight: this.weight,
                 })
                 .then(response => (
                     this.$router.push({path: '/boxes'}) 

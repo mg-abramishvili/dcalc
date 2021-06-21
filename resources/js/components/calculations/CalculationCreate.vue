@@ -47,19 +47,6 @@
 
                 </div>
 
-                Комментарий:
-                <textarea class="form-control mb-2" v-model="comment"></textarea>
-                <div v-if="price_total > 0" class="row align-items-center my-4">
-                    <div class="col-10 text-right" style="color: #888;">
-                        Итого:
-                    </div>
-                    <div class="col-2 text-end">
-                        <h4 class="text-primary m-0">{{ price_total }} ₽</h4>
-                    </div>
-                </div>
-                <!--<button @click="calc()">Пересчитать</button>-->
-                <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
-
                 <div class="delivery mt-4">
                     <div class="alert alert-primary alert-outline">
                         <div></div>
@@ -83,21 +70,48 @@
                                 <span class="sr-only">Загрузка...</span>
                             </div>
 
-                            <p v-if="pek_response" class="mt-4 mb-0">
-                                <template v-if="pek_response.auto[0]">
-                                    {{ pek_response.auto[0] }}
-                                </template>
-                                <template v-if="pek_response.auto[1]">
-                                    ({{ pek_response.auto[1] }}):
-                                </template>
-                                <template v-if="pek_response.auto[2]">
-                                    <strong>{{ pek_response.auto[2] }} руб.</strong>
-                                </template>
-                                ({{ pek_response.periods_days }} дней)
-                            </p>
                         </div>
                     </div>
                 </div>
+
+                <div v-if="price_subtotal > 0" class="row align-items-center mt-4">
+                    <div class="col-10 text-end" style="color: #888;">
+                        Стоимость:
+                    </div>
+                    <div class="col-2 text-end">
+                        <h4 class="text-primary m-0">{{ price_subtotal }} ₽</h4>
+                    </div>
+                </div>
+
+                <div v-if="parseInt(pek_price) > 0" class="row align-items-center my-0 mb-1">
+                    <div class="col-10 text-end" style="color: #888;">
+                        <p v-if="pek_response" class="m-0">
+                            Доставка
+                            <template v-if="pek_response.auto[1]">
+                                <small style="display:block; line-height: 1; font-size: 11px;">{{ pek_response.auto[1] }} ({{ pek_response.periods_days }} дней)</small>
+                                <small style="display:block; line-height: 1; font-size: 11px;">{{ selected_boxes_length }}м &times; {{ selected_boxes_width }}м &times; {{ selected_boxes_height }}м, {{ (selected_boxes_width * selected_boxes_height * selected_boxes_length).toFixed(2) }}м³, {{ selected_boxes_weight }}кг</small>
+                            </template>
+                        </p>
+                    </div>
+                    <div class="col-2 text-end">
+                        <h4 class="text-primary m-0">{{ parseInt(pek_price) }} ₽</h4>
+                    </div>
+                </div>
+
+                <div v-if="price_subtotal > 0 && parseInt(pek_price) > 0" class="row align-items-center mb-0">
+                    <div class="col-10 text-end" style="color: #888;">
+                        Итого:
+                    </div>
+                    <div class="col-2 text-end">
+                        <h4 class="text-primary m-0">{{ price_subtotal + pek_price }} ₽</h4>
+                    </div>
+                </div>
+
+                <div class="mt-4">Комментарий:</div>
+                <textarea class="form-control mb-2" v-model="comment"></textarea>
+
+                <!--<button @click="calc()">Пересчитать</button>-->
+                <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
 
             </div>
         </div>
@@ -111,12 +125,19 @@
                 calculation: {},
                 categories: [],
                 elements: [],
+                price_subtotal: {},
                 price_total: {},
                 comment: '',
                 boxes: {},
                 types: {},
                 selected_types: '',
+
                 selected_boxes: {},
+                selected_boxes_width: '',
+                selected_boxes_length: '',
+                selected_boxes_height: '',
+                selected_boxes_weight: '',
+
                 selected_boxes_price: '',
                 moment: moment,
                 ele_cat: [],
@@ -127,6 +148,7 @@
                 pek_cities_sub: {},
                 pek_city_sub_selected: '',
                 pek_response: '',
+                pek_price: '',
                 pek_loading: false,
 
             }
@@ -189,9 +211,9 @@
                 this.reset_form = true
             },
             calc() {
-                this.price_total = 0
+                this.price_subtotal = 0
                 var pr_to =  [];
-                this.price_total = pr_to
+                this.price_subtotal = pr_to
 
                 this.categories.forEach(function(category) {
                         document.getElementsByName(category.slug + '[]').forEach((child) => {
@@ -203,7 +225,7 @@
                 );
 
                 pr_to = pr_to.reduce((a, b) => a + b, 0)
-                this.price_total = parseInt(this.selected_boxes_price) + pr_to
+                this.price_subtotal = parseInt(this.selected_boxes_price) + pr_to
             },
             onChange(category, index) {
                 if(document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
@@ -229,7 +251,7 @@
                 .get(`/api/boxes/filter/${this.selected_types}`)
                 .then(response => (
                     this.boxes = response.data,
-                    this.price_total = 0
+                    this.price_subtotal = 0
                 ));
 
                 this.categories.forEach(function(category) {
@@ -253,7 +275,11 @@
                 axios
                 .get(`/api/box/${this.selected_boxes}`)
                 .then(response => (
-                    this.selected_boxes_price = response.data.price
+                    this.selected_boxes_price = response.data.price,
+                    this.selected_boxes_width = response.data.width,
+                    this.selected_boxes_length = response.data.length,
+                    this.selected_boxes_height = response.data.height,
+                    this.selected_boxes_weight = response.data.weight
                 ));
 
                 // Фильтруем остальные детали относительно корпуса
@@ -300,7 +326,7 @@
                 console.log(megred_select_form_values)
                 
                 axios
-                .post(`/api/calculations`, { comment: this.comment, price_total: this.price_total, types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
+                .post(`/api/calculations`, { comment: this.comment, price_subtotal: this.price_subtotal, types: this.selected_types, boxes: this.selected_boxes, elements: megred_select_form_values })
                 .then(response => (
                     this.$router.push({path: '/calculations'})
                 ));
@@ -325,13 +351,14 @@
                 axios
                     .get('http://calc.pecom.ru/bitrix/components/pecom/calc/ajax.php', {
                         params: {
-                            'places[0]': [ '2', '2', '2', '8', '70', 0, 0 ],
+                            'places[0]': [ `${this.selected_boxes_width}`, `${this.selected_boxes_length}`, `${this.selected_boxes_height}`, `${this.selected_boxes_width * this.selected_boxes_height * this.selected_boxes_length}`, `${this.selected_boxes_weight}`, 0, 0 ],
                             'take[town]': '-463',
                             'deliver[town]': `${this.pek_city_sub_selected}`
                         }
                     })
                     .then(response => (
                         this.pek_response = response.data,
+                        this.pek_price = response.data.auto[2],
                         this.pek_loading = false,
                         console.log(response.data)
                     ));

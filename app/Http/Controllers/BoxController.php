@@ -49,6 +49,10 @@ class BoxController extends Controller
             'pre_usd' => 'required|numeric',
             'price' => 'required|numeric',
             'types' => 'required',
+            'length' => 'required|numeric',
+            'width' => 'required|numeric',
+            'height' => 'required|numeric',
+            'weight' => 'required|numeric',
         ];
 
         $this->validate($request, $rules);
@@ -59,6 +63,10 @@ class BoxController extends Controller
         $box->pre_rub = $data['pre_rub'];
         $box->pre_usd = $data['pre_usd'];
         $box->price = $data['price'];
+        $box->length = $data['length'];
+        $box->width = $data['width'];
+        $box->height = $data['height'];
+        $box->weight = $data['weight'];
         $box->save();
         $box->types()->detach();
         $box->types()->attach($request->types, ['box_id' => $box->id]);
