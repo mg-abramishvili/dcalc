@@ -175,7 +175,8 @@
             }.bind(this), 500);
 
             axios
-                .get('http://www.pecom.ru/ru/calc/towns.php')
+                //.get('http://www.pecom.ru/ru/calc/towns.php')
+                .get('/towns.php')
                 .then((response => {
                     this.pek_cities_data = response.data
                     

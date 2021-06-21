@@ -2886,7 +2886,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     setTimeout(function () {
       this.clear();
     }.bind(this), 500);
-    axios.get('http://www.pecom.ru/ru/calc/towns.php').then(function (response) {
+    axios //.get('http://www.pecom.ru/ru/calc/towns.php')
+    .get('/towns.php').then(function (response) {
       _this.pek_cities_data = response.data;
       var data = _this.pek_cities_data;
       var pek_cities = [];
