@@ -3011,7 +3011,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       console.log(megred_select_form_values);
       axios.post("/api/calculations", {
         comment: this.comment,
-        price_subtotal: this.price_subtotal,
+        price_total: this.price_subtotal + this.pek_price.toFixed(0),
         types: this.selected_types,
         boxes: this.selected_boxes,
         elements: megred_select_form_values
