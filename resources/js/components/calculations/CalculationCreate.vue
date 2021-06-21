@@ -359,7 +359,7 @@
                     })
                     .then(response => (
                         this.pek_response = response.data,
-                        this.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[0]),
+                        this.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[1]),
                         this.pek_loading = false,
                         console.log(response.data)
                     ));
