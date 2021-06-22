@@ -13,7 +13,7 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <small style="color: #888;">Тип</small>
-                                <strong class="d-block">{{ selected_type.title }}</strong>
+                                <strong id="type_title" class="d-block"></strong>
                             </div>
                             <div class="col-4 text-end"></div>
                         </div>
@@ -24,15 +24,15 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <small style="color: #888;">Корпус</small>
-                                <strong class="d-block">{{ selected_box.title }}</strong>
+                                <strong id="box_title" class="d-block"></strong>
                             </div>
                             <div class="col-4 text-end">
-                                <strong v-if="selected_box.price" class="text-primary">{{ selected_box.price }} ₽</strong>
+                                <strong id="box_price" class="text-primary"></strong>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <div class="description">{{ selected_box.description }}</div>
+                                <div id="box_description" class="description"></div>
                             </div>
                         </div>
                     </a>
@@ -50,6 +50,7 @@
                         </div>
                     </a>
                 </li>
+                <li v-if="overlay" class="overlay"></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_type" role="tabpanel">
@@ -110,7 +111,9 @@
                 categories: {},
                 elements: {},
 
-                price_subtotal: ''
+                price_subtotal: '',
+
+                overlay: true,
             }
         },
         created() {
@@ -138,6 +141,11 @@
                     .then(response => (
                         this.boxes = response.data
                     ));
+
+                    if(document.getElementById('type_title')) {
+                        document.getElementById('type_title').innerHTML = this.selected_type.title
+                    }
+
                     this.tabSelect('tab_box')
                 } else {
                     alert('Выберите тип')
@@ -150,9 +158,22 @@
                     .then(response => (
                         this.elements = response.data
                     ));
-                    this.tabSelect('tab_type')
+
+                    if(document.getElementById('box_title')) {
+                        document.getElementById('box_title').innerHTML = this.selected_box.title
+                    }
+                    if(document.getElementById('box_price')) {
+                        document.getElementById('box_price').innerHTML = this.selected_box.price + ' ₽'
+                    }
+                    if(document.getElementById('box_description')) {
+                        document.getElementById('box_description').innerHTML = this.selected_box.description
+                    }
 
                     this.tabSelect('tab_' + this.categories[0].slug)
+
+                    this.overlay = true
+
+                    this.price_subtotal = this.selected_box.price
 
                     this.categories.forEach(function(category) {
                         if(document.getElementById(category.slug + '_title')) {
@@ -164,7 +185,7 @@
                     });
 
                 } else {
-                    alert('Выберите тип')
+                    alert('Выберите корпус')
                 }
             },
             onSelect(category, index) {
@@ -185,9 +206,10 @@
                 if(this.categories[0+index+1]) {
                     this.tabSelect('tab_' + this.categories[0+index+1].slug)
                 } else {
-                    document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
+                    this.overlay = false
+                    /*document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
                     el.style.visibility = 'hidden';
-                    });
+                    });*/
                 }
 
             },
@@ -211,14 +233,8 @@
             tabSelectBack(index) {
                 if(index === 0) {
                     this.tabSelect('tab_box')
-                    document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
-                    el.style.visibility = 'visible';
-                    });
                 } else if (this.categories[0+index-1]) {
                     this.tabSelect('tab_' + this.categories[0+index-1].slug)
-                    document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
-                    el.style.visibility = 'visible';
-                    });
                 }
             },
             calc() {
@@ -255,6 +271,18 @@
         float: right;
         padding-left: 30px;
         display: block;
+        position: relative;
+    }
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4);
+        z-index: 100;
     }
     .tab .nav-tabs .nav-link.active {
         background: none;

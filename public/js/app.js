@@ -2901,6 +2901,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2910,7 +2911,8 @@ __webpack_require__.r(__webpack_exports__);
       selected_box: {},
       categories: {},
       elements: {},
-      price_subtotal: ''
+      price_subtotal: '',
+      overlay: true
     };
   },
   created: function created() {
@@ -2934,6 +2936,11 @@ __webpack_require__.r(__webpack_exports__);
         axios.get("/api/boxes/filter/".concat(this.selected_type.id)).then(function (response) {
           return _this2.boxes = response.data;
         });
+
+        if (document.getElementById('type_title')) {
+          document.getElementById('type_title').innerHTML = this.selected_type.title;
+        }
+
         this.tabSelect('tab_box');
       } else {
         alert('Выберите тип');
@@ -2946,8 +2953,22 @@ __webpack_require__.r(__webpack_exports__);
         axios.get("/api/elements/filter/box/".concat(this.selected_box.id)).then(function (response) {
           return _this3.elements = response.data;
         });
-        this.tabSelect('tab_type');
+
+        if (document.getElementById('box_title')) {
+          document.getElementById('box_title').innerHTML = this.selected_box.title;
+        }
+
+        if (document.getElementById('box_price')) {
+          document.getElementById('box_price').innerHTML = this.selected_box.price + ' ₽';
+        }
+
+        if (document.getElementById('box_description')) {
+          document.getElementById('box_description').innerHTML = this.selected_box.description;
+        }
+
         this.tabSelect('tab_' + this.categories[0].slug);
+        this.overlay = true;
+        this.price_subtotal = this.selected_box.price;
         this.categories.forEach(function (category) {
           if (document.getElementById(category.slug + '_title')) {
             document.getElementById(category.slug + '_title').innerHTML = '';
@@ -2958,7 +2979,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       } else {
-        alert('Выберите тип');
+        alert('Выберите корпус');
       }
     },
     onSelect: function onSelect(category, index) {
@@ -2980,9 +3001,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.categories[0 + index + 1]) {
         this.tabSelect('tab_' + this.categories[0 + index + 1].slug);
       } else {
-        document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
-          el.style.visibility = 'hidden';
-        });
+        this.overlay = false;
+        /*document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
+        el.style.visibility = 'hidden';
+        });*/
       }
     },
     tabSelect: function tabSelect(tab_id) {
@@ -3008,14 +3030,8 @@ __webpack_require__.r(__webpack_exports__);
     tabSelectBack: function tabSelectBack(index) {
       if (index === 0) {
         this.tabSelect('tab_box');
-        document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
-          el.style.visibility = 'visible';
-        });
       } else if (this.categories[0 + index - 1]) {
         this.tabSelect('tab_' + this.categories[0 + index - 1].slug);
-        document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
-          el.style.visibility = 'visible';
-        });
       }
     },
     calc: function calc() {
@@ -5567,7 +5583,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.tab[data-v-162aba0b] {\n    min-height: 500px;\n}\n.tab-vertical .nav-tabs[data-v-162aba0b] {\n    width: 60%;\n    float: right;\n    padding-left: 30px;\n    display: block;\n}\n.tab .nav-tabs .nav-link.active[data-v-162aba0b] {\n    background: none;\n}\n.tab .nav-tabs .nav-link[data-v-162aba0b] {\n    border-radius: 0;\n    padding-left: 0;\n    padding-right: 0;\n    border-bottom: 1px solid #ddd;\n}\n.tab .nav-tabs .nav-item:first-child .nav-link[data-v-162aba0b] {\n    padding-top: 0;\n}\n.tab .tab-content[data-v-162aba0b] {\n    position: sticky;\n    top: 20px;\n    background: none;\n    box-shadow: none;\n    padding: 0;\n}\n.tab-content>.tab-pane[data-v-162aba0b] {\n    background: #fff;\n    padding: 1.25rem;\n    box-shadow: 0 0.1rem 0.2rem rgb(0 0 0 / 5%);\n    margin-bottom: 40px;\n}\n.total .col-6[data-v-162aba0b] {\n    padding: 0;\n}\n.total .text-primary[data-v-162aba0b] {\n    font-size: 26px;\n    font-weight: bold;\n}\n.description[data-v-162aba0b] {\n    font-size: 12px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.tab[data-v-162aba0b] {\n    min-height: 500px;\n}\n.tab-vertical .nav-tabs[data-v-162aba0b] {\n    width: 60%;\n    float: right;\n    padding-left: 30px;\n    display: block;\n    position: relative;\n}\n.overlay[data-v-162aba0b] {\n    position: absolute;\n    top: 0;\n    left: 0;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0,0,0,0.4);\n    z-index: 100;\n}\n.tab .nav-tabs .nav-link.active[data-v-162aba0b] {\n    background: none;\n}\n.tab .nav-tabs .nav-link[data-v-162aba0b] {\n    border-radius: 0;\n    padding-left: 0;\n    padding-right: 0;\n    border-bottom: 1px solid #ddd;\n}\n.tab .nav-tabs .nav-item:first-child .nav-link[data-v-162aba0b] {\n    padding-top: 0;\n}\n.tab .tab-content[data-v-162aba0b] {\n    position: sticky;\n    top: 20px;\n    background: none;\n    box-shadow: none;\n    padding: 0;\n}\n.tab-content>.tab-pane[data-v-162aba0b] {\n    background: #fff;\n    padding: 1.25rem;\n    box-shadow: 0 0.1rem 0.2rem rgb(0 0 0 / 5%);\n    margin-bottom: 40px;\n}\n.total .col-6[data-v-162aba0b] {\n    padding: 0;\n}\n.total .text-primary[data-v-162aba0b] {\n    font-size: 26px;\n    font-weight: bold;\n}\n.description[data-v-162aba0b] {\n    font-size: 12px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -41574,21 +41590,7 @@ var render = function() {
                   }
                 }
               },
-              [
-                _c("div", { staticClass: "row align-items-center" }, [
-                  _c("div", { staticClass: "col-8" }, [
-                    _c("small", { staticStyle: { color: "#888" } }, [
-                      _vm._v("Тип")
-                    ]),
-                    _vm._v(" "),
-                    _c("strong", { staticClass: "d-block" }, [
-                      _vm._v(_vm._s(_vm.selected_type.title))
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-4 text-end" })
-                ])
-              ]
+              [_vm._m(1)]
             )
           ]),
           _vm._v(" "),
@@ -41604,35 +41606,7 @@ var render = function() {
                   }
                 }
               },
-              [
-                _c("div", { staticClass: "row align-items-center" }, [
-                  _c("div", { staticClass: "col-8" }, [
-                    _c("small", { staticStyle: { color: "#888" } }, [
-                      _vm._v("Корпус")
-                    ]),
-                    _vm._v(" "),
-                    _c("strong", { staticClass: "d-block" }, [
-                      _vm._v(_vm._s(_vm.selected_box.title))
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-4 text-end" }, [
-                    _vm.selected_box.price
-                      ? _c("strong", { staticClass: "text-primary" }, [
-                          _vm._v(_vm._s(_vm.selected_box.price) + " ₽")
-                        ])
-                      : _vm._e()
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-12" }, [
-                    _c("div", { staticClass: "description" }, [
-                      _vm._v(_vm._s(_vm.selected_box.description))
-                    ])
-                  ])
-                ])
-              ]
+              [_vm._m(2), _vm._v(" "), _vm._m(3)]
             )
           ]),
           _vm._v(" "),
@@ -41683,7 +41657,9 @@ var render = function() {
                 )
               ]
             )
-          })
+          }),
+          _vm._v(" "),
+          _vm.overlay ? _c("li", { staticClass: "overlay" }) : _vm._e()
         ],
         2
       ),
@@ -41699,7 +41675,7 @@ var render = function() {
               attrs: { id: "tab_type", role: "tabpanel" }
             },
             [
-              _vm._m(1),
+              _vm._m(4),
               _vm._v(" "),
               _c(
                 "select",
@@ -41769,7 +41745,7 @@ var render = function() {
               attrs: { id: "tab_box", role: "tabpanel" }
             },
             [
-              _vm._m(2),
+              _vm._m(5),
               _vm._v(" "),
               _c(
                 "select",
@@ -41968,6 +41944,52 @@ var staticRenderFns = [
     return _c("div", { staticClass: "row align-items-center mb-4" }, [
       _c("div", { staticClass: "col-12 col-lg-6" }, [
         _c("h1", { staticClass: "h3 m-0" }, [_vm._v("Новый расчёт")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row align-items-center" }, [
+      _c("div", { staticClass: "col-8" }, [
+        _c("small", { staticStyle: { color: "#888" } }, [_vm._v("Тип")]),
+        _vm._v(" "),
+        _c("strong", { staticClass: "d-block", attrs: { id: "type_title" } })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-4 text-end" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row align-items-center" }, [
+      _c("div", { staticClass: "col-8" }, [
+        _c("small", { staticStyle: { color: "#888" } }, [_vm._v("Корпус")]),
+        _vm._v(" "),
+        _c("strong", { staticClass: "d-block", attrs: { id: "box_title" } })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-4 text-end" }, [
+        _c("strong", {
+          staticClass: "text-primary",
+          attrs: { id: "box_price" }
+        })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12" }, [
+        _c("div", {
+          staticClass: "description",
+          attrs: { id: "box_description" }
+        })
       ])
     ])
   },
