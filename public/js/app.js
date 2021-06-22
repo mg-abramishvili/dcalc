@@ -5089,9 +5089,6 @@ __webpack_require__.r(__webpack_exports__);
     axios.get("/api/project/".concat(this.$route.params.id)).then(function (response) {
       return _this.project = response.data;
     });
-    axios.get("/api/offer/1").then(function (response) {
-      return _this.offer = response.data;
-    });
   },
   methods: {
     tabSelect: function tabSelect(tab_id) {
@@ -45615,10 +45612,11 @@ var render = function() {
             staticClass: "tab-pane",
             attrs: { id: "tab_kps", role: "tabpanel" }
           },
-          [
-            _c(
+          _vm._l(_vm.project.offers, function(offer) {
+            return _c(
               "div",
               {
+                key: "offer" + offer.id,
                 staticClass: "card-body m-sm-3 m-md-5",
                 attrs: { id: "offer" }
               },
@@ -45629,25 +45627,25 @@ var render = function() {
                   ),
                   _c("br"),
                   _vm._v(
-                    "для " + _vm._s(_vm.offer.client) + "\n                    "
+                    "для " + _vm._s(offer.client) + "\n                    "
                   )
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "mb-4" }, [
                   _vm._v(
                     "\n                        " +
-                      _vm._s(_vm.offer.comment) +
+                      _vm._s(offer.comment) +
                       "\n                    "
                   )
                 ]),
                 _vm._v(" "),
                 _c("table", { staticClass: "table table-sm mb-3" }, [
-                  _vm._m(2),
+                  _vm._m(2, true),
                   _vm._v(" "),
                   _c(
                     "tbody",
                     [
-                      _vm._l(_vm.offer.calculations, function(offer_calc) {
+                      _vm._l(offer.calculations, function(offer_calc) {
                         return _vm._l(offer_calc.elements, function(element) {
                           return _c("tr", [
                             _c("td", [_vm._v(_vm._s(element.title))]),
@@ -45668,7 +45666,7 @@ var render = function() {
                           "th",
                           { staticClass: "text-end" },
                           [
-                            _vm._l(_vm.offer.calculations, function(of_c) {
+                            _vm._l(offer.calculations, function(of_c) {
                               return [
                                 _vm._v(
                                   "\n                                        " +
@@ -45689,7 +45687,8 @@ var render = function() {
                 _c("div", { staticClass: "text-center" })
               ]
             )
-          ]
+          }),
+          0
         )
       ])
     ])

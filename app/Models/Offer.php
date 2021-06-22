@@ -18,4 +18,9 @@ class Offer extends Model
     {
         return $this->belongsToMany('App\Models\Calculation');
     }
+
+    public function projects()
+    {
+        return $this->belongsToMany('App\Models\Project');
+    }
 }

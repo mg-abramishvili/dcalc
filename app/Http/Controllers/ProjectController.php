@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Offer;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -14,7 +15,7 @@ class ProjectController extends Controller
 
     public function project_item($id)
     {
-        return Project::with('calculations')->find($id);
+        return Project::with('calculations', 'offers.calculations.elements')->find($id);
     }
 
     public function projects_store(Request $request)
@@ -28,6 +29,13 @@ class ProjectController extends Controller
         $project->payment = $data['payment'];
         $project->description = $data['description'];
         $project->save();
+        $offer = new Offer([
+            'client' => '',
+            'comment' => '',
+        ]);
+        $offer->save();
+        $offer->calculations()->attach($request->calculation_id, ['offer_id' => $offer->id]);
         $project->calculations()->attach($request->calculation_id, ['project_id' => $project->id]);
+        $project->offers()->attach($offer->id, ['project_id' => $project->id]);
     }
 }

@@ -60,7 +60,7 @@
                     </table>
                 </div>
                 <div class="tab-pane" id="tab_kps" role="tabpanel">
-                    <div class="card-body m-sm-3 m-md-5" id="offer">
+                    <div v-for="offer in project.offers" :key="'offer' + offer.id" class="card-body m-sm-3 m-md-5" id="offer">
                         <h2 class="h2 mt-4 mb-4 text-center">
                             Коммерческое предложение
                             <br>для {{offer.client}}
@@ -121,11 +121,6 @@
                 .get(`/api/project/${this.$route.params.id}`)
                 .then(response => (
                     this.project = response.data
-                ));
-            axios
-                .get(`/api/offer/1`)
-                .then(response => (
-                    this.offer = response.data
                 ));
         },
         methods: {

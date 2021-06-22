@@ -22,4 +22,9 @@ class Project extends Model
     {
         return $this->belongsToMany('App\Models\Calculation');
     }
+
+    public function offers()
+    {
+        return $this->belongsToMany('App\Models\Offer');
+    }
 }
