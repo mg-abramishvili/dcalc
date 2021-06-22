@@ -2802,40 +2802,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2938,247 +2904,137 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      calculation: {},
-      categories: [],
-      elements: [],
-      price_subtotal: {},
-      price_total: {},
-      comment: '',
-      boxes: {},
       types: {},
-      selected_types: '',
-      selected_boxes: {},
-      selected_boxes_width: '',
-      selected_boxes_length: '',
-      selected_boxes_height: '',
-      selected_boxes_weight: '',
-      selected_boxes_price: '',
-      moment: moment,
-      ele_cat: [],
-      pek_cities_data: {},
-      pek_cities: {},
-      pek_city_selected: '',
-      pek_cities_sub: {},
-      pek_city_sub_selected: '',
-      pek_response: '',
-      pek_price: 0,
-      pek_loading: false
+      selected_type: {},
+      boxes: {},
+      selected_box: {},
+      categories: {},
+      elements: {},
+      price_subtotal: ''
     };
   },
   created: function created() {
     var _this = this;
 
-    axios.get('/api/categories').then(function (response) {
-      return _this.categories = response.data;
-    });
     axios.get('/api/types').then(function (response) {
       return _this.types = response.data;
     });
     axios.get('/api/boxes').then(function (response) {
       return _this.boxes = response.data;
     });
-    setTimeout(function () {
-      this.clear();
-    }.bind(this), 500);
-    axios //.get('http://www.pecom.ru/ru/calc/towns.php')
-    .get('/towns.php').then(function (response) {
-      _this.pek_cities_data = response.data;
-      var data = _this.pek_cities_data;
-      var pek_cities = [];
-
-      for (var i in data) {
-        pek_cities.push(i);
-      }
-
-      _this.pek_cities = pek_cities.sort();
+    axios.get('/api/categories').then(function (response) {
+      return _this.categories = response.data;
     });
   },
   methods: {
-    clear: function clear() {
-      this.categories.forEach(function (category) {
-        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
-          document.getElementById('section_' + category.slug).lastElementChild.remove();
+    onTypeSelect: function onTypeSelect() {
+      var _this2 = this;
+
+      if (!isNaN(this.selected_type.id)) {
+        axios.get("/api/boxes/filter/".concat(this.selected_type.id)).then(function (response) {
+          return _this2.boxes = response.data;
+        });
+        this.tabSelect('tab_box');
+      } else {
+        alert('Выберите тип');
+      }
+    },
+    onBoxSelect: function onBoxSelect() {
+      var _this3 = this;
+
+      if (!isNaN(this.selected_box.id)) {
+        axios.get("/api/elements/filter/box/".concat(this.selected_box.id)).then(function (response) {
+          return _this3.elements = response.data;
+        });
+        this.tabSelect('tab_type');
+        this.tabSelect('tab_' + this.categories[0].slug);
+        this.categories.forEach(function (category) {
+          if (document.getElementById(category.slug + '_title')) {
+            document.getElementById(category.slug + '_title').innerHTML = '';
+          }
+
+          if (document.getElementById(category.slug + '_price')) {
+            document.getElementById(category.slug + '_price').innerHTML = '';
+          }
+        });
+      } else {
+        alert('Выберите тип');
+      }
+    },
+    onSelect: function onSelect(category, index) {
+      document.getElementsByName(category.slug + '[]').forEach(function (child) {
+        if (child.options[child.selectedIndex].getAttribute('data-title')) {
+          if (document.getElementById(category.slug + '_title')) {
+            document.getElementById(category.slug + '_title').innerHTML = child.options[child.selectedIndex].getAttribute('data-title');
+          }
+        }
+
+        if (child.options[child.selectedIndex].getAttribute('data-price')) {
+          if (document.getElementById(category.slug + '_price')) {
+            document.getElementById(category.slug + '_price').innerHTML = parseInt(child.options[child.selectedIndex].getAttribute('data-price')) + ' ₽';
+          }
         }
       });
-      var indexes = document.querySelectorAll('[class^="index"]');
-      [].forEach.call(indexes, function (index) {
-        index.style.display = "none";
-      });
-      document.getElementById('selected_boxes').style.display = "none";
-      this.selected_types = '';
-      this.selected_boxes = '';
-      this.reset_form = true;
+      this.calc();
+
+      if (this.categories[0 + index + 1]) {
+        this.tabSelect('tab_' + this.categories[0 + index + 1].slug);
+      } else {
+        document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
+          el.style.visibility = 'hidden';
+        });
+      }
+    },
+    tabSelect: function tabSelect(tab_id) {
+      // Убираем активность со всех табов и их кнопок
+      var tab_link;
+      var tab_links = document.querySelectorAll(".tab-link");
+
+      for (tab_link = 0; tab_link < tab_links.length; tab_link++) {
+        tab_links[tab_link].classList.remove('active');
+      }
+
+      var tab_pane;
+      var tab_panes = document.querySelectorAll(".tab-pane");
+
+      for (tab_pane = 0; tab_pane < tab_panes.length; tab_pane++) {
+        tab_panes[tab_pane].classList.remove('active');
+      } // Делаем активным нужный таб
+
+
+      document.getElementById(tab_id).classList.add('active');
+      document.getElementById(tab_id + '_link').classList.add('active');
+    },
+    tabSelectBack: function tabSelectBack(index) {
+      if (index === 0) {
+        this.tabSelect('tab_box');
+        document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
+          el.style.visibility = 'visible';
+        });
+      } else if (this.categories[0 + index - 1]) {
+        this.tabSelect('tab_' + this.categories[0 + index - 1].slug);
+        document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
+          el.style.visibility = 'visible';
+        });
+      }
     },
     calc: function calc() {
       this.price_subtotal = 0;
-      var pr_to = [];
-      this.price_subtotal = pr_to;
+      var price_subtotal = [];
       this.categories.forEach(function (category) {
         document.getElementsByName(category.slug + '[]').forEach(function (child) {
           if (child.options[child.selectedIndex].getAttribute('data-price')) {
-            pr_to.push(parseInt(child.options[child.selectedIndex].getAttribute('data-price')));
+            price_subtotal.push(parseInt(child.options[child.selectedIndex].getAttribute('data-price')));
           }
         });
       });
-      pr_to = pr_to.reduce(function (a, b) {
+      price_subtotal = price_subtotal.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.price_subtotal = parseInt(this.selected_boxes_price) + pr_to;
-    },
-    onChange: function onChange(category, index) {
-      if (document.getElementsByName(category.slug + '[]')[0].value && document.getElementsByClassName('index' + (index + 1))[0]) {
-        document.getElementsByClassName('index' + (index + 1))[0].style.display = "block";
-
-        if (document.getElementsByClassName('index' + (index + 1))[0].querySelector("select")) {
-          document.getElementsByClassName('index' + (index + 1))[0].querySelector("select").selectedIndex = "0";
-        }
-      }
-
-      var all_numbers = [index + 1, index + 2, index + 3, index + 4, index + 5, index + 6, index + 7, index + 8, index + 9, index + 10];
-
-      if (!document.getElementsByName(category.slug + '[]')[0].value.length) {
-        all_numbers.forEach(function (number) {
-          if (document.getElementsByClassName('index' + number)[0]) {
-            document.getElementsByClassName('index' + number)[0].style.display = "none";
-          }
-        });
-      }
-    },
-    onTypeChange: function onTypeChange() {
-      var _this2 = this;
-
-      axios.get("/api/boxes/filter/".concat(this.selected_types)).then(function (response) {
-        return _this2.boxes = response.data, _this2.price_subtotal = 0;
-      });
-      this.categories.forEach(function (category) {
-        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
-          document.getElementById('section_' + category.slug).lastElementChild.remove();
-        }
-      });
-      var indexes = document.querySelectorAll('[class^="index"]');
-      [].forEach.call(indexes, function (index) {
-        index.style.display = "none";
-      });
-      document.getElementById('selected_boxes').style.display = "block";
-      this.selected_boxes = '';
-    },
-    onBoxChange: function onBoxChange() {
-      var _this3 = this;
-
-      // Берем данные выбранного корпуса
-      axios.get("/api/box/".concat(this.selected_boxes)).then(function (response) {
-        _this3.selected_boxes_price = response.data.price;
-        _this3.selected_boxes_width = response.data.width;
-        _this3.selected_boxes_length = response.data.length;
-        _this3.selected_boxes_height = response.data.height;
-        _this3.selected_boxes_weight = response.data.weight; // Берем описание и выводим в div
-
-        document.getElementById('box_description').innerHTML = '';
-
-        if (response.data.description) {
-          document.getElementById('box_description').innerHTML = "".concat(response.data.description);
-        }
-      }); // Фильтруем остальные детали относительно выбранного корпуса
-
-      axios.get("/api/elements/filter/box/".concat(this.selected_boxes)).then(function (response) {
-        return _this3.elements = response.data;
-      });
-      this.categories.forEach(function (category) {
-        while (document.getElementById('section_' + category.slug).childElementCount > 4) {
-          document.getElementById('section_' + category.slug).lastElementChild.remove();
-        }
-      });
-      var all_numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      all_numbers.forEach(function (number) {
-        if (document.getElementsByClassName('index' + number)[0]) {
-          document.getElementsByClassName('index' + number)[0].style.display = "none";
-        }
-      });
-      document.getElementsByClassName('index0')[0].style.display = "block";
-    },
-    dopElementsClone: function dopElementsClone(category) {
-      var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
-      document.getElementById('section_' + category.slug).appendChild(cln);
-    },
-    saveCalculation: function saveCalculation() {
-      var _this4 = this;
-
-      var megred_select_form_values = [];
-      this.categories.forEach(function (category) {
-        document.getElementsByName(category.slug + '[]').forEach(function (child) {
-          if (document.getElementsByName(category.slug + '[]')[0].value) {
-            megred_select_form_values.push(child.value);
-          } else {
-            console.log(category.slug + ' - none');
-          }
-        });
-      });
-      console.log(megred_select_form_values);
-      axios.post("/api/calculations", {
-        comment: this.comment,
-        price_total: this.price_subtotal + this.pek_price.toFixed(0),
-        types: this.selected_types,
-        boxes: this.selected_boxes,
-        elements: megred_select_form_values
-      }).then(function (response) {
-        return _this4.$router.push({
-          name: 'ProjectCreate',
-          params: {
-            calculation_id: response.data
-          }
-        });
-      });
-    },
-    onCityChange: function onCityChange() {
-      this.pek_response = '';
-      var data = this.pek_cities_data;
-      var pek_cities_sub = [];
-
-      for (var i in data) {
-        if (i === this.pek_city_selected) {
-          for (var _i = 0, _Object$entries = Object.entries(data[i]); _i < _Object$entries.length; _i++) {
-            var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-                key = _Object$entries$_i[0],
-                value = _Object$entries$_i[1];
-
-            pek_cities_sub.push({
-              id: "".concat(key),
-              name: "".concat(value)
-            });
-          }
-        }
-      }
-
-      this.pek_cities_sub = pek_cities_sub.sort(function (a, b) {
-        return a.name > b.name ? 1 : -1;
-      });
-    },
-    calcDelivery: function calcDelivery() {
-      var _this5 = this;
-
-      this.pek_loading = true;
-      axios.get('http://calc.pecom.ru/bitrix/components/pecom/calc/ajax.php', {
-        params: {
-          'places[0]': ["".concat(this.selected_boxes_width), "".concat(this.selected_boxes_length), "".concat(this.selected_boxes_height), "".concat((this.selected_boxes_width * this.selected_boxes_height * this.selected_boxes_length).toFixed(2)), "".concat(this.selected_boxes_weight), 0, 1],
-          'take[town]': '-463',
-          'deliver[town]': "".concat(this.pek_city_sub_selected)
-        }
-      }).then(function (response) {
-        return _this5.pek_response = response.data, _this5.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[1]), _this5.pek_loading = false, console.log(response.data);
-      });
-    },
-    checkDelivery: function checkDelivery() {
-      if (document.getElementsByName('delivery[]')[0] && document.getElementsByName('delivery[]')[0].value === '55') {
-        document.getElementById('delivery').style.display = 'block';
-      } else if (document.getElementById('delivery')) {
-        document.getElementById('delivery').style.display = 'none';
-      }
+      this.price_subtotal = parseInt(this.selected_box.price) + price_subtotal;
     }
   },
-  mounted: function mounted() {
-    setInterval(this.calc, 500);
-    setInterval(this.checkDelivery, 500);
-  },
+  mounted: function mounted() {},
   watch: {},
   components: {}
 });
@@ -5711,7 +5567,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.w-45[data-v-162aba0b] {\n    width: 45%;\n}\n.w-40[data-v-162aba0b] {\n    width: 40%;\n}\n.w-35[data-v-162aba0b] {\n    width: 35%;\n}\n.w-30[data-v-162aba0b] {\n    width: 30%;\n}\n.w-25[data-v-162aba0b] {\n    width: 25%;\n}\n.description_text[data-v-162aba0b] {\n    font-size: 12px;\n    color: #777;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.tab[data-v-162aba0b] {\n    min-height: 500px;\n}\n.tab-vertical .nav-tabs[data-v-162aba0b] {\n    width: 60%;\n    float: right;\n    padding-left: 30px;\n    display: block;\n}\n.tab .nav-tabs .nav-link.active[data-v-162aba0b] {\n    background: none;\n}\n.tab .nav-tabs .nav-link[data-v-162aba0b] {\n    border-radius: 0;\n    padding-left: 0;\n    padding-right: 0;\n    border-bottom: 1px solid #ddd;\n}\n.tab .nav-tabs .nav-item:first-child .nav-link[data-v-162aba0b] {\n    padding-top: 0;\n}\n.tab .tab-content[data-v-162aba0b] {\n    position: sticky;\n    top: 20px;\n    background: none;\n    box-shadow: none;\n    padding: 0;\n}\n.tab-content>.tab-pane[data-v-162aba0b] {\n    background: #fff;\n    padding: 1.25rem;\n    box-shadow: 0 0.1rem 0.2rem rgb(0 0 0 / 5%);\n    margin-bottom: 40px;\n}\n.total .col-6[data-v-162aba0b] {\n    padding: 0;\n}\n.total .text-primary[data-v-162aba0b] {\n    font-size: 26px;\n    font-weight: bold;\n}\n.description[data-v-162aba0b] {\n    font-size: 12px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -41701,82 +41557,164 @@ var render = function() {
   return _c("div", [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
+    _c("div", { staticClass: "tab tab-vertical" }, [
       _c(
-        "div",
-        { staticClass: "card-body" },
+        "ul",
+        { staticClass: "nav nav-tabs", attrs: { role: "tablist" } },
         [
-          _c("div", { attrs: { id: "selected_types" } }, [
-            _c("label", [_vm._v("Тип")]),
-            _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
             _c(
-              "select",
+              "a",
               {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.selected_types,
-                    expression: "selected_types"
-                  }
-                ],
-                staticClass: "form-control mb-3",
+                staticClass: "nav-link tab-link active",
+                attrs: { id: "tab_type_link", role: "tab" },
                 on: {
-                  change: [
-                    function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.selected_types = $event.target.multiple
-                        ? $$selectedVal
-                        : $$selectedVal[0]
-                    },
-                    function($event) {
-                      return _vm.onTypeChange()
-                    }
-                  ]
+                  click: function($event) {
+                    return _vm.tabSelect("tab_type")
+                  }
                 }
               },
               [
-                _c("option", { attrs: { value: "", selected: "" } }, [
-                  _vm._v(" ")
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.types, function(type) {
-                  return [
-                    _c("option", { domProps: { value: type.id } }, [
-                      _vm._v(_vm._s(type.title))
+                _c("div", { staticClass: "row align-items-center" }, [
+                  _c("div", { staticClass: "col-8" }, [
+                    _c("small", { staticStyle: { color: "#888" } }, [
+                      _vm._v("Тип")
+                    ]),
+                    _vm._v(" "),
+                    _c("strong", { staticClass: "d-block" }, [
+                      _vm._v(_vm._s(_vm.selected_type.title))
                     ])
-                  ]
-                })
-              ],
-              2
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4 text-end" })
+                ])
+              ]
             )
           ]),
           _vm._v(" "),
-          _c("div", { attrs: { id: "selected_boxes" } }, [
-            _c("label", [_vm._v("Корпус")]),
-            _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
             _c(
-              "select",
+              "a",
               {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.selected_boxes,
-                    expression: "selected_boxes"
-                  }
-                ],
-                staticClass: "form-control",
+                staticClass: "nav-link tab-link",
+                attrs: { id: "tab_box_link", role: "tab" },
                 on: {
-                  change: [
-                    function($event) {
+                  click: function($event) {
+                    return _vm.tabSelect("tab_box")
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "row align-items-center" }, [
+                  _c("div", { staticClass: "col-8" }, [
+                    _c("small", { staticStyle: { color: "#888" } }, [
+                      _vm._v("Корпус")
+                    ]),
+                    _vm._v(" "),
+                    _c("strong", { staticClass: "d-block" }, [
+                      _vm._v(_vm._s(_vm.selected_box.title))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4 text-end" }, [
+                    _vm.selected_box.price
+                      ? _c("strong", { staticClass: "text-primary" }, [
+                          _vm._v(_vm._s(_vm.selected_box.price) + " ₽")
+                        ])
+                      : _vm._e()
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12" }, [
+                    _c("div", { staticClass: "description" }, [
+                      _vm._v(_vm._s(_vm.selected_box.description))
+                    ])
+                  ])
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.categories, function(category, index) {
+            return _c(
+              "li",
+              {
+                key: "category_" + category.id,
+                staticClass: "nav-item",
+                attrs: { id: "section_" + category.slug }
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "nav-link tab-link",
+                    attrs: {
+                      id: "tab_" + category.slug + "_link",
+                      role: "tab"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.tabSelect("tab_" + category.slug)
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "row align-items-center" }, [
+                      _c("div", { staticClass: "col-8" }, [
+                        _c("small", { staticStyle: { color: "#888" } }, [
+                          _vm._v(_vm._s(category.title))
+                        ]),
+                        _vm._v(" "),
+                        _c("strong", {
+                          staticClass: "d-block",
+                          attrs: { id: category.slug + "_title" }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-4 text-end" }, [
+                        _c("strong", {
+                          staticClass: "text-primary",
+                          attrs: { id: category.slug + "_price" }
+                        })
+                      ])
+                    ])
+                  ]
+                )
+              ]
+            )
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "tab-content" },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "tab-pane active",
+              attrs: { id: "tab_type", role: "tabpanel" }
+            },
+            [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selected_type,
+                      expression: "selected_type"
+                    }
+                  ],
+                  staticClass: "form-select form-select-lg mb-3",
+                  on: {
+                    change: function($event) {
                       var $$selectedVal = Array.prototype.filter
                         .call($event.target.options, function(o) {
                           return o.selected
@@ -41785,87 +41723,159 @@ var render = function() {
                           var val = "_value" in o ? o._value : o.value
                           return val
                         })
-                      _vm.selected_boxes = $event.target.multiple
+                      _vm.selected_type = $event.target.multiple
                         ? $$selectedVal
                         : $$selectedVal[0]
-                    },
-                    function($event) {
-                      return _vm.onBoxChange()
                     }
-                  ]
-                }
-              },
-              [
-                _c("option", { attrs: { value: "", selected: "" } }, [
-                  _vm._v(" ")
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.boxes, function(box) {
-                  return [
-                    _c(
-                      "option",
-                      {
-                        attrs: { "data-description": box.description },
-                        domProps: { value: box.id }
-                      },
-                      [
-                        _vm._v(
-                          _vm._s(box.title) + " - " + _vm._s(box.price) + "₽"
-                        )
-                      ]
-                    )
-                  ]
-                })
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _c("div", {
-              staticClass: "description_text mb-3",
-              attrs: { id: "box_description" }
-            })
-          ]),
+                  }
+                },
+                [
+                  _vm._l(_vm.types, function(type) {
+                    return [
+                      _c(
+                        "option",
+                        {
+                          domProps: {
+                            value: { id: type.id, title: type.title }
+                          }
+                        },
+                        [_vm._v(_vm._s(type.title))]
+                      )
+                    ]
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.onTypeSelect()
+                    }
+                  }
+                },
+                [_vm._v("Далее")]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "tab-pane",
+              attrs: { id: "tab_box", role: "tabpanel" }
+            },
+            [
+              _vm._m(2),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selected_box,
+                      expression: "selected_box"
+                    }
+                  ],
+                  staticClass: "form-select form-select-lg mb-3",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selected_box = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "", selected: "" } }, [
+                    _vm._v(" ")
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.boxes, function(box) {
+                    return [
+                      _c(
+                        "option",
+                        {
+                          domProps: {
+                            value: {
+                              id: box.id,
+                              title: box.title,
+                              price: box.price,
+                              description: box.description
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(box.title) + " - " + _vm._s(box.price) + "₽"
+                          )
+                        ]
+                      )
+                    ]
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.tabSelect("tab_type")
+                    }
+                  }
+                },
+                [_vm._v("Назад")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.onBoxSelect()
+                    }
+                  }
+                },
+                [_vm._v("Далее")]
+              )
+            ]
+          ),
           _vm._v(" "),
           _vm._l(_vm.categories, function(category, index) {
             return _c(
               "div",
               {
-                key: "category_" + category.id,
-                class: "index" + index + " mb-3",
-                attrs: { id: "section_" + category.slug }
+                key: "category_pane_" + category.id,
+                staticClass: "tab-pane",
+                attrs: { id: "tab_" + category.slug, role: "tabpanel" }
               },
               [
-                _c("label", [_vm._v(_vm._s(category.title))]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-sm btn-outline-secondary",
-                    staticStyle: {
-                      padding: "0",
-                      height: "15px",
-                      "line-height": "10px",
-                      width: "15px"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.dopElementsClone(category)
-                      }
-                    }
-                  },
-                  [_vm._v("+")]
-                ),
+                _c("label", { staticClass: "mb-2" }, [
+                  _c("strong", [_vm._v(_vm._s(category.title))])
+                ]),
                 _vm._v(" "),
                 _c(
                   "select",
                   {
-                    staticClass: "form-control mb-3",
-                    attrs: { name: category.slug + "[]" },
-                    on: {
-                      change: function($event) {
-                        return _vm.onChange(category, index)
-                      }
-                    }
+                    staticClass: "form-select form-select-lg mb-3",
+                    attrs: { name: category.slug + "[]" }
                   },
                   [
                     _c("option", { attrs: { value: "", selected: "" } }, [
@@ -41880,7 +41890,10 @@ var render = function() {
                               ? _c(
                                   "option",
                                   {
-                                    attrs: { "data-price": element.price },
+                                    attrs: {
+                                      "data-title": element.title,
+                                      "data-price": element.price
+                                    },
                                     domProps: { value: element.id }
                                   },
                                   [
@@ -41899,295 +41912,48 @@ var render = function() {
                     })
                   ],
                   2
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    on: {
+                      click: function($event) {
+                        return _vm.tabSelectBack(index)
+                      }
+                    }
+                  },
+                  [_vm._v("Назад")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary btn-next",
+                    on: {
+                      click: function($event) {
+                        return _vm.onSelect(category, index)
+                      }
+                    }
+                  },
+                  [_vm._v("Далее")]
                 )
               ]
             )
           }),
           _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "delivery mt-4", attrs: { id: "delivery" } },
-            [
-              _c("div", { staticClass: "alert alert-primary alert-outline" }, [
-                _c("div"),
-                _vm._v(" "),
-                _c("div", { staticClass: "alert-message" }, [
-                  _c("h6", { staticClass: "alert-heading" }, [
-                    _vm._v("Город доставки (ПЭК):")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-12 col-md-6" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.pek_city_selected,
-                              expression: "pek_city_selected"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.pek_city_selected = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              },
-                              function($event) {
-                                return _vm.onCityChange()
-                              }
-                            ]
-                          }
-                        },
-                        _vm._l(_vm.pek_cities, function(pek_city) {
-                          return _c(
-                            "option",
-                            { domProps: { value: pek_city } },
-                            [_vm._v(_vm._s(pek_city))]
-                          )
-                        }),
-                        0
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-12 col-md-6" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.pek_city_sub_selected,
-                              expression: "pek_city_sub_selected"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.pek_city_sub_selected = $event.target
-                                  .multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              },
-                              function($event) {
-                                return _vm.calcDelivery()
-                              }
-                            ]
-                          }
-                        },
-                        _vm._l(_vm.pek_cities_sub, function(pek_city_sub) {
-                          return _c(
-                            "option",
-                            { domProps: { value: pek_city_sub.id } },
-                            [_vm._v(_vm._s(pek_city_sub.name))]
-                          )
-                        }),
-                        0
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _vm.pek_loading
-                    ? _c(
-                        "div",
-                        { staticClass: "spinner-border text-primary mt-4" },
-                        [
-                          _c("span", { staticClass: "sr-only" }, [
-                            _vm._v("Загрузка...")
-                          ])
-                        ]
-                      )
-                    : _vm._e()
-                ])
-              ])
-            ]
-          ),
-          _vm._v(" "),
           _vm.price_subtotal > 0
-            ? _c("div", { staticClass: "row align-items-center mt-4" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "col-10 text-end",
-                    staticStyle: { color: "#888" }
-                  },
-                  [_vm._v("\n                    Стоимость:\n                ")]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-2 text-end" }, [
-                  _c("h4", { staticClass: "text-primary m-0" }, [
+            ? _c("div", { staticClass: "total" }, [
+                _c("div", { staticClass: "row align-items-center m-0 p-0" }, [
+                  _c("div", { staticClass: "col-6" }, [_vm._v("Итого:")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-6 text-end text-primary" }, [
                     _vm._v(_vm._s(_vm.price_subtotal) + " ₽")
                   ])
                 ])
               ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.pek_price > 0
-            ? _c("div", { staticClass: "row align-items-center my-0 mb-1" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "col-10 text-end",
-                    staticStyle: { color: "#888" }
-                  },
-                  [
-                    _vm.pek_response
-                      ? _c(
-                          "p",
-                          { staticClass: "m-0" },
-                          [
-                            _vm._v(
-                              "\n                        Доставка\n                        "
-                            ),
-                            _vm.pek_response.auto[1]
-                              ? [
-                                  _c(
-                                    "small",
-                                    {
-                                      staticStyle: {
-                                        display: "block",
-                                        "line-height": "1",
-                                        "font-size": "11px"
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        _vm._s(_vm.pek_response.auto[1]) +
-                                          " (" +
-                                          _vm._s(
-                                            _vm.pek_response.periods_days
-                                          ) +
-                                          " дней)"
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "small",
-                                    {
-                                      staticStyle: {
-                                        display: "block",
-                                        "line-height": "1",
-                                        "font-size": "11px"
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        _vm._s(_vm.selected_boxes_length) +
-                                          "м × " +
-                                          _vm._s(_vm.selected_boxes_width) +
-                                          "м × " +
-                                          _vm._s(_vm.selected_boxes_height) +
-                                          "м, " +
-                                          _vm._s(
-                                            (
-                                              _vm.selected_boxes_width *
-                                              _vm.selected_boxes_height *
-                                              _vm.selected_boxes_length
-                                            ).toFixed(2)
-                                          ) +
-                                          "м³, " +
-                                          _vm._s(_vm.selected_boxes_weight) +
-                                          "кг"
-                                      )
-                                    ]
-                                  )
-                                ]
-                              : _vm._e()
-                          ],
-                          2
-                        )
-                      : _vm._e()
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-2 text-end" }, [
-                  _c("h4", { staticClass: "text-primary m-0" }, [
-                    _vm._v(_vm._s(_vm.pek_price) + " ₽")
-                  ])
-                ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.price_subtotal > 0 && _vm.pek_price > 0
-            ? _c("div", { staticClass: "row align-items-center mb-0" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "col-10 text-end",
-                    staticStyle: { color: "#888" }
-                  },
-                  [_vm._v("\n                    Итого:\n                ")]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-2 text-end" }, [
-                  _c("h4", { staticClass: "text-primary m-0" }, [
-                    _vm._v(
-                      _vm._s((_vm.price_subtotal + _vm.pek_price).toFixed(0)) +
-                        " ₽"
-                    )
-                  ])
-                ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("div", { staticClass: "mt-4" }, [_vm._v("Комментарий:")]),
-          _vm._v(" "),
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.comment,
-                expression: "comment"
-              }
-            ],
-            staticClass: "form-control mb-2",
-            domProps: { value: _vm.comment },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.comment = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary",
-              on: {
-                click: function($event) {
-                  return _vm.saveCalculation()
-                }
-              }
-            },
-            [_vm._v("Сохранить")]
-          )
+            : _vm._e()
         ],
         2
       )
@@ -42203,6 +41969,20 @@ var staticRenderFns = [
       _c("div", { staticClass: "col-12 col-lg-6" }, [
         _c("h1", { staticClass: "h3 m-0" }, [_vm._v("Новый расчёт")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "mb-2" }, [_c("strong", [_vm._v("Тип")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "mb-2" }, [
+      _c("strong", [_vm._v("Корпус")])
     ])
   }
 ]
