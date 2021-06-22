@@ -2996,15 +2996,20 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       });
-      this.calc();
 
-      if (this.categories[0 + index + 1]) {
-        this.tabSelect('tab_' + this.categories[0 + index + 1].slug);
+      if (document.getElementsByName(category.slug + '[]')[0].options[document.getElementsByName(category.slug + '[]')[0].selectedIndex].getAttribute('data-title')) {
+        this.calc();
+
+        if (this.categories[0 + index + 1]) {
+          this.tabSelect('tab_' + this.categories[0 + index + 1].slug);
+        } else {
+          this.overlay = false;
+          /*document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
+          el.style.visibility = 'hidden';
+          });*/
+        }
       } else {
-        this.overlay = false;
-        /*document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
-        el.style.visibility = 'hidden';
-        });*/
+        alert('Выберите ' + category.title);
       }
     },
     tabSelect: function tabSelect(tab_id) {
