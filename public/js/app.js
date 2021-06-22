@@ -2902,6 +2902,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2912,6 +2914,7 @@ __webpack_require__.r(__webpack_exports__);
       categories: {},
       elements: {},
       price_subtotal: '',
+      save_button: false,
       overlay: true
     };
   },
@@ -3004,6 +3007,7 @@ __webpack_require__.r(__webpack_exports__);
           this.tabSelect('tab_' + this.categories[0 + index + 1].slug);
         } else {
           this.overlay = false;
+          this.save_button = true;
           /*document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
           el.style.visibility = 'hidden';
           });*/
@@ -3053,6 +3057,52 @@ __webpack_require__.r(__webpack_exports__);
         return a + b;
       }, 0);
       this.price_subtotal = parseInt(this.selected_box.price) + price_subtotal;
+    },
+    checkBeforeSave: function checkBeforeSave() {
+      var categories_filled = [];
+      var categories_not_filled = [];
+      this.categories.forEach(function (category) {
+        if (document.getElementsByName(category.slug + '[]')[0].options[document.getElementsByName(category.slug + '[]')[0].selectedIndex].getAttribute('data-title')) {
+          categories_filled.push(category.id);
+        } else {
+          categories_not_filled.push(category.title);
+        }
+      });
+
+      if (!isNaN(this.selected_type.id) && !isNaN(this.selected_box.id) && categories_filled.length === this.categories.length) {
+        this.saveCalculation();
+      } else {
+        alert('Не заполнено: ' + categories_not_filled);
+      }
+    },
+    saveCalculation: function saveCalculation() {
+      var _this4 = this;
+
+      var megred_select_form_values = [];
+      this.categories.forEach(function (category) {
+        document.getElementsByName(category.slug + '[]').forEach(function (child) {
+          if (document.getElementsByName(category.slug + '[]')[0].value) {
+            megred_select_form_values.push(child.value);
+          } else {
+            console.log(category.slug + ' - none');
+          }
+        });
+      });
+      console.log(megred_select_form_values);
+      axios.post("/api/calculations", {
+        comment: 'no comment',
+        price_total: this.price_subtotal,
+        type: this.selected_type.id,
+        box: this.selected_box.id,
+        elements: megred_select_form_values
+      }).then(function (response) {
+        return _this4.$router.push({
+          name: 'ProjectCreate',
+          params: {
+            calculation_id: response.data
+          }
+        });
+      });
     }
   },
   mounted: function mounted() {},
@@ -41731,7 +41781,16 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary",
+                  staticClass: "btn btn-outline-primary",
+                  attrs: { disabled: "" }
+                },
+                [_vm._v("Назад")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-primary",
                   on: {
                     click: function($event) {
                       return _vm.onTypeSelect()
@@ -41814,7 +41873,7 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary",
+                  staticClass: "btn btn-outline-primary",
                   on: {
                     click: function($event) {
                       return _vm.tabSelect("tab_type")
@@ -41827,7 +41886,7 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary",
+                  staticClass: "btn btn-outline-primary",
                   on: {
                     click: function($event) {
                       return _vm.onBoxSelect()
@@ -41898,7 +41957,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-primary",
+                    staticClass: "btn btn-outline-primary",
                     on: {
                       click: function($event) {
                         return _vm.tabSelectBack(index)
@@ -41911,7 +41970,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-primary btn-next",
+                    staticClass: "btn btn-outline-primary btn-next",
                     on: {
                       click: function($event) {
                         return _vm.onSelect(category, index)
@@ -41932,7 +41991,22 @@ var render = function() {
                   _c("div", { staticClass: "col-6 text-end text-primary" }, [
                     _vm._v(_vm._s(_vm.price_subtotal) + " ₽")
                   ])
-                ])
+                ]),
+                _vm._v(" "),
+                _vm.save_button
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-lg btn-primary mt-4",
+                        on: {
+                          click: function($event) {
+                            return _vm.checkBeforeSave()
+                          }
+                        }
+                      },
+                      [_vm._v("Создать проект")]
+                    )
+                  : _vm._e()
               ])
             : _vm._e()
         ],

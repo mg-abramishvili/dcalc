@@ -13,11 +13,6 @@ class CalculationController extends Controller
         return Calculation::orderBy('created_at', 'desc')->get();
     }
 
-    public function index_count()
-    {
-        return Calculation::orderBy('created_at', 'desc')->count();
-    }
-
     public function create(Request $request)
     {
         
@@ -31,10 +26,8 @@ class CalculationController extends Controller
         $calculation->price_total = $data['price_total'];
         $calculation->save();
 
-        $calculation->types()->attach($request->types, ['calculation_id' => $calculation->id]);
-        $calculation->boxes()->attach($request->boxes, ['calculation_id' => $calculation->id]);
-
-        return $calculation->id;
+        $calculation->types()->attach($request->type, ['calculation_id' => $calculation->id]);
+        $calculation->boxes()->attach($request->box, ['calculation_id' => $calculation->id]);
         
         $elements = $request->input('elements', []);
         
@@ -43,6 +36,8 @@ class CalculationController extends Controller
                 $calculation->elements()->attach($elements[$element], []);
             }
         }
+
+        return $calculation->id;
     }
 
     public function edit(Request $request)

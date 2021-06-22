@@ -60,7 +60,8 @@
                             <option v-bind:value="{ id: type.id, title: type.title }">{{ type.title }}</option>
                         </template>
                     </select>
-                    <button @click="onTypeSelect()" class="btn btn-primary">Далее</button>
+                    <button class="btn btn-outline-primary" disabled>Назад</button>
+                    <button @click="onTypeSelect()" class="btn btn-outline-primary">Далее</button>
                 </div>
                 <div class="tab-pane" id="tab_box" role="tabpanel">
                     <label class="mb-2"><strong>Корпус</strong></label>
@@ -70,8 +71,8 @@
                             <option v-bind:value="{ id: box.id, title: box.title, price: box.price, description: box.description }">{{ box.title }} - {{ box.price }}₽</option>
                         </template>
                     </select>
-                    <button @click="tabSelect('tab_type')" class="btn btn-primary">Назад</button>
-                    <button @click="onBoxSelect()" class="btn btn-primary">Далее</button>
+                    <button @click="tabSelect('tab_type')" class="btn btn-outline-primary">Назад</button>
+                    <button @click="onBoxSelect()" class="btn btn-outline-primary">Далее</button>
                 </div>
                 <div v-for="(category, index) in categories" :key="'category_pane_' + category.id" :id="'tab_' + category.slug" class="tab-pane" role="tabpanel">
                     <label class="mb-2"><strong>{{ category.title }}</strong></label>
@@ -83,14 +84,15 @@
                             </template>
                         </template>
                     </select>
-                    <button @click="tabSelectBack(index)" class="btn btn-primary">Назад</button>
-                    <button @click="onSelect(category, index)" class="btn btn-primary btn-next">Далее</button>
+                    <button @click="tabSelectBack(index)" class="btn btn-outline-primary">Назад</button>
+                    <button @click="onSelect(category, index)" class="btn btn-outline-primary btn-next">Далее</button>
                 </div>
                 <div v-if="price_subtotal > 0" class="total">
                     <div class="row align-items-center m-0 p-0">
                         <div class="col-6">Итого:</div>
                         <div class="col-6 text-end text-primary">{{ price_subtotal }} ₽</div>
                     </div>
+                    <button @click="checkBeforeSave()" v-if="save_button" class="btn btn-lg btn-primary mt-4">Создать проект</button>
                 </div>
             </div>
         </div>
@@ -113,6 +115,7 @@
 
                 price_subtotal: '',
 
+                save_button: false,
                 overlay: true,
             }
         },
@@ -209,6 +212,7 @@
                         this.tabSelect('tab_' + this.categories[0+index+1].slug)
                     } else {
                         this.overlay = false
+                        this.save_button = true
                         /*document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
                         el.style.visibility = 'hidden';
                         });*/
@@ -257,6 +261,45 @@
 
                 price_subtotal = price_subtotal.reduce((a, b) => a + b, 0)
                 this.price_subtotal = parseInt(this.selected_box.price) + price_subtotal
+            },
+            checkBeforeSave() {
+                var categories_filled = []
+                var categories_not_filled = []
+
+                this.categories.forEach(function(category) {
+                    if(document.getElementsByName(category.slug + '[]')[0].options[document.getElementsByName(category.slug + '[]')[0].selectedIndex].getAttribute('data-title')) {
+                        categories_filled.push(category.id)
+                    } else {
+                        categories_not_filled.push(category.title)
+                    }
+                })
+
+                if(!isNaN(this.selected_type.id) && !isNaN(this.selected_box.id) && categories_filled.length === this.categories.length) {
+                    this.saveCalculation()
+                } else {
+                    alert('Не заполнено: ' + categories_not_filled)
+                }
+            },
+            saveCalculation() {
+                var megred_select_form_values = [];
+                this.categories.forEach(function(category) {
+                        document.getElementsByName(category.slug + '[]').forEach((child) => {
+                            if(document.getElementsByName(category.slug + '[]')[0].value) {
+                                megred_select_form_values.push(child.value)
+                            } else {
+                                console.log(category.slug + ' - none')
+                            }
+                        });
+                    }
+                );
+
+                console.log(megred_select_form_values)
+                
+                axios
+                .post(`/api/calculations`, { comment: 'no comment', price_total: this.price_subtotal, type: this.selected_type.id, box: this.selected_box.id, elements: megred_select_form_values })
+                .then(response => (
+                    this.$router.push({name: 'ProjectCreate', params: {calculation_id: response.data}})
+                ));
             },
         },
         mounted() {
