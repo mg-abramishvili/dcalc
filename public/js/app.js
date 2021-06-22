@@ -2904,6 +2904,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2986,17 +2994,25 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     onSelect: function onSelect(category, index) {
+      var category_titles = [];
+      var category_prices = [];
       document.getElementsByName(category.slug + '[]').forEach(function (child) {
         if (child.options[child.selectedIndex].getAttribute('data-title')) {
-          if (document.getElementById(category.slug + '_title')) {
-            document.getElementById(category.slug + '_title').innerHTML = child.options[child.selectedIndex].getAttribute('data-title');
-          }
+          category_titles.push(child.options[child.selectedIndex].getAttribute('data-title'));
+        }
+
+        if (document.getElementById(category.slug + '_title')) {
+          document.getElementById(category.slug + '_title').innerHTML = category_titles;
         }
 
         if (child.options[child.selectedIndex].getAttribute('data-price')) {
-          if (document.getElementById(category.slug + '_price')) {
-            document.getElementById(category.slug + '_price').innerHTML = parseInt(child.options[child.selectedIndex].getAttribute('data-price')) + ' ₽';
-          }
+          category_prices.push(child.options[child.selectedIndex].getAttribute('data-price'));
+        }
+
+        if (document.getElementById(category.slug + '_price')) {
+          document.getElementById(category.slug + '_price').innerHTML = category_prices.reduce(function (a, b) {
+            return parseInt(a) + parseInt(b);
+          }, 0) + ' ₽';
         }
       });
 
@@ -3015,6 +3031,14 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         alert('Выберите ' + category.title);
       }
+
+      document.getElementsByName(category.slug + '[]').forEach(function (child, index) {
+        if (index != 0) {
+          if (!child.options[child.selectedIndex].getAttribute('data-title')) {
+            child.remove();
+          }
+        }
+      });
     },
     tabSelect: function tabSelect(tab_id) {
       // Убираем активность со всех табов и их кнопок
@@ -3042,6 +3066,10 @@ __webpack_require__.r(__webpack_exports__);
       } else if (this.categories[0 + index - 1]) {
         this.tabSelect('tab_' + this.categories[0 + index - 1].slug);
       }
+    },
+    dopElementsClone: function dopElementsClone(category) {
+      var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
+      document.getElementById('tab_' + category.slug).insertBefore(cln, document.getElementById('tab_' + category.slug).lastChild);
     },
     calc: function calc() {
       this.price_subtotal = 0;
@@ -41954,31 +41982,50 @@ var render = function() {
                   2
                 ),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.tabSelectBack(index)
-                      }
-                    }
-                  },
-                  [_vm._v("Назад")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-primary btn-next",
-                    on: {
-                      click: function($event) {
-                        return _vm.onSelect(category, index)
-                      }
-                    }
-                  },
-                  [_vm._v("Далее")]
-                )
+                _c("div", { staticClass: "row align-items-center" }, [
+                  _c("div", { staticClass: "col" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-primary",
+                        on: {
+                          click: function($event) {
+                            return _vm.tabSelectBack(index)
+                          }
+                        }
+                      },
+                      [_vm._v("Назад")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-primary btn-next",
+                        on: {
+                          click: function($event) {
+                            return _vm.onSelect(category, index)
+                          }
+                        }
+                      },
+                      [_vm._v("Далее")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col text-end" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-outline-secondary me-auto",
+                        on: {
+                          click: function($event) {
+                            return _vm.dopElementsClone(category)
+                          }
+                        }
+                      },
+                      [_vm._v("добавить ещё")]
+                    )
+                  ])
+                ])
               ]
             )
           }),

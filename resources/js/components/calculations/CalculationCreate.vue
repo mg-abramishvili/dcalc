@@ -84,8 +84,16 @@
                             </template>
                         </template>
                     </select>
-                    <button @click="tabSelectBack(index)" class="btn btn-outline-primary">Назад</button>
-                    <button @click="onSelect(category, index)" class="btn btn-outline-primary btn-next">Далее</button>
+                    
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <button @click="tabSelectBack(index)" class="btn btn-outline-primary">Назад</button>
+                            <button @click="onSelect(category, index)" class="btn btn-outline-primary btn-next">Далее</button>
+                        </div>
+                        <div class="col text-end">
+                            <button @click="dopElementsClone(category)" class="btn btn-sm btn-outline-secondary me-auto">добавить ещё</button>
+                        </div>                        
+                    </div>
                 </div>
                 <div v-if="price_subtotal > 0" class="total">
                     <div class="row align-items-center m-0 p-0">
@@ -192,16 +200,22 @@
                 }
             },
             onSelect(category, index) {
+                var category_titles = []
+                var category_prices = []
+                
                 document.getElementsByName(category.slug + '[]').forEach((child) => {
                     if(child.options[child.selectedIndex].getAttribute('data-title')) {
-                        if(document.getElementById(category.slug + '_title')) {
-                            document.getElementById(category.slug + '_title').innerHTML = child.options[child.selectedIndex].getAttribute('data-title')
-                        }
+                        category_titles.push(child.options[child.selectedIndex].getAttribute('data-title'))
                     }
+                    if(document.getElementById(category.slug + '_title')) {
+                        document.getElementById(category.slug + '_title').innerHTML = category_titles
+                    }
+
                     if(child.options[child.selectedIndex].getAttribute('data-price')) {
-                        if(document.getElementById(category.slug + '_price')) {
-                            document.getElementById(category.slug + '_price').innerHTML = parseInt(child.options[child.selectedIndex].getAttribute('data-price')) + ' ₽'
-                        }
+                        category_prices.push(child.options[child.selectedIndex].getAttribute('data-price'))
+                    }
+                    if(document.getElementById(category.slug + '_price')) {
+                        document.getElementById(category.slug + '_price').innerHTML = category_prices.reduce((a, b) => parseInt(a) + parseInt(b), 0) + ' ₽'
                     }
                 });
 
@@ -220,6 +234,14 @@
                 } else {
                     alert('Выберите ' + category.title)
                 }
+
+                document.getElementsByName(category.slug + '[]').forEach((child, index) => {
+                    if ( index != 0 ) {
+                        if(!child.options[child.selectedIndex].getAttribute('data-title')) {
+                            child.remove()
+                        }
+                    }
+                });
 
             },
             tabSelect(tab_id) {
@@ -245,6 +267,10 @@
                 } else if (this.categories[0+index-1]) {
                     this.tabSelect('tab_' + this.categories[0+index-1].slug)
                 }
+            },
+            dopElementsClone(category) {
+                var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
+                document.getElementById('tab_' + category.slug).insertBefore(cln, document.getElementById('tab_' + category.slug).lastChild)
             },
             calc() {
                 this.price_subtotal = 0
