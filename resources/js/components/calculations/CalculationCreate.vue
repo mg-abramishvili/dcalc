@@ -312,7 +312,7 @@
 </script>
 <style scoped>
     .tab {
-        min-height: 500px;
+        min-height: 1500px;
     }
     .tab-vertical .nav-tabs {
         width: 60%;
