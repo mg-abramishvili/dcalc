@@ -21,12 +21,13 @@
 
                 <div id="selected_boxes">
                     <label>Корпус</label>
-                    <select v-model="selected_boxes" @change="onBoxChange()" class="form-control mb-3">
+                    <select v-model="selected_boxes" @change="onBoxChange()" class="form-control">
                         <option value selected>&nbsp;</option>
                         <template v-for="box in boxes">
-                            <option :value="box.id">{{ box.title }} - {{ box.price }}₽</option>
+                            <option :value="box.id" :data-description="box.description">{{ box.title }} - {{ box.price }}₽</option>
                         </template>
                     </select>
+                    <div id="box_description" class="description_text mb-3"></div>
                 </div>
 
                 <div v-for="(category, index) in categories" :key="'category_' + category.id" :id="'section_' + category.slug" :class="'index' + index + ' mb-3'">
@@ -272,18 +273,24 @@
                 this.selected_boxes = ''
             },
             onBoxChange() {
-                // Берем цену корпуса
+                // Берем данные выбранного корпуса
                 axios
                 .get(`/api/box/${this.selected_boxes}`)
-                .then(response => (
-                    this.selected_boxes_price = response.data.price,
-                    this.selected_boxes_width = response.data.width,
-                    this.selected_boxes_length = response.data.length,
-                    this.selected_boxes_height = response.data.height,
+                .then((response => {
+                    this.selected_boxes_price = response.data.price
+                    this.selected_boxes_width = response.data.width
+                    this.selected_boxes_length = response.data.length
+                    this.selected_boxes_height = response.data.height
                     this.selected_boxes_weight = response.data.weight
-                ));
 
-                // Фильтруем остальные детали относительно корпуса
+                    // Берем описание и выводим в div
+                    document.getElementById('box_description').innerHTML = ''
+                    if(response.data.description) {
+                        document.getElementById('box_description').innerHTML = `${response.data.description}`
+                    }
+                }));
+
+                // Фильтруем остальные детали относительно выбранного корпуса
                 axios
                 .get(`/api/elements/filter/box/${this.selected_boxes}`)
                 .then(response => (
@@ -398,5 +405,10 @@
     }
     .w-25 {
         width: 25%;
+    }
+
+    .description_text {
+        font-size: 12px;
+        color: #777;
     }
 </style>

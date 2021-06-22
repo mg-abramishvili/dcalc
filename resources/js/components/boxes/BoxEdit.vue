@@ -30,19 +30,24 @@
                     </div>
                 </div>
 
-                <label>Курс USD <small>(на {{moment(currencies_date).format('DD.MM.YYYY')}})</small></label>
-                <input type="text" class="form-control mb-3" :value="currencies.Value" disabled>
-
-                <div class="row" style="position: relative">
-                    <div class="col-6">
+                <div class="row mb-3">
+                    <div class="col-3">
                         <label>Цена RUB</label>
-                        <input type="text" class="form-control mb-3" v-model="pre_rub">
+                        <input type="text" class="form-control" v-model="pre_rub">
                     </div>
-                    <div class="col-6">
+                    <div class="col-3">
                         <label>Цена USD</label>
-                        <input type="text" class="form-control mb-3" v-model="pre_usd">
+                        <input type="text" class="form-control" v-model="pre_usd">
+                        <small style="color: #999;">курс {{currencies.Value}} на {{moment(currencies_date).format('DD.MM.YYYY')}}</small>
                     </div>
-                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: block; width: 10px; padding: 0; margin: 0; margin-top: 2px;">+</span>
+                    <div class="col-3">
+                        <label>Маржа, руб.</label>
+                        <input type="text" class="form-control" v-model="marzha">
+                    </div>
+                    <div class="col-3">
+                        <label>Сборка, руб.</label>
+                        <input type="text" class="form-control" v-model="sborka">
+                    </div>
                 </div>
 
                 <div class="form-group" style="position: relative;">
@@ -51,12 +56,18 @@
                     <button @click="TotalPrice()" style="position: absolute; top: 50%; transform: translateY(-50%); right: 1rem; border: none; box-shadow: none; font-size: 0.7rem; background: none; margin-top: 0.75rem">пересчитать</button>
                 </div>
 
-                <label id="boxes_label">Совместимость c типами</label>
+                <label id="types_label">Совместимость c типами</label>
                 <select v-model="selected_types" id="types_input" class="form-control mb-3" multiple>
                     <template v-for="type in types">
                         <option :value="type.id">{{ type.title }}</option>
                     </template>
                 </select>
+
+                <label id="description_label">Описание (для КП)</label>
+                <textarea v-model="description" id="description_input" class="form-control mb-3"></textarea>
+
+                <label id="descriptionmanager_label">Описание (для менеджеров)</label>
+                <textarea v-model="descriptionmanager" id="descriptionmanager_input" class="form-control mb-3"></textarea>
 
                 <button @click="saveBox()" class="btn btn-primary">Сохранить</button>
             </div>
@@ -72,7 +83,11 @@
                 title: '',
                 pre_rub: '',
                 pre_usd: '',
+                marzha: '',
+                sborka: '',
                 price: '',
+                description: '',
+                descriptionmanager: '',
                 currencies: {},
                 currencies_date: {},
                 moment: moment,
@@ -93,12 +108,16 @@
                     this.title = response.data.title,
                     this.pre_rub = response.data.pre_rub,
                     this.pre_usd = response.data.pre_usd,
+                    this.marzha = response.data.marzha,
+                    this.sborka = response.data.sborka,
                     this.price = response.data.price,
                     this.selected_types = response.data.types.map(type => type.id),
                     this.width = response.data.width,
                     this.height = response.data.height,
                     this.length = response.data.length,
-                    this.weight = response.data.weight
+                    this.weight = response.data.weight,
+                    this.description = response.data.description,
+                    this.descriptionmanager = response.data.descriptionmanager
                 ));
             axios
                 .get('https://www.cbr-xml-daily.ru/daily_json.js')
@@ -139,12 +158,16 @@
                     title: this.title,
                     pre_rub: this.pre_rub,
                     pre_usd: this.pre_usd,
+                    marzha: this.marzha,
+                    sborka: this.sborka,
                     price: this.price,
                     types: this.selected_types,
                     length: this.length,
                     width: this.width,
                     height: this.height,
                     weight: this.weight,
+                    description: this.description,
+                    descriptionmanager: this.descriptionmanager,
                 })
                 .then(response => (
                     this.$router.push({path: '/boxes'}) 
@@ -159,13 +182,7 @@
                 });
             },
             TotalPrice() {
-                if(this.pre_rub > 0 && this.pre_usd > 0) {
-                    this.price = Math.ceil((this.pre_rub + (parseFloat(this.currencies.Value) * this.pre_usd)) / 50)*50
-                } else if (!this.pre_rub) {
-                    this.price = Math.ceil((0 + (parseFloat(this.currencies.Value) * this.pre_usd)) / 50)*50
-                } else if (!this.pre_usd) {
-                    this.price = Math.ceil((this.pre_rub + 0) / 50)*50
-                }
+                this.price = Math.ceil((this.pre_rub + (parseFloat(this.currencies.Value) * this.pre_usd) + this.marzha + this.sborka) / 50)*50
             }
         },
         watch: {
@@ -183,6 +200,22 @@
                     this.TotalPrice()
                 } else {
                     this.pre_usd = 0
+                }
+            },
+            marzha: function (val) {
+                if(!isNaN(parseFloat(val))) {
+                    this.marzha = parseFloat(val)
+                    this.TotalPrice()
+                } else {
+                    this.marzha = 0
+                }
+            },
+            sborka: function (val) {
+                if(!isNaN(parseFloat(val))) {
+                    this.sborka = parseFloat(val)
+                    this.TotalPrice()
+                } else {
+                    this.sborka = 0
                 }
             },
         },

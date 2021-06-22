@@ -13,11 +13,15 @@ class Box extends Model
         'title',
         'pre_rub',
         'pre_usd',
+        'marzha',
+        'sborka',
         'price',
         'length',
         'width',
         'height',
         'weight',
+        'description',
+        'descriptionmanager',
     ];
 
     public function types()

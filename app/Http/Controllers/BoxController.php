@@ -25,8 +25,14 @@ class BoxController extends Controller
             'title' => 'required',
             'pre_rub' => 'required|numeric',
             'pre_usd' => 'required|numeric',
+            'marzha' => 'required|numeric',
+            'sborka' => 'required|numeric',
             'price' => 'required|numeric',
             'types' => 'required',
+            'length' => 'required|numeric',
+            'width' => 'required|numeric',
+            'height' => 'required|numeric',
+            'weight' => 'required|numeric',
         ];
 
         $this->validate($request, $rules);
@@ -36,7 +42,15 @@ class BoxController extends Controller
         $box->title = $data['title'];
         $box->pre_rub = $data['pre_rub'];
         $box->pre_usd = $data['pre_usd'];
+        $box->marzha = $data['marzha'];
+        $box->sborka = $data['sborka'];
         $box->price = $data['price'];
+        $box->length = $data['length'];
+        $box->width = $data['width'];
+        $box->height = $data['height'];
+        $box->weight = $data['weight'];
+        $box->description = $data['description'];
+        $box->descriptionmanager = $data['descriptionmanager'];
         $box->save();
         $box->types()->attach($request->types, ['box_id' => $box->id]);
     }
@@ -47,6 +61,8 @@ class BoxController extends Controller
             'title' => 'required',
             'pre_rub' => 'required|numeric',
             'pre_usd' => 'required|numeric',
+            'marzha' => 'required|numeric',
+            'sborka' => 'required|numeric',
             'price' => 'required|numeric',
             'types' => 'required',
             'length' => 'required|numeric',
@@ -62,11 +78,15 @@ class BoxController extends Controller
         $box->title = $data['title'];
         $box->pre_rub = $data['pre_rub'];
         $box->pre_usd = $data['pre_usd'];
+        $box->marzha = $data['marzha'];
+        $box->sborka = $data['sborka'];
         $box->price = $data['price'];
         $box->length = $data['length'];
         $box->width = $data['width'];
         $box->height = $data['height'];
         $box->weight = $data['weight'];
+        $box->description = $data['description'];
+        $box->descriptionmanager = $data['descriptionmanager'];
         $box->save();
         $box->types()->detach();
         $box->types()->attach($request->types, ['box_id' => $box->id]);

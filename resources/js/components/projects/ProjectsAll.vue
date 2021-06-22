@@ -18,11 +18,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="project in projects" :key="project.id">
+                        <tr v-for="project in projects" :key="project.id" @click="goTo(project.id)">
                             <td class="align-middle">{{ project.id }}</td>
-                            <td class="align-middle">
-                                <router-link :to="{name: 'ProjectItem', params: {id: project.id}}">{{ project.name }}</router-link>
-                            </td>
+                            <td class="align-middle">{{ project.name }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -45,7 +43,17 @@
                     this.projects = response.data
                 ));
         },
+        methods: {
+            goTo(id) {
+                this.$router.push({ name: 'ProjectItem', params: { id: id } });
+            }
+        },
         components: {
         }
     }
 </script>
+<style scoped>
+    .table tr:hover {
+        cursor: pointer;
+    }
+</style>
