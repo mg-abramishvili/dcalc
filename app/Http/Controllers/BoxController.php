@@ -19,6 +19,22 @@ class BoxController extends Controller
         })->get();
     }
 
+    public function file_upload(Request $request)
+    {
+        if ($request->hasFile('box_images')) {
+            $file = $request->file('box_images');
+            /*$filename = $file->getClientOriginalName();
+            $folder = \Carbon\Carbon::now()->format('Y-m-d');
+            $file->storeAs('tmp_uploads/' . $folder, $filename);
+            return $folder;*/
+            $filename = md5(time() . rand(1, 100000)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path() . '/uploads', $filename);
+            return \Response::make('/uploads/' . $filename, 200, [
+                'Content-Disposition' => 'inline',
+            ]);
+        }
+    }
+
     public function boxes_store(Request $request)
     {
         $rules = [
@@ -51,6 +67,7 @@ class BoxController extends Controller
         $box->weight = $data['weight'];
         $box->description = $data['description'];
         $box->descriptionmanager = $data['descriptionmanager'];
+        $box->box_images = $data['box_images'];
         $box->save();
         $box->types()->attach($request->types, ['box_id' => $box->id]);
     }
@@ -87,6 +104,7 @@ class BoxController extends Controller
         $box->weight = $data['weight'];
         $box->description = $data['description'];
         $box->descriptionmanager = $data['descriptionmanager'];
+        $box->box_images = $data['box_images'];
         $box->save();
         $box->types()->detach();
         $box->types()->attach($request->types, ['box_id' => $box->id]);

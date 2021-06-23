@@ -11,6 +11,9 @@
                 <label id="title_label">Название</label>
                 <input v-model="title" type="text" class="form-control mb-3">
 
+                <label id="title_label">Код</label>
+                <input v-model="slug" type="text" class="form-control mb-3">
+
                 <div class="d-flex justify-content-between">
                     <button @click="saveCategory()" class="btn btn-primary">Сохранить</button>
                     <button @click="deleteCategory()" class="btn btn-outline-danger">Удалить категорию</button>
@@ -26,6 +29,7 @@
             return {
                 category: {},
                 title: '',
+                slug: '',
             }
         },
         created() {
@@ -33,7 +37,8 @@
                 .get(`/api/category/${this.$route.params.id}`)
                 .then(response => (
                     this.category = response.data,
-                    this.title = response.data.title
+                    this.title = response.data.title,
+                    this.slug = response.data.slug
                 ));
         },
         methods: {
@@ -42,6 +47,7 @@
                 .post(`/api/category/${this.$route.params.id}/edit`, {
                     id: this.category.id,
                     title: this.title,
+                    slug: this.slug
                 })
                 .then(response => (
                     this.$router.push({path: '/elements'}) 

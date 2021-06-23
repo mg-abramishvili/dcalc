@@ -37,6 +37,7 @@ Route::get('/boxes/filter/{type_id}','App\Http\Controllers\BoxController@boxes_f
 Route::post('/boxes','App\Http\Controllers\BoxController@boxes_store');
 Route::post('/box/{id}/edit','App\Http\Controllers\BoxController@box_edit');
 Route::get('/box/{id}/delete','App\Http\Controllers\BoxController@box_delete');
+Route::post('/box/file_upload','App\Http\Controllers\BoxController@file_upload');
 
 // Расчеты
 Route::get('/calculations','App\Http\Controllers\CalculationController@index');

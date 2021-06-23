@@ -15,7 +15,7 @@ class ProjectController extends Controller
 
     public function project_item($id)
     {
-        return Project::with('calculations', 'offers.calculations.elements')->find($id);
+        return Project::with('calculations.boxes', 'calculations.elements.categories', 'offers.calculations.elements')->find($id);
     }
 
     public function projects_store(Request $request)

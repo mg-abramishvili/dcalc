@@ -8,6 +8,23 @@
 
         <div class="card">
             <div class="card-body">
+<!--
+                {{ box_images }}
+
+                <file-pond
+                    name="box_images"
+                    ref="pond"
+                    label-idle="<span class='filepond--label-action'>Загрузить фотки корпуса</span>"
+                    allow-multiple="true"
+                    allow-reorder="true"
+                    instant-upload="false"
+                    accepted-file-types="image/jpeg, image/png"
+                    :server="{ process }"
+                    v-on:addfile="addFilepondFile"
+                    v-on:removefile="removeFilepondFile"
+                />
+                -->
+
                 <label id="title_label">Название</label>
                 <input v-model="title" id="title_input" type="text" class="form-control mb-3">
 
@@ -76,6 +93,17 @@
 </template>
 
 <script>
+    import vueFilePond from 'vue-filepond'
+    import 'filepond/dist/filepond.min.css'
+    import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
+    import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
+    import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+
+    const FilePond = vueFilePond(
+        FilePondPluginFileValidateType,
+        FilePondPluginImagePreview
+    )
+
     export default {
         data() {
             return {
@@ -88,6 +116,7 @@
                 price: '',
                 description: '',
                 descriptionmanager: '',
+                box_images: [],
                 currencies: {},
                 currencies_date: {},
                 moment: moment,
@@ -98,6 +127,8 @@
                 height: '',
                 length: '',
                 weight: '',
+
+                myFiles: ["cat.jpeg"]
             }
         },
         created() {
@@ -150,6 +181,7 @@
                     weight: this.weight,
                     description: this.description,
                     descriptionmanager: this.descriptionmanager,
+                    box_images: this.box_images,
                 })
                 .then(response => (
                     this.$router.push({path: '/boxes'}) 
@@ -167,7 +199,72 @@
             },
             TotalPrice() {
                 this.price = Math.ceil((this.pre_rub + (parseFloat(this.currencies.Value) * this.pre_usd) + this.marzha + this.sborka) / 50)*50
-            }
+            },
+            handleFilePondInit: function() {
+                console.log('FilePond has initialized');
+
+                // example of instance method call on pond reference
+                this.$refs.pond.getFiles();
+            },
+            removeFilepondFile: function(file) {
+                console.log('файл удален')
+                console.log(this.$refs.pond.getFiles())
+            },
+            addFilepondFile: function(file) {
+                console.log('файл добавлен')
+                console.log(this.$refs.pond.getFiles())
+            },
+            storeFilepond: function(file, progress) {
+                const box_images = this.$refs.pond.getFiles(0) 
+                const formData = new FormData();
+                formData.append('box_images', box_images)
+                
+                axios({
+                    method: 'post',
+                    url: '/api/box/file_upload',
+                    data: formData,
+                }).then(response => {
+                    console.log(response)
+                })
+            },
+            process: function(fieldName, file, metadata, load, error, progress, abort) {
+                // set data
+                const formData = new FormData();
+                formData.append('box_images', file, file.id);
+
+                // related to aborting the request
+                const CancelToken = axios.CancelToken;
+                const source = CancelToken.source();
+                        
+                // the request itself
+                axios({
+                    method: 'post',
+                    url: '/api/box/file_upload',
+                    data: formData,
+                    //cancelToken: source.token,
+                    onUploadProgress: (e) => {
+                        // updating progress indicator
+                        progress(e.lengthComputable, e.loaded, e.total);
+                    }
+                }).then(response => {
+                    // passing the file id to FilePond
+                    load(response)
+                    this.box_images.push(response.data)
+                }).catch((thrown) => {
+                    if (axios.isCancel(thrown)) {
+                        console.log('Request canceled', thrown.message);
+                    } else {
+                        // handle error
+                    }
+                });
+
+                // Setup abort interface
+                return {
+                    abort: () => {
+                        source.cancel('Operation canceled by the user.');
+                    }
+                };
+            },
         },
         watch: {
             pre_rub: function (val) {
@@ -204,6 +301,7 @@
             },
         },
         components: {
+            FilePond,
         }
     }
 </script>

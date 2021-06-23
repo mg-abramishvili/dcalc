@@ -37,7 +37,10 @@
                             <tr>
                                 <th>Автор расчета</th>
                                 <th>№</th>
-                                <th>Комментарий</th>
+                                <th>Корпус</th>
+                                <th>Компоненты</th>
+                                <th>Кол-во</th>
+                                <th class="text-end">Стоимость</th>
                                 <th class="text-end">Дата расчета</th>
                             </tr>
                         </thead>
@@ -50,7 +53,24 @@
                                     Расчет №{{ calculation.id }}
                                 </td>
                                 <td class="align-middle">
-                                    {{ calculation.comment }}
+                                    <template v-for="calculation_box in calculation.boxes">
+                                        {{ calculation_box.title }}
+                                    </template>
+                                </td>
+                                <td class="align-middle">
+                                    <template v-for="calculation_element in calculation.elements">
+                                        <template v-for="calculation_element_category in calculation_element.categories">
+                                            {{ calculation_element_category.title }}
+                                        </template>
+                                        {{ calculation_element.title }}
+                                        <br>
+                                    </template>
+                                </td>
+                                <td class="align-middle text-end">
+                                    
+                                </td>
+                                <td class="align-middle text-end">
+                                    <strong>{{ calculation.price_total }} ₽</strong>
                                 </td>
                                 <td class="align-middle text-end">
                                     {{moment(calculation.created_at).format('D MMMM YYYY')}}
@@ -148,6 +168,10 @@
 <style scoped>
     .table tr:hover {
         cursor: pointer;
+    }
+    table.dataTable>thead>tr>td:not(.sorting_disabled),
+    table.dataTable>thead>tr>th:not(.sorting_disabled) {
+        padding-right: .75rem;
     }
     #offer {
         width: 595.28pt;

@@ -22,7 +22,10 @@ class Box extends Model
         'weight',
         'description',
         'descriptionmanager',
+        'box_images',
     ];
+
+    protected $casts=['box_images'=>'json'];
 
     public function types()
     {

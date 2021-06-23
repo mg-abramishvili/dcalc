@@ -97,6 +97,12 @@ table.dataTable {
 /* TABLE */
 
 
+/* FILEPOND */
+.filepond--item {
+    width: calc(25% - 0.5em);
+}
+/* FILEPOND */
+
 
 /* ERRORS */
 
