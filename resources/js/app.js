@@ -11,6 +11,7 @@ moment.locale('ru');
 
 import axios from 'axios'
 window.axios = require('axios');
+window.axios.defaults.withCredentials = true;
 
 import App from './App.vue';
 import VueRouter from 'vue-router';

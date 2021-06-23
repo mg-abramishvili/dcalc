@@ -1946,16 +1946,96 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       sidebar: true,
-      bell_icon: false
+      bell_icon: false,
+      formData: {
+        email: '',
+        password: ''
+      },
+      user: {},
+      authenticated: false
     };
   },
-  created: function created() {},
+  created: function created() {
+    this.checkMe();
+  },
   methods: {
+    handleLogin: function handleLogin() {
+      var _this = this;
+
+      // send axios request to the login route
+      axios.get('/sanctum/csrf-cookie').then(function (response) {
+        axios.post('/api/login', _this.formData).then(function (response) {
+          _this.checkMe();
+        });
+      });
+    },
+    checkMe: function checkMe() {
+      var _this2 = this;
+
+      axios.post('/api/me').then(function (response) {
+        _this2.user = response.data;
+
+        if (_this2.user.name.length) {
+          _this2.authenticated = true;
+        } else {
+          _this2.authenticated = false;
+        }
+      });
+    },
     sidebar_toggle: function sidebar_toggle() {
       if (this.sidebar === false) {
         this.sidebar = true;
@@ -5534,6 +5614,7 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.prototype.$moment = (moment__WEBPACK_IM
 moment__WEBPACK_IMPORTED_MODULE_0___default().locale('ru');
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+window.axios.defaults.withCredentials = true;
 
 
 
@@ -56681,254 +56762,418 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "wrapper" },
-    [
-      _c("Sidebar", { class: { collapsed: _vm.sidebar === false } }),
-      _vm._v(" "),
-      _c("div", { staticClass: "main" }, [
-        _c(
-          "nav",
-          { staticClass: "navbar navbar-expand navbar-light navbar-bg" },
-          [
-            _c(
-              "a",
-              {
-                staticClass: "sidebar-toggle",
-                on: {
-                  click: function($event) {
-                    return _vm.sidebar_toggle()
-                  }
-                }
-              },
-              [_c("i", { staticClass: "hamburger align-self-center" })]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group input-group-navbar" }, [
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  placeholder: "Поиск ...",
-                  "aria-label": "Поиск"
-                }
-              }),
-              _vm._v(" "),
-              _c("button", { staticClass: "btn", attrs: { type: "button" } }, [
+  return _c("div", [
+    _vm.authenticated === false
+      ? _c("div", { staticClass: "main d-flex justify-content-center w-100" }, [
+          _c("main", { staticClass: "content d-flex p-0" }, [
+            _c("div", { staticClass: "container d-flex flex-column" }, [
+              _c("div", { staticClass: "row h-100" }, [
                 _c(
-                  "svg",
+                  "div",
                   {
-                    staticClass: "feather feather-search align-middle",
-                    attrs: {
-                      xmlns: "http://www.w3.org/2000/svg",
-                      width: "24",
-                      height: "24",
-                      viewBox: "0 0 24 24",
-                      fill: "none",
-                      stroke: "currentColor",
-                      "stroke-width": "2",
-                      "stroke-linecap": "round",
-                      "stroke-linejoin": "round"
-                    }
+                    staticClass:
+                      "col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100"
                   },
                   [
-                    _c("circle", { attrs: { cx: "11", cy: "11", r: "8" } }),
-                    _c("line", {
-                      attrs: { x1: "21", y1: "21", x2: "16.65", y2: "16.65" }
-                    })
+                    _c("div", { staticClass: "d-table-cell align-middle" }, [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("div", { staticClass: "m-sm-4" }, [
+                            _c(
+                              "form",
+                              {
+                                on: {
+                                  submit: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.handleLogin.apply(
+                                      null,
+                                      arguments
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c("div", { staticClass: "mb-3" }, [
+                                  _c("label", { staticClass: "form-label" }, [
+                                    _vm._v("E-mail")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.formData.email,
+                                        expression: "formData.email"
+                                      }
+                                    ],
+                                    staticClass: "form-control form-control-lg",
+                                    attrs: {
+                                      type: "email",
+                                      name: "email",
+                                      placeholder: ""
+                                    },
+                                    domProps: { value: _vm.formData.email },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          _vm.formData,
+                                          "email",
+                                          $event.target.value
+                                        )
+                                      }
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "mb-3" }, [
+                                  _c("label", { staticClass: "form-label" }, [
+                                    _vm._v("Пароль")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.formData.password,
+                                        expression: "formData.password"
+                                      }
+                                    ],
+                                    staticClass: "form-control form-control-lg",
+                                    attrs: {
+                                      type: "password",
+                                      name: "password",
+                                      placeholder: ""
+                                    },
+                                    domProps: { value: _vm.formData.password },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          _vm.formData,
+                                          "password",
+                                          $event.target.value
+                                        )
+                                      }
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _vm._m(1)
+                              ]
+                            )
+                          ])
+                        ])
+                      ])
+                    ])
                   ]
                 )
               ])
-            ]),
+            ])
+          ])
+        ])
+      : _c(
+          "div",
+          { staticClass: "wrapper" },
+          [
+            _c("Sidebar", { class: { collapsed: _vm.sidebar === false } }),
             _vm._v(" "),
-            _c("div", { staticClass: "navbar-collapse collapse" }, [
-              _c("ul", { staticClass: "navbar-nav navbar-align" }, [
-                _c("li", { staticClass: "nav-item dropdown" }, [
+            _c("div", { staticClass: "main" }, [
+              _c(
+                "nav",
+                { staticClass: "navbar navbar-expand navbar-light navbar-bg" },
+                [
                   _c(
                     "a",
                     {
-                      staticClass:
-                        "nav-icon dropdown-toggle d-inline-block d-sm-none",
-                      attrs: { href: "#", "data-bs-toggle": "dropdown" }
+                      staticClass: "sidebar-toggle",
+                      on: {
+                        click: function($event) {
+                          return _vm.sidebar_toggle()
+                        }
+                      }
                     },
-                    [
-                      _c(
-                        "svg",
-                        {
-                          staticClass: "feather feather-settings align-middle",
-                          attrs: {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            width: "24",
-                            height: "24",
-                            viewBox: "0 0 24 24",
-                            fill: "none",
-                            stroke: "currentColor",
-                            "stroke-width": "2",
-                            "stroke-linecap": "round",
-                            "stroke-linejoin": "round"
-                          }
-                        },
-                        [
-                          _c("circle", {
-                            attrs: { cx: "12", cy: "12", r: "3" }
-                          }),
-                          _c("path", {
-                            attrs: {
-                              d:
-                                "M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
-                            }
-                          })
-                        ]
-                      )
-                    ]
+                    [_c("i", { staticClass: "hamburger align-self-center" })]
                   ),
                   _vm._v(" "),
-                  _vm._m(0),
+                  _c("div", { staticClass: "input-group input-group-navbar" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Поиск ...",
+                        "aria-label": "Поиск"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      { staticClass: "btn", attrs: { type: "button" } },
+                      [
+                        _c(
+                          "svg",
+                          {
+                            staticClass: "feather feather-search align-middle",
+                            attrs: {
+                              xmlns: "http://www.w3.org/2000/svg",
+                              width: "24",
+                              height: "24",
+                              viewBox: "0 0 24 24",
+                              fill: "none",
+                              stroke: "currentColor",
+                              "stroke-width": "2",
+                              "stroke-linecap": "round",
+                              "stroke-linejoin": "round"
+                            }
+                          },
+                          [
+                            _c("circle", {
+                              attrs: { cx: "11", cy: "11", r: "8" }
+                            }),
+                            _c("line", {
+                              attrs: {
+                                x1: "21",
+                                y1: "21",
+                                x2: "16.65",
+                                y2: "16.65"
+                              }
+                            })
+                          ]
+                        )
+                      ]
+                    )
+                  ]),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "dropdown-menu dropdown-menu-end" },
-                    [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "dropdown-item",
-                          attrs: { href: "pages-profile.html" }
-                        },
-                        [
-                          _c(
-                            "svg",
-                            {
-                              staticClass:
-                                "feather feather-user align-middle me-1",
-                              attrs: {
-                                xmlns: "http://www.w3.org/2000/svg",
-                                width: "24",
-                                height: "24",
-                                viewBox: "0 0 24 24",
-                                fill: "none",
-                                stroke: "currentColor",
-                                "stroke-width": "2",
-                                "stroke-linecap": "round",
-                                "stroke-linejoin": "round"
-                              }
-                            },
-                            [
-                              _c("path", {
+                  _c("div", { staticClass: "navbar-collapse collapse" }, [
+                    _c("ul", { staticClass: "navbar-nav navbar-align" }, [
+                      _c("li", { staticClass: "nav-item dropdown" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "nav-icon dropdown-toggle d-inline-block d-sm-none",
+                            attrs: { href: "#", "data-bs-toggle": "dropdown" }
+                          },
+                          [
+                            _c(
+                              "svg",
+                              {
+                                staticClass:
+                                  "feather feather-settings align-middle",
                                 attrs: {
-                                  d: "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                                  xmlns: "http://www.w3.org/2000/svg",
+                                  width: "24",
+                                  height: "24",
+                                  viewBox: "0 0 24 24",
+                                  fill: "none",
+                                  stroke: "currentColor",
+                                  "stroke-width": "2",
+                                  "stroke-linecap": "round",
+                                  "stroke-linejoin": "round"
                                 }
-                              }),
-                              _c("circle", {
-                                attrs: { cx: "12", cy: "7", r: "4" }
-                              })
-                            ]
-                          ),
-                          _vm._v(" Profile")
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [
-                          _c(
-                            "svg",
-                            {
+                              },
+                              [
+                                _c("circle", {
+                                  attrs: { cx: "12", cy: "12", r: "3" }
+                                }),
+                                _c("path", {
+                                  attrs: {
+                                    d:
+                                      "M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                  }
+                                })
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "nav-link dropdown-toggle d-none d-sm-inline-block",
+                            attrs: { href: "#", "data-bs-toggle": "dropdown" }
+                          },
+                          [
+                            _c("img", {
                               staticClass:
-                                "feather feather-pie-chart align-middle me-1",
+                                "avatar img-fluid rounded-circle me-1",
                               attrs: {
-                                xmlns: "http://www.w3.org/2000/svg",
-                                width: "24",
-                                height: "24",
-                                viewBox: "0 0 24 24",
-                                fill: "none",
-                                stroke: "currentColor",
-                                "stroke-width": "2",
-                                "stroke-linecap": "round",
-                                "stroke-linejoin": "round"
+                                src:
+                                  "https://appstack.bootlab.io/img/avatars/avatar.jpg",
+                                alt: "Chris Wood"
                               }
-                            },
-                            [
-                              _c("path", {
-                                attrs: { d: "M21.21 15.89A10 10 0 1 1 8 2.83" }
-                              }),
-                              _c("path", {
-                                attrs: { d: "M22 12A10 10 0 0 0 12 2v10z" }
-                              })
-                            ]
-                          ),
-                          _vm._v(" Analytics")
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "dropdown-divider" }),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "dropdown-item",
-                          attrs: { href: "pages-settings.html" }
-                        },
-                        [_vm._v("Settings & Privacy")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [_vm._v("Help")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [_vm._v("Sign out")]
-                      )
-                    ]
-                  )
-                ])
+                            }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "text-dark" }, [
+                              _vm._v(_vm._s(_vm.user.name))
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "dropdown-menu dropdown-menu-end" },
+                          [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "pages-profile.html" }
+                              },
+                              [
+                                _c(
+                                  "svg",
+                                  {
+                                    staticClass:
+                                      "feather feather-user align-middle me-1",
+                                    attrs: {
+                                      xmlns: "http://www.w3.org/2000/svg",
+                                      width: "24",
+                                      height: "24",
+                                      viewBox: "0 0 24 24",
+                                      fill: "none",
+                                      stroke: "currentColor",
+                                      "stroke-width": "2",
+                                      "stroke-linecap": "round",
+                                      "stroke-linejoin": "round"
+                                    }
+                                  },
+                                  [
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                                      }
+                                    }),
+                                    _c("circle", {
+                                      attrs: { cx: "12", cy: "7", r: "4" }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" Profile")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "#" }
+                              },
+                              [
+                                _c(
+                                  "svg",
+                                  {
+                                    staticClass:
+                                      "feather feather-pie-chart align-middle me-1",
+                                    attrs: {
+                                      xmlns: "http://www.w3.org/2000/svg",
+                                      width: "24",
+                                      height: "24",
+                                      viewBox: "0 0 24 24",
+                                      fill: "none",
+                                      stroke: "currentColor",
+                                      "stroke-width": "2",
+                                      "stroke-linecap": "round",
+                                      "stroke-linejoin": "round"
+                                    }
+                                  },
+                                  [
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M21.21 15.89A10 10 0 1 1 8 2.83"
+                                      }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d: "M22 12A10 10 0 0 0 12 2v10z"
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" Analytics")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "dropdown-divider" }),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "pages-settings.html" }
+                              },
+                              [_vm._v("Settings & Privacy")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "#" }
+                              },
+                              [_vm._v("Help")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "#" }
+                              },
+                              [_vm._v("Sign out")]
+                            )
+                          ]
+                        )
+                      ])
+                    ])
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("main", { staticClass: "content" }, [
+                _c(
+                  "div",
+                  { staticClass: "container-fluid p-0" },
+                  [_c("router-view", { key: _vm.$route.path })],
+                  1
+                )
               ])
             ])
-          ]
-        ),
-        _vm._v(" "),
-        _c("main", { staticClass: "content" }, [
-          _c(
-            "div",
-            { staticClass: "container-fluid p-0" },
-            [_c("router-view", { key: _vm.$route.path })],
-            1
-          )
-        ])
-      ])
-    ],
-    1
-  )
+          ],
+          1
+        )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "nav-link dropdown-toggle d-none d-sm-inline-block",
-        attrs: { href: "#", "data-bs-toggle": "dropdown" }
-      },
-      [
-        _c("img", {
-          staticClass: "avatar img-fluid rounded-circle me-1",
-          attrs: {
-            src: "https://appstack.bootlab.io/img/avatars/avatar.jpg",
-            alt: "Chris Wood"
-          }
-        }),
-        _vm._v(" "),
-        _c("span", { staticClass: "text-dark" }, [_vm._v("Петр Иванов")])
-      ]
-    )
+    return _c("div", { staticClass: "text-center mt-4 mb-4" }, [
+      _c("h1", { staticClass: "h2" }, [_vm._v("DreamApp CRM")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center mt-3" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-lg btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Войти")]
+      )
+    ])
   }
 ]
 render._withStripped = true
