@@ -8,6 +8,9 @@ Route::post('/me', 'App\Http\Controllers\AuthController@me')->middleware('auth:s
 
 // Пользователи
 Route::get('/users','App\Http\Controllers\UserController@index')->middleware('auth:sanctum');
+Route::get('/user/{id}','App\Http\Controllers\UserController@user_item')->middleware('auth:sanctum');
+Route::post('/users','App\Http\Controllers\UserController@users_store')->middleware('auth:sanctum');
+Route::post('/user/{id}/edit','App\Http\Controllers\UserController@user_edit')->middleware('auth:sanctum');
 
 // Проекты
 Route::get('/projects','App\Http\Controllers\ProjectController@projects');
@@ -66,3 +69,6 @@ Route::get('/types','App\Http\Controllers\TypeController@index');
 
 // Коммерческие предложения
 Route::get('/offers','App\Http\Controllers\OfferController@index');
+
+// Счетчики
+Route::get('/counter_users','App\Http\Controllers\CounterController@user_count');

@@ -111,3 +111,25 @@ table.dataTable {
 }
 
 /* ERRORS */
+
+
+/* AUTH FORM */
+
+#auth_form {
+    -webkit-animation: auth_form_fade 1s;
+            animation: auth_form_fade 1s;
+}
+
+@-webkit-keyframes auth_form_fade {
+    0% {opacity: 0;}
+    95% {opacity: 0;}
+    100% {opacity: 100%;}
+}
+
+@keyframes auth_form_fade {
+    0% {opacity: 0;}
+    95% {opacity: 0;}
+    100% {opacity: 100%;}
+}
+
+/* AUTH FORM */

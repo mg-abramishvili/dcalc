@@ -29,13 +29,25 @@
                         </div>
                     </div>
 
-                    Срок сдачи: {{moment(project.deadline).format('D MMMM YYYY')}}
+                    <div class="row align-items-center mb-4">
+                        <div class="col-6">Срок сдачи</div>
+                        <div class="col-6 text-end">{{moment(project.deadline).format('D MMMM YYYY')}}</div>
+                    </div>
+                     <div class="row align-items-center mb-4">
+                        <div class="col-6">Ответственный</div>
+                        <div class="col-6 text-end">
+                            <template v-for="user in project.users">
+                                <img src="/img/profile.png" width="32" height="32" class="rounded-circle me-2">
+                                {{ user.name }}
+                            </template>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="tab-pane" id="tab_calculations" role="tabpanel">
                     <table class="table table-striped table-hover dataTable no-footer dtr-inline">
                         <thead>
                             <tr>
-                                <th>Автор расчета</th>
                                 <th>№</th>
                                 <th>Корпус</th>
                                 <th>Компоненты</th>
@@ -46,9 +58,6 @@
                         </thead>
                         <tbody>
                             <tr v-for="calculation in project.calculations" :key="calculation.id" @click="goToCalculation(calculation.id)">
-                                <td class="align-middle">
-                                    <img src="https://appstack.bootlab.io/img/avatars/avatar-3.jpg" width="48" height="48" class="rounded-circle me-2" alt="Avatar"> Петр Иванов
-                                </td>
                                 <td class="align-middle">
                                     Расчет №{{ calculation.id }}
                                 </td>

@@ -50,6 +50,13 @@
                     <textarea v-model="description" id="description_input" class="form-control mb-3"></textarea>
                 </div>
 
+                <div class="form-group">
+                    <label id="users_label">Ответственный</label>
+                    <select v-model="users" id="users_input" class="form-control mb-3">
+                        <option v-for="user in users_data" :value="user.id">{{ user.name }}</option>
+                    </select>
+                </div>
+
                 <div>
                     <button @click="saveProject()" class="btn btn-primary">Сохранить</button>
                 </div>
@@ -68,17 +75,26 @@
                 deadline: '',
                 payment: '',
                 description: '',
+                users: '',
+
+                users_data: {},
 
                 calculation_id: '',
             }
         },
         created() {
             this.calculation_id = this.$route.params.calculation_id
+
+            axios
+                .get('/api/users')
+                .then(response => (
+                    this.users_data = response.data
+                ));
         },
         methods: {
             saveProject() {
                 axios
-                .post('/api/projects', { name: this.name, status: this.status, priority: this.priority, deadline: this.deadline, payment: this.payment, description: this.description, calculation_id: this.calculation_id })
+                .post('/api/projects', { name: this.name, status: this.status, priority: this.priority, deadline: this.deadline, payment: this.payment, description: this.description, calculation_id: this.calculation_id, users: this.users })
                 .then(response => (
                     this.$router.push({path: '/projects'}) 
                 ));

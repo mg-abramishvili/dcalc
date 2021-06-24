@@ -15,12 +15,19 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Название проекта</th>
+                            <th scope="col">Ответственный</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="project in projects" :key="project.id" @click="goTo(project.id)">
                             <td class="align-middle">{{ project.id }}</td>
                             <td class="align-middle">{{ project.name }}</td>
+                            <td class="align-middle">
+                                <template v-for="user in project.users">
+                                    <img src="/img/profile.png" width="48" height="48" class="rounded-circle me-2">
+                                    {{ user.name }}
+                                </template>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

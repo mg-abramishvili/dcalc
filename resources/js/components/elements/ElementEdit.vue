@@ -95,7 +95,7 @@
                     this.boxes = response.data
                 ));
             axios
-                .get('https://www.cbr-xml-daily.ru/daily_json.js')
+                .get(`https://www.cbr-xml-daily.ru/daily_json.js`, { withCredentials: false })
                 .then(response => (
                     this.currencies = response.data.Valute.USD,
                     this.currencies_date = response.data.Date
@@ -145,7 +145,7 @@
                     boxes: this.selected_boxes,
                 })
                 .then(response => (
-                    this.$router.push({path: '/elements'}) 
+                    this.$router.push({name: 'ElementsByCategory', params: {id: this.selected_category}}) 
                 ))
                 .catch((error) => {
                     if(error.response) {

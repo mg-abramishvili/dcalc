@@ -10,12 +10,12 @@ class ProjectController extends Controller
 {
     public function projects()
     {
-        return Project::orderBy('created_at', 'desc')->get();
+        return Project::with('users')->orderBy('created_at', 'desc')->get();
     }
 
     public function project_item($id)
     {
-        return Project::with('calculations.boxes', 'calculations.elements.categories', 'offers.calculations.elements')->find($id);
+        return Project::with('calculations.boxes', 'calculations.elements.categories', 'offers.calculations.elements', 'users')->find($id);
     }
 
     public function projects_store(Request $request)
@@ -37,5 +37,6 @@ class ProjectController extends Controller
         $offer->calculations()->attach($request->calculation_id, ['offer_id' => $offer->id]);
         $project->calculations()->attach($request->calculation_id, ['project_id' => $project->id]);
         $project->offers()->attach($offer->id, ['project_id' => $project->id]);
+        $project->users()->attach($request->users, ['project_id' => $project->id]);
     }
 }

@@ -133,7 +133,7 @@
         },
         created() {
             axios
-                .get('https://www.cbr-xml-daily.ru/daily_json.js')
+                .get('https://www.cbr-xml-daily.ru/daily_json.js', { withCredentials: false })
                 .then(response => (
                     this.currencies = response.data.Valute.USD,
                     this.currencies_date = response.data.Date

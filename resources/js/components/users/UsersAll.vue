@@ -21,12 +21,14 @@
                     </thead>
                     <tbody>
                         <tr v-for="user in users" :key="user.id">
-                            <td class="align-middle">{{ user.id }}</td>
-                            <td class="align-middle">{{ user.name }}</td>
-                            <td class="align-middle">{{ user.email }}</td>
-                            <td class="align-middle text-end">
-                                <button class="btn btn-warning">Правка</button>
-                            </td>
+                            <template v-if="user.id !== 9999">
+                                <td class="align-middle">{{ user.id }}</td>
+                                <td class="align-middle">{{ user.name }}</td>
+                                <td class="align-middle">{{ user.email }}</td>
+                                <td class="align-middle text-end">
+                                    <router-link :to="{name: 'UserEdit', params: {id: user.id}}" class="btn btn-warning">Правка</router-link>
+                                </td>
+                            </template>
                         </tr>
                     </tbody>
                 </table>

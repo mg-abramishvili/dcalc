@@ -1,6 +1,7 @@
 import Home from './components/Home.vue';
 import Users from './components/users/UsersAll.vue';
 import UserCreate from './components/users/UserCreate.vue';
+import UserEdit from './components/users/UserEdit.vue';
 
 import Projects from './components/projects/ProjectsAll.vue';
 import ProjectCreate from './components/projects/ProjectCreate.vue';
@@ -45,6 +46,11 @@ export const routes = [
         path: '/users',
         name: 'Users',
         component: Users
+    },
+    {
+        path: '/user/:id/edit',
+        name: 'UserEdit',
+        component: UserEdit
     },
     {
         path: '/users/create',
