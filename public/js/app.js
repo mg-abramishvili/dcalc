@@ -5057,6 +5057,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -62853,12 +62857,20 @@ var render = function() {
                 }
               }
             },
-            _vm._l(_vm.users_data, function(user) {
-              return _c("option", { domProps: { value: user.id } }, [
-                _vm._v(_vm._s(user.name))
-              ])
-            }),
-            0
+            [
+              _vm._l(_vm.users_data, function(user) {
+                return [
+                  user.id !== 9999
+                    ? [
+                        _c("option", { domProps: { value: user.id } }, [
+                          _vm._v(_vm._s(user.name))
+                        ])
+                      ]
+                    : _vm._e()
+                ]
+              })
+            ],
+            2
           )
         ]),
         _vm._v(" "),

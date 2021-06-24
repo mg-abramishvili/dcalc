@@ -53,7 +53,11 @@
                 <div class="form-group">
                     <label id="users_label">Ответственный</label>
                     <select v-model="users" id="users_input" class="form-control mb-3">
-                        <option v-for="user in users_data" :value="user.id">{{ user.name }}</option>
+                        <template v-for="user in users_data">
+                            <template v-if="user.id !== 9999">
+                                <option  :value="user.id">{{ user.name }}</option>
+                            </template>
+                        </template>
                     </select>
                 </div>
 
