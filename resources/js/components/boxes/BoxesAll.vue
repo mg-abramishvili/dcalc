@@ -19,7 +19,6 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
                                 <th scope="col">Наименование</th>
                                 <th scope="col" class="text-end">Цена</th>
                                 <th scope="col">&nbsp;</th>
@@ -27,7 +26,6 @@
                         </thead>
                         <tbody>
                             <tr v-for="box in boxes" :key="box.id">
-                                <td class="align-middle">{{ box.id }}</td>
                                 <td class="align-middle">{{ box.title }}</td>
                                 <td class="align-middle text-end">{{ box.price }} ₽</td>
                                 <td class="align-middle text-end">

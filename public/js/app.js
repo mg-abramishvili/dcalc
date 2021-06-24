@@ -2895,8 +2895,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -4537,9 +4535,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _CatSidebar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CatSidebar.vue */ "./resources/js/components/elements/CatSidebar.vue");
-//
-//
-//
 //
 //
 //
@@ -57761,13 +57756,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _c("span", { staticClass: "align-middle" }, [
-                  _vm._v("Новости")
-                ]),
-                _vm._v(" "),
-                _c("span", { staticClass: "badge badge-sidebar-primary" }, [
-                  _vm._v("1")
-                ])
+                _c("span", { staticClass: "align-middle" }, [_vm._v("Новости")])
               ]
             )
           ],
@@ -58945,10 +58934,6 @@ var render = function() {
                 _vm._l(_vm.boxes, function(box) {
                   return _c("tr", { key: box.id }, [
                     _c("td", { staticClass: "align-middle" }, [
-                      _vm._v(_vm._s(box.id))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "align-middle" }, [
                       _vm._v(_vm._s(box.title))
                     ]),
                     _vm._v(" "),
@@ -59088,8 +59073,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
-        _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Наименование")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-end", attrs: { scope: "col" } }, [
@@ -61657,10 +61640,6 @@ var render = function() {
                   _vm._l(_vm.boxes, function(box) {
                     return _c("tr", { key: "box_" + box.id }, [
                       _c("td", { staticClass: "align-middle" }, [
-                        _vm._v(_vm._s(box.id))
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "align-middle" }, [
                         _vm._v(_vm._s(box.title))
                       ]),
                       _vm._v(" "),
@@ -61778,10 +61757,6 @@ var render = function() {
                   _vm._v(" "),
                   _vm._l(_vm.elements, function(element) {
                     return _c("tr", { key: "element_" + element.id }, [
-                      _c("td", { staticClass: "align-middle" }, [
-                        _vm._v(_vm._s(element.id))
-                      ]),
-                      _vm._v(" "),
                       _c("td", { staticClass: "align-middle" }, [
                         _vm._v(_vm._s(element.title))
                       ]),
@@ -61929,8 +61904,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
-        _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Наименование")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-end", attrs: { scope: "col" } }, [
