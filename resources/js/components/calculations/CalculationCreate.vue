@@ -68,7 +68,7 @@
                     <select v-model="selected_box" class="form-select form-select-lg mb-3">
                         <option value selected>&nbsp;</option>
                         <template v-for="box in boxes">
-                            <option v-bind:value="{ id: box.id, title: box.title, price: box.price, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ box.price }}₽</option>
+                            <option v-bind:value="{ id: box.id, title: box.title, price: box.price, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ parseInt(box.price) }}₽</option>
                         </template>
                     </select>
                     <button @click="tabSelect('tab_type')" class="btn btn-outline-primary">Назад</button>
@@ -80,7 +80,7 @@
                         <option value selected>&nbsp;</option>
                         <template v-for="element in elements">
                             <template v-for="ect in element.categories">
-                                <option v-if="ect.id === category.id" :value="element.id" :data-title="element.title" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
+                                <option v-if="ect.id === category.id" :value="element.id" :data-title="element.title" :data-price="element.price">{{ element.title }} - {{ parseInt(element.price) }}₽</option>
                             </template>
                         </template>
                     </select>
@@ -98,7 +98,7 @@
                 <div v-if="price_subtotal > 0" class="total">
                     <div class="row align-items-center m-0 p-0">
                         <div class="col-6">Итого:</div>
-                        <div class="col-6 text-end text-primary">{{ price_subtotal }} ₽</div>
+                        <div class="col-6 text-end text-primary">{{ parseInt(price_subtotal) }} ₽</div>
                     </div>
                     <button @click="checkBeforeSave()" v-if="save_button" class="btn btn-lg btn-primary mt-4">Создать проект</button>
                 </div>
@@ -174,7 +174,7 @@
                         document.getElementById('box_title').innerHTML = this.selected_box.title
                     }
                     if(document.getElementById('box_price')) {
-                        document.getElementById('box_price').innerHTML = this.selected_box.price + ' ₽'
+                        document.getElementById('box_price').innerHTML = parseInt(this.selected_box.price) + ' ₽'
                     }
                     if(document.getElementById('box_description')) {
                         document.getElementById('box_description').innerHTML = this.selected_box.descriptionmanager

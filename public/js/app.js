@@ -3096,7 +3096,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         if (document.getElementById('box_price')) {
-          document.getElementById('box_price').innerHTML = this.selected_box.price + ' ₽';
+          document.getElementById('box_price').innerHTML = parseInt(this.selected_box.price) + ' ₽';
         }
 
         if (document.getElementById('box_description')) {
@@ -59353,7 +59353,10 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            _vm._s(box.title) + " - " + _vm._s(box.price) + "₽"
+                            _vm._s(box.title) +
+                              " - " +
+                              _vm._s(parseInt(box.price)) +
+                              "₽"
                           )
                         ]
                       )
@@ -59433,7 +59436,7 @@ var render = function() {
                                     _vm._v(
                                       _vm._s(element.title) +
                                         " - " +
-                                        _vm._s(element.price) +
+                                        _vm._s(parseInt(element.price)) +
                                         "₽"
                                     )
                                   ]
@@ -59501,7 +59504,7 @@ var render = function() {
                   _c("div", { staticClass: "col-6" }, [_vm._v("Итого:")]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-6 text-end text-primary" }, [
-                    _vm._v(_vm._s(_vm.price_subtotal) + " ₽")
+                    _vm._v(_vm._s(parseInt(_vm.price_subtotal)) + " ₽")
                   ])
                 ]),
                 _vm._v(" "),
