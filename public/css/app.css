@@ -66,6 +66,10 @@ body {
     display: inline-block;
     vertical-align: middle;
 }
+.badge-sidebar-primary,
+.badge-sidebar-secondary {
+    top: 16px;
+}
 /* SIDEBAR */
 
 
