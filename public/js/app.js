@@ -57971,7 +57971,9 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12 col-md-3" }, [
-            _c("label", { attrs: { id: "length_label" } }, [_vm._v("Длина")]),
+            _c("label", { attrs: { id: "length_label" } }, [
+              _vm._v("Длина, м")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -57997,7 +57999,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
-            _c("label", { attrs: { id: "width_label" } }, [_vm._v("Ширина")]),
+            _c("label", { attrs: { id: "width_label" } }, [
+              _vm._v("Ширина, м")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -58023,7 +58027,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
-            _c("label", { attrs: { id: "height_label" } }, [_vm._v("Высота")]),
+            _c("label", { attrs: { id: "height_label" } }, [
+              _vm._v("Высота, м")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -58049,7 +58055,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
-            _c("label", { attrs: { id: "weight_label" } }, [_vm._v("Вес")]),
+            _c("label", { attrs: { id: "weight_label" } }, [_vm._v("Вес, кг")]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -58489,7 +58495,9 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12 col-md-3" }, [
-            _c("label", { attrs: { id: "length_label" } }, [_vm._v("Длина")]),
+            _c("label", { attrs: { id: "length_label" } }, [
+              _vm._v("Длина, м")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -58515,7 +58523,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
-            _c("label", { attrs: { id: "width_label" } }, [_vm._v("Ширина")]),
+            _c("label", { attrs: { id: "width_label" } }, [
+              _vm._v("Ширина, м")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -58541,7 +58551,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
-            _c("label", { attrs: { id: "height_label" } }, [_vm._v("Высота")]),
+            _c("label", { attrs: { id: "height_label" } }, [
+              _vm._v("Высота, м")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -58567,7 +58579,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
-            _c("label", { attrs: { id: "weight_label" } }, [_vm._v("Вес")]),
+            _c("label", { attrs: { id: "weight_label" } }, [_vm._v("Вес, кг")]),
             _vm._v(" "),
             _c("input", {
               directives: [
