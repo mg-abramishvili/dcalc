@@ -1951,6 +1951,8 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.checkMe();
     this.counterUsers();
+    this.counterProjects();
+    this.counterClients();
   },
   methods: {
     handleLogin: function handleLogin() {

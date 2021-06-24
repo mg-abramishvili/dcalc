@@ -108,6 +108,8 @@
         created() {
 			this.checkMe()
 			this.counterUsers()
+			this.counterProjects()
+			this.counterClients()
         },
 		methods: {
 			handleLogin() {
