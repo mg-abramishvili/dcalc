@@ -67,7 +67,7 @@ class BoxController extends Controller
         $box->weight = $data['weight'];
         $box->description = $data['description'];
         $box->descriptionmanager = $data['descriptionmanager'];
-        $box->box_images = $data['box_images'];
+        //$box->box_images = $data['box_images'];
         $box->save();
         $box->types()->attach($request->types, ['box_id' => $box->id]);
     }
@@ -104,7 +104,7 @@ class BoxController extends Controller
         $box->weight = $data['weight'];
         $box->description = $data['description'];
         $box->descriptionmanager = $data['descriptionmanager'];
-        $box->box_images = $data['box_images'];
+        //$box->box_images = $data['box_images'];
         $box->save();
         $box->types()->detach();
         $box->types()->attach($request->types, ['box_id' => $box->id]);

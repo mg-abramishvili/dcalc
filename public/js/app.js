@@ -2436,8 +2436,8 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_0___default()((filepond_plu
         height: this.height,
         weight: this.weight,
         description: this.description,
-        descriptionmanager: this.descriptionmanager,
-        box_images: this.box_images
+        descriptionmanager: this.descriptionmanager //box_images: this.box_images,
+
       }).then(function (response) {
         return _this2.$parent.counterElementsBoxes(), _this2.$router.push({
           path: '/boxes'

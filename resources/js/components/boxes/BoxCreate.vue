@@ -181,7 +181,7 @@
                     weight: this.weight,
                     description: this.description,
                     descriptionmanager: this.descriptionmanager,
-                    box_images: this.box_images,
+                    //box_images: this.box_images,
                 })
                 .then(response => (
                     this.$parent.counterElementsBoxes(),
