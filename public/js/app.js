@@ -1965,6 +1965,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.post('/api/me').then(function (response) {
+        console.log(response);
         _this2.user = response.data;
 
         if (_this2.user.name.length) {

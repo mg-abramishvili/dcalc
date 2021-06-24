@@ -118,6 +118,7 @@
             },
 			checkMe() {
 				axios.post('/api/me').then(response => {
+					console.log(response)
 					this.user = response.data
 					if(this.user.name.length) {
 						this.authenticated = true
