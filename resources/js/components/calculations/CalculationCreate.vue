@@ -80,7 +80,7 @@
                         <option value selected>&nbsp;</option>
                         <template v-for="element in elements">
                             <template v-for="ect in element.categories">
-                                <option v-if="ect.id === category.id" :value="element.id" :data-title="element.title" :data-price="element.price">{{ element.title }} - {{ element.price.toFixed(0) }}₽</option>
+                                <option v-if="ect.id === category.id" :value="element.id" :data-title="element.title" :data-price="element.price">{{ element.title }} - {{ element.price }}₽</option>
                             </template>
                         </template>
                     </select>

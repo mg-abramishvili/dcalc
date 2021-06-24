@@ -59433,7 +59433,7 @@ var render = function() {
                                     _vm._v(
                                       _vm._s(element.title) +
                                         " - " +
-                                        _vm._s(element.price.toFixed(0)) +
+                                        _vm._s(element.price) +
                                         "₽"
                                     )
                                   ]
