@@ -96,6 +96,7 @@
                 axios
                 .post('/api/projects', { name: this.name, status: this.status, priority: this.priority, deadline: this.deadline, payment: this.payment, description: this.description, calculation_id: this.calculation_id, users: this.users })
                 .then(response => (
+                    this.$parent.counterProjects(),
                     this.$router.push({path: '/projects'}) 
                 ));
             },

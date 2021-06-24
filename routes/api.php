@@ -72,3 +72,5 @@ Route::get('/offers','App\Http\Controllers\OfferController@index');
 
 // Счетчики
 Route::get('/counter_users','App\Http\Controllers\CounterController@user_count');
+Route::get('/counter_projects','App\Http\Controllers\CounterController@project_count');
+Route::get('/counter_clients','App\Http\Controllers\CounterController@client_count');

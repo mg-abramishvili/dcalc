@@ -1943,7 +1943,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       user: {},
       authenticated: false,
-      counter_users: ''
+      counter_users: '',
+      counter_projects: '',
+      counter_clients: ''
     };
   },
   created: function created() {
@@ -1980,6 +1982,20 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/counter_users').then(function (response) {
         _this3.counter_users = response.data;
+      });
+    },
+    counterProjects: function counterProjects() {
+      var _this4 = this;
+
+      axios.get('/api/counter_projects').then(function (response) {
+        _this4.counter_projects = response.data;
+      });
+    },
+    counterClients: function counterClients() {
+      var _this5 = this;
+
+      axios.get('/api/counter_clients').then(function (response) {
+        _this5.counter_clients = response.data;
       });
     },
     sidebar_toggle: function sidebar_toggle() {
@@ -3932,7 +3948,7 @@ __webpack_require__.r(__webpack_exports__);
         phone: this.phone,
         email: this.email
       }).then(function (response) {
-        return _this.$router.push({
+        return _this.$parent.counterClients(), _this.$router.push({
           path: '/clients'
         });
       });
@@ -5071,7 +5087,7 @@ __webpack_require__.r(__webpack_exports__);
         calculation_id: this.calculation_id,
         users: this.users
       }).then(function (response) {
-        return _this2.$router.push({
+        return _this2.$parent.counterProjects(), _this2.$router.push({
           path: '/projects'
         });
       });
@@ -57527,7 +57543,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("span", { staticClass: "badge badge-sidebar-primary" }, [
-                  _vm._v("0")
+                  _vm._v(_vm._s(_vm.$parent.counter_projects))
                 ])
               ]
             )
@@ -57577,7 +57593,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("span", { staticClass: "badge badge-sidebar-primary" }, [
-                  _vm._v("0")
+                  _vm._v(_vm._s(_vm.$parent.counter_clients))
                 ])
               ]
             )

@@ -53,6 +53,7 @@
                 axios
                 .post('/api/clients', { name: this.name, inn: this.inn, phone: this.phone, email: this.email })
                 .then(response => (
+                    this.$parent.counterClients(),
                     this.$router.push({path: '/clients'}) 
                 ));
             },

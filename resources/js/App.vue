@@ -100,7 +100,9 @@
 				user: {},
 				authenticated: false,
 
-				counter_users: ''
+				counter_users: '',
+				counter_projects: '',
+				counter_clients: '',
             }
         },
         created() {
@@ -130,6 +132,16 @@
 			counterUsers() {
 				axios.get('/api/counter_users').then(response => {
 					this.counter_users = response.data
+                });
+			},
+			counterProjects() {
+				axios.get('/api/counter_projects').then(response => {
+					this.counter_projects = response.data
+                });
+			},
+			counterClients() {
+				axios.get('/api/counter_clients').then(response => {
+					this.counter_clients = response.data
                 });
 			},
 			sidebar_toggle() {
