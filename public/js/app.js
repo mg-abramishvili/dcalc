@@ -63761,7 +63761,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "mb-3" }, [
-            _c("label", { staticClass: "form-label" }, [_vm._v("E-mail")]),
+            _c("label", { staticClass: "form-label" }, [
+              _vm._v("E-mail (логин)")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -63904,7 +63906,9 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "mb-3" }, [
-          _c("label", { staticClass: "form-label" }, [_vm._v("E-mail")]),
+          _c("label", { staticClass: "form-label" }, [
+            _vm._v("E-mail (логин)")
+          ]),
           _vm._v(" "),
           _c("input", {
             directives: [

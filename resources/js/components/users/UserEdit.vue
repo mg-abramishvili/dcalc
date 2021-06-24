@@ -15,7 +15,7 @@
                     <input v-model="name" type="text" class="form-control" placeholder="Имя">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">E-mail</label>
+                    <label class="form-label">E-mail (логин)</label>
                     <input v-model="email" type="text" class="form-control" placeholder="E-mail">
                 </div>
                 <!--<div class="mb-3">
