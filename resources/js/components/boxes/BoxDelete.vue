@@ -29,6 +29,7 @@
                 axios
                 .get(`/api/box/${id}/delete`)
                 .then(response => (
+                    this.$parent.counterElementsBoxes(),
                     this.$router.push({path: '/elements'})
                 ));
             },

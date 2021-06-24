@@ -103,6 +103,7 @@
 				counter_users: '',
 				counter_projects: '',
 				counter_clients: '',
+				counter_elements_boxes: '',
             }
         },
         created() {
@@ -110,6 +111,7 @@
 			this.counterUsers()
 			this.counterProjects()
 			this.counterClients()
+			this.counterElementsBoxes()
         },
 		methods: {
 			handleLogin() {
@@ -144,6 +146,11 @@
 			counterClients() {
 				axios.get('/api/counter_clients').then(response => {
 					this.counter_clients = response.data
+                });
+			},
+			counterElementsBoxes() {
+				axios.get('/api/counter_elements_boxes').then(response => {
+					this.counter_elements_boxes = response.data
                 });
 			},
 			sidebar_toggle() {

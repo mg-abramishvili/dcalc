@@ -184,6 +184,7 @@
                     box_images: this.box_images,
                 })
                 .then(response => (
+                    this.$parent.counterElementsBoxes(),
                     this.$router.push({path: '/boxes'}) 
                 ))
                 .catch((error) => {

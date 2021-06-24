@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Client;
+use App\Models\Box;
+use App\Models\Element;
 use Illuminate\Http\Request;
 
 class CounterController extends Controller
@@ -22,5 +24,12 @@ class CounterController extends Controller
     public function client_count()
     {
         return Client::count();
+    }
+
+    public function element_box_count()
+    {
+        $boxes = Box::count();
+        $elements = Element::count();
+        return $boxes + $elements;
     }
 }

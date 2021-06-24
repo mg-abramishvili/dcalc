@@ -1945,7 +1945,8 @@ __webpack_require__.r(__webpack_exports__);
       authenticated: false,
       counter_users: '',
       counter_projects: '',
-      counter_clients: ''
+      counter_clients: '',
+      counter_elements_boxes: ''
     };
   },
   created: function created() {
@@ -1953,6 +1954,7 @@ __webpack_require__.r(__webpack_exports__);
     this.counterUsers();
     this.counterProjects();
     this.counterClients();
+    this.counterElementsBoxes();
   },
   methods: {
     handleLogin: function handleLogin() {
@@ -1998,6 +2000,13 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/counter_clients').then(function (response) {
         _this5.counter_clients = response.data;
+      });
+    },
+    counterElementsBoxes: function counterElementsBoxes() {
+      var _this6 = this;
+
+      axios.get('/api/counter_elements_boxes').then(function (response) {
+        _this6.counter_elements_boxes = response.data;
       });
     },
     sidebar_toggle: function sidebar_toggle() {
@@ -2430,7 +2439,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_0___default()((filepond_plu
         descriptionmanager: this.descriptionmanager,
         box_images: this.box_images
       }).then(function (response) {
-        return _this2.$router.push({
+        return _this2.$parent.counterElementsBoxes(), _this2.$router.push({
           path: '/boxes'
         });
       })["catch"](function (error) {
@@ -2592,7 +2601,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get("/api/box/".concat(id, "/delete")).then(function (response) {
-        return _this2.$router.push({
+        return _this2.$parent.counterElementsBoxes(), _this2.$router.push({
           path: '/elements'
         });
       });
@@ -4221,7 +4230,7 @@ __webpack_require__.r(__webpack_exports__);
         categories: this.categories_selected,
         boxes: this.selected_boxes
       }).then(function (response) {
-        return _this3.$router.push({
+        return _this3.$parent.counterElementsBoxes(), _this3.$router.push({
           path: '/elements'
         });
       })["catch"](function (error) {
@@ -4308,7 +4317,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get("/api/element/".concat(id, "/delete")).then(function (response) {
-        return _this2.$router.push({
+        return _this2.$parent.counterElementsBoxes(), _this2.$router.push({
           path: '/elements'
         });
       });
@@ -57654,7 +57663,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("span", { staticClass: "badge badge-sidebar-primary" }, [
-                  _vm._v("0")
+                  _vm._v(_vm._s(_vm.$parent.counter_elements_boxes))
                 ])
               ]
             )

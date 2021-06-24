@@ -134,6 +134,7 @@
                     boxes: this.selected_boxes,
                 })
                 .then(response => (
+                    this.$parent.counterElementsBoxes(),
                     this.$router.push({path: '/elements'}) 
                 ))
                 .catch((error) => {
