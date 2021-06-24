@@ -9,6 +9,6 @@ class CounterController extends Controller
 {
     public function user_count()
     {
-        return User::count();
+        return User::count() - 1;
     }
 }
