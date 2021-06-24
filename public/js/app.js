@@ -3100,7 +3100,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         if (document.getElementById('box_description')) {
-          document.getElementById('box_description').innerHTML = this.selected_box.description;
+          document.getElementById('box_description').innerHTML = this.selected_box.descriptionmanager;
         }
 
         this.tabSelect('tab_' + this.categories[0].slug);
@@ -59347,7 +59347,7 @@ var render = function() {
                               id: box.id,
                               title: box.title,
                               price: box.price,
-                              description: box.description
+                              descriptionmanager: box.descriptionmanager
                             }
                           }
                         },

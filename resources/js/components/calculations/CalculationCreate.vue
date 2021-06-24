@@ -68,7 +68,7 @@
                     <select v-model="selected_box" class="form-select form-select-lg mb-3">
                         <option value selected>&nbsp;</option>
                         <template v-for="box in boxes">
-                            <option v-bind:value="{ id: box.id, title: box.title, price: box.price, description: box.description }">{{ box.title }} - {{ box.price }}₽</option>
+                            <option v-bind:value="{ id: box.id, title: box.title, price: box.price, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ box.price }}₽</option>
                         </template>
                     </select>
                     <button @click="tabSelect('tab_type')" class="btn btn-outline-primary">Назад</button>
@@ -177,7 +177,7 @@
                         document.getElementById('box_price').innerHTML = this.selected_box.price + ' ₽'
                     }
                     if(document.getElementById('box_description')) {
-                        document.getElementById('box_description').innerHTML = this.selected_box.description
+                        document.getElementById('box_description').innerHTML = this.selected_box.descriptionmanager
                     }
 
                     this.tabSelect('tab_' + this.categories[0].slug)
