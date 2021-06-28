@@ -13,8 +13,8 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Клиент</th>
+                            <th scope="col">Тип</th>
                             <th scope="col">ИНН</th>
                             <th scope="col">Телефон</th>
                             <th scope="col">E-mail</th>
@@ -22,8 +22,15 @@
                     </thead>
                     <tbody>
                         <tr v-for="client in clients" :key="client.id">
-                            <td class="align-middle">{{ client.id }}</td>
                             <td class="align-middle">{{ client.name }}</td>
+                            <td class="align-middle">
+                                <template v-if="client.type === 'partner'">
+                                    Партнер
+                                </template>
+                                <template v-if="client.type === 'endclient'">
+                                    Конечник
+                                </template>
+                            </td>
                             <td class="align-middle">{{ client.inn }}</td>
                             <td class="align-middle">{{ client.phone }}</td>
                             <td class="align-middle">{{ client.email }}</td>
