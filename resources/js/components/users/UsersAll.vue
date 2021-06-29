@@ -13,7 +13,6 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Имя</th>
                             <th scope="col">E-mail</th>
                             <th scope="col">&nbsp;</th>
@@ -22,7 +21,6 @@
                     <tbody>
                         <tr v-for="user in users" :key="user.id">
                             <template v-if="user.id !== 9999">
-                                <td class="align-middle">{{ user.id }}</td>
                                 <td class="align-middle">{{ user.name }}</td>
                                 <td class="align-middle">{{ user.email }}</td>
                                 <td class="align-middle text-end">

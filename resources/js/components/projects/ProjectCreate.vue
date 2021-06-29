@@ -16,7 +16,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label id="clients_label">Конечник</label>
+                            <label id="clients_label">ИНН Конечника</label>
                             <input v-model="clients" id="clients_input" type="text" class="form-control mb-3">
                         </div>
 

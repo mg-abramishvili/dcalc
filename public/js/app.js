@@ -4699,8 +4699,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5546,8 +5544,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5961,8 +5957,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
 //
 //
 //
@@ -62419,10 +62413,6 @@ var render = function() {
                 _vm._l(_vm.elements, function(element) {
                   return _c("tr", { key: element.id }, [
                     _c("td", { staticClass: "align-middle" }, [
-                      _vm._v(_vm._s(element.id))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "align-middle" }, [
                       _vm._v(_vm._s(element.title))
                     ]),
                     _vm._v(" "),
@@ -62556,8 +62546,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
-        _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Наименование")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-end", attrs: { scope: "col" } }, [
@@ -63296,7 +63284,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { id: "clients_label" } }, [
-                _vm._v("Конечник")
+                _vm._v("ИНН Конечника")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -64171,10 +64159,6 @@ var render = function() {
                 },
                 [
                   _c("td", { staticClass: "align-middle" }, [
-                    _vm._v(_vm._s(project.id))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "align-middle" }, [
                     _vm._v(_vm._s(project.name))
                   ]),
                   _vm._v(" "),
@@ -64231,8 +64215,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
-        _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Название проекта")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Ответственный")])
@@ -64760,10 +64742,6 @@ var render = function() {
                   user.id !== 9999
                     ? [
                         _c("td", { staticClass: "align-middle" }, [
-                          _vm._v(_vm._s(user.id))
-                        ]),
-                        _vm._v(" "),
-                        _c("td", { staticClass: "align-middle" }, [
                           _vm._v(_vm._s(user.name))
                         ]),
                         _vm._v(" "),
@@ -64819,8 +64797,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
-        _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Имя")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("E-mail")]),
