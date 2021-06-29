@@ -18,6 +18,11 @@ class ProjectController extends Controller
         return Project::with('calculations.boxes', 'calculations.elements.categories', 'offers.calculations.elements', 'users')->find($id);
     }
 
+    public function projects_search($search, Request $request)
+    {
+        return Project::where('name', 'LIKE', "%$search%")->get();
+    }
+
     public function projects_store(Request $request)
     {
         $data = request()->all();

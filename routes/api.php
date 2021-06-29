@@ -16,6 +16,7 @@ Route::post('/user/{id}/edit','App\Http\Controllers\UserController@user_edit')->
 Route::get('/projects','App\Http\Controllers\ProjectController@projects');
 Route::get('/project/{id}','App\Http\Controllers\ProjectController@project_item');
 Route::post('/projects','App\Http\Controllers\ProjectController@projects_store');
+Route::get('/projects/search/{search}','App\Http\Controllers\ProjectController@projects_search');
 
 // Конечники
 Route::get('/clients','App\Http\Controllers\ClientController@clients');
