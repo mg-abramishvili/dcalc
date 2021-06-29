@@ -2,7 +2,7 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0">Новый конечник</h1>
+                <h1 class="h3 m-0">Новый партнер</h1>
             </div>
         </div>
 
@@ -51,10 +51,10 @@
         methods: {
             saveProject() {
                 axios
-                .post('/api/clients', { name: this.name, inn: this.inn, phone: this.phone, email: this.email })
+                .post('/api/partners', { name: this.name, inn: this.inn, phone: this.phone, email: this.email })
                 .then(response => (
-                    this.$parent.counterClients(),
-                    this.$router.push({path: '/clients'}) 
+                    this.$parent.counterPartners(),
+                    this.$router.push({path: '/partners'}) 
                 ));
             },
         },

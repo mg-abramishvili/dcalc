@@ -17,7 +17,6 @@ class ClientController extends Controller
         $data = request()->all();
         $client = new Client();
         $client->name = $data['name'];
-        $client->type = $data['type'];
         $client->inn = $data['inn'];
         $client->phone = $data['phone'];
         $client->email = $data['email'];

@@ -10,6 +10,9 @@ import ProjectItem from './components/projects/ProjectItem.vue';
 import Clients from './components/clients/ClientsAll.vue';
 import ClientCreate from './components/clients/ClientCreate.vue';
 
+import Partners from './components/partners/PartnersAll.vue';
+import PartnerCreate from './components/partners/PartnerCreate.vue';
+
 import Elements from './components/elements/ElementsAll.vue';
 import ElementsByCategory from './components/elements/ElementsByCategory.vue';
 import ElementCreate from './components/elements/ElementCreate.vue';
@@ -81,6 +84,16 @@ export const routes = [
         path: '/clients/create',
         name: 'ClientCreate',
         component: ClientCreate
+    },
+    {
+        path: '/partners',
+        name: 'Partners',
+        component: Partners
+    },
+    {
+        path: '/partners/create',
+        name: 'PartnerCreate',
+        component: PartnerCreate
     },
     {
         path: '/elements',

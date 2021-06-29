@@ -2,10 +2,10 @@
     <div>
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
-                <h1 class="h3 m-0">Конечники</h1>
+                <h1 class="h3 m-0">Партнеры</h1>
             </div>
             <div class="col-12 col-lg-6 text-end">
-                <router-link :to="{name: 'ClientCreate'}" class="btn btn-primary">Добавить</router-link>
+                <router-link :to="{name: 'PartnerCreate'}" class="btn btn-primary">Добавить</router-link>
             </div>
         </div>
         <div class="card">
@@ -20,11 +20,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="client in clients" :key="client.id">
-                            <td class="align-middle">{{ client.name }}</td>
-                            <td class="align-middle">{{ client.inn }}</td>
-                            <td class="align-middle">{{ client.phone }}</td>
-                            <td class="align-middle">{{ client.email }}</td>
+                        <tr v-for="partner in partners" :key="partner.id">
+                            <td class="align-middle">{{ partner.name }}</td>
+                            <td class="align-middle">{{ partner.inn }}</td>
+                            <td class="align-middle">{{ partner.phone }}</td>
+                            <td class="align-middle">{{ partner.email }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -37,14 +37,14 @@
     export default {
         data() {
             return {
-                clients: []
+                partners: []
             }
         },
         created() {
             axios
-                .get('/api/clients')
+                .get('/api/partners')
                 .then(response => (
-                    this.clients = response.data
+                    this.partners = response.data
                 ));
         },
         components: {

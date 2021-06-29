@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Client;
 use App\Models\Box;
 use App\Models\Element;
+use App\Models\Partner;
 use Illuminate\Http\Request;
 
 class CounterController extends Controller
@@ -24,6 +25,11 @@ class CounterController extends Controller
     public function client_count()
     {
         return Client::count();
+    }
+
+    public function partner_count()
+    {
+        return Partner::count();
     }
 
     public function element_box_count()

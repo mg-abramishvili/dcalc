@@ -17,9 +17,13 @@ Route::get('/projects','App\Http\Controllers\ProjectController@projects');
 Route::get('/project/{id}','App\Http\Controllers\ProjectController@project_item');
 Route::post('/projects','App\Http\Controllers\ProjectController@projects_store');
 
-// Клиенты
+// Конечники
 Route::get('/clients','App\Http\Controllers\ClientController@clients');
 Route::post('/clients','App\Http\Controllers\ClientController@clients_store');
+
+// Партнеры
+Route::get('/partners','App\Http\Controllers\PartnerController@partners');
+Route::post('/partners','App\Http\Controllers\PartnerController@partners_store');
 
 // Элементы
 Route::get('/categories','App\Http\Controllers\ElementController@categories');
@@ -74,4 +78,5 @@ Route::get('/offers','App\Http\Controllers\OfferController@index');
 Route::get('/counter_users','App\Http\Controllers\CounterController@user_count');
 Route::get('/counter_projects','App\Http\Controllers\CounterController@project_count');
 Route::get('/counter_clients','App\Http\Controllers\CounterController@client_count');
+Route::get('/counter_partners','App\Http\Controllers\CounterController@partner_count');
 Route::get('/counter_elements_boxes','App\Http\Controllers\CounterController@element_box_count');

@@ -103,6 +103,7 @@
 				counter_users: '',
 				counter_projects: '',
 				counter_clients: '',
+				counter_partners: '',
 				counter_elements_boxes: '',
             }
         },
@@ -111,6 +112,7 @@
 			this.counterUsers()
 			this.counterProjects()
 			this.counterClients()
+			this.counterPartners()
 			this.counterElementsBoxes()
         },
 		methods: {
@@ -146,6 +148,11 @@
 			counterClients() {
 				axios.get('/api/counter_clients').then(response => {
 					this.counter_clients = response.data
+                });
+			},
+			counterPartners() {
+				axios.get('/api/counter_partners').then(response => {
+					this.counter_partners = response.data
                 });
 			},
 			counterElementsBoxes() {

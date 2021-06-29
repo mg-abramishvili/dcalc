@@ -32,4 +32,14 @@ class Project extends Model
     {
         return $this->belongsToMany('App\Models\User');
     }
+
+    public function clients()
+    {
+        return $this->belongsToMany('App\Models\Client');
+    }
+
+    public function partners()
+    {
+        return $this->belongsToMany('App\Models\Client');
+    }
 }
