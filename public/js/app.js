@@ -60040,10 +60040,18 @@ var render = function() {
                 attrs: { id: "tab_" + category.slug, role: "tabpanel" }
               },
               [
+                _c("label", { staticClass: "mb-2" }, [
+                  _c("strong", [_vm._v(_vm._s(category.title))])
+                ]),
+                _vm._v(" "),
                 _vm.elements_loader
                   ? _c(
                       "div",
-                      { staticClass: "spinner-border text-primary mt-4" },
+                      {
+                        staticClass:
+                          "spinner-border spinner-border-sm text-primary me-2",
+                        attrs: { role: "status" }
+                      },
                       [
                         _c("span", { staticClass: "sr-only" }, [
                           _vm._v("Загрузка...")
@@ -60051,10 +60059,6 @@ var render = function() {
                       ]
                     )
                   : _vm._e(),
-                _vm._v(" "),
-                _c("label", { staticClass: "mb-2" }, [
-                  _c("strong", [_vm._v(_vm._s(category.title))])
-                ]),
                 _vm._v(" "),
                 _c(
                   "select",
