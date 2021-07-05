@@ -43,7 +43,7 @@
                     <label id="boxes_label">Совместимость</label>
                     <button @click="selectAllCat()" class="btn btn-sm">выбрать все</button>
                 </div>
-                <select v-model="selected_boxes" id="boxes_input" class="form-control mb-3" multiple>
+                <select v-model="selected_boxes" id="boxes_input" class="form-control mb-3" style="height: 300px;" multiple>
                     <template v-for="box in boxes">
                         <option :value="box.id">{{ box.title }}</option>
                     </template>
@@ -135,7 +135,7 @@
                 })
                 .then(response => (
                     this.$parent.counterElementsBoxes(),
-                    this.$router.push({path: '/elements'}) 
+                    this.$router.push({path: `/category/${this.categories_selected}/elements/`}) 
                 ))
                 .catch((error) => {
                     if(error.response) {

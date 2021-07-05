@@ -123,25 +123,24 @@
                     </div>
                 </div>
 
-                <div v-if="pek_price > 0" class="row align-items-center my-0 mb-1">
-                    <div class="col-10 text-end" style="color: #888;">
-                        <p v-if="pek_response" class="m-0">
-                            Доставка
-                            <template v-if="pek_response.auto[1]">
-                                <small style="display:block; line-height: 1; font-size: 11px;">{{ pek_response.auto[1] }} ({{ pek_response.periods_days }} дней)</small>
-                                <small style="display:block; line-height: 1; font-size: 11px;">{{ selected_boxes_length }}м &times; {{ selected_boxes_width }}м &times; {{ selected_boxes_height }}м, {{ (selected_boxes_width * selected_boxes_height * selected_boxes_length).toFixed(2) }}м³, {{ selected_boxes_weight }}кг</small>
-                            </template>
-                        </p>
-                    </div>
-                    <div class="col-2 text-end">
-                        <h4 class="text-primary m-0">{{ pek_price }} ₽</h4>
-                    </div>
-                </div>
-
                 <div v-if="price_subtotal > 0" class="total">
                     <div class="row align-items-center m-0 p-0">
-                        <div class="col-6">Итого:</div>
+                        <div class="col-6">Подитог:</div>
                         <div class="col-6 text-end text-primary">{{ parseInt(price_subtotal) }} ₽</div>
+                    </div>
+                    <div v-if="delivery_block && pek_price > 0" class="row align-items-center m-0 p-0">
+                        <div class="col-6">
+                            Доставка:
+                            <template v-if="pek_response.auto[1]">
+                                <small style="display:block; line-height: 1; font-size: 11px;">{{ pek_response.auto[1] }} ({{ pek_response.periods_days }} дней)</small>
+                                <small style="display:block; line-height: 1; font-size: 11px;">{{ selected_box_length }}м &times; {{ selected_box_width }}м &times; {{ selected_box_height }}м, {{ (selected_box_width * selected_box_height * selected_box_length).toFixed(2) }}м³, {{ selected_box_weight }}кг</small>
+                            </template>
+                        </div>
+                        <div class="col-6 text-end text-primary">{{ parseInt(pek_price) }} ₽</div>
+                    </div>
+                    <div class="row align-items-center m-0 p-0">
+                        <div class="col-6">Итого:</div>
+                        <div class="col-6 text-end text-primary">{{ parseInt(price_subtotal) + parseInt(pek_price) }} ₽</div>
                     </div>
                     <button @click="checkBeforeSave()" v-if="save_button" class="btn btn-lg btn-primary mt-4">Создать проект</button>
                 </div>
@@ -255,13 +254,15 @@
                     this.tabSelect('tab_' + this.categories[0].slug)
 
                     this.overlay = true
+                    this.delivery_block = false
 
                     this.price_subtotal = this.selected_box.price
+                    this.pek_price = 0
 
-                    this.selected_box_width = this.selected_box.width
-                    this.selected_box_length = this.selected_box.length
-                    this.selected_box_height = this.selected_box.height
-                    this.selected_box_weight = this.selected_box.weight
+                    this.selected_box_width = parseInt(this.selected_box.width) / 1000
+                    this.selected_box_length = parseInt(this.selected_box.length) / 1000
+                    this.selected_box_height = parseInt(this.selected_box.height) / 1000
+                    this.selected_box_weight = parseInt(this.selected_box.weight)
 
                     this.categories.forEach(function(category) {
                         if(document.getElementById(category.slug + '_title')) {

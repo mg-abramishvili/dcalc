@@ -3117,7 +3117,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -3210,11 +3209,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
         this.tabSelect('tab_' + this.categories[0].slug);
         this.overlay = true;
+        this.delivery_block = false;
         this.price_subtotal = this.selected_box.price;
-        this.selected_box_width = this.selected_box.width;
-        this.selected_box_length = this.selected_box.length;
-        this.selected_box_height = this.selected_box.height;
-        this.selected_box_weight = this.selected_box.weight;
+        this.pek_price = 0;
+        this.selected_box_width = parseInt(this.selected_box.width) / 1000;
+        this.selected_box_length = parseInt(this.selected_box.length) / 1000;
+        this.selected_box_height = parseInt(this.selected_box.height) / 1000;
+        this.selected_box_weight = parseInt(this.selected_box.weight);
         this.categories.forEach(function (category) {
           if (document.getElementById(category.slug + '_title')) {
             document.getElementById(category.slug + '_title').innerHTML = '';
@@ -4382,7 +4383,7 @@ __webpack_require__.r(__webpack_exports__);
         boxes: this.selected_boxes
       }).then(function (response) {
         return _this3.$parent.counterElementsBoxes(), _this3.$router.push({
-          path: '/elements'
+          path: "/category/".concat(_this3.categories_selected, "/elements/")
         });
       })["catch"](function (error) {
         if (error.response) {
@@ -6175,8 +6176,8 @@ window.moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.
 vue__WEBPACK_IMPORTED_MODULE_1__.default.prototype.$moment = (moment__WEBPACK_IMPORTED_MODULE_0___default());
 moment__WEBPACK_IMPORTED_MODULE_0___default().locale('ru');
 
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.axios.defaults.withCredentials = true;
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"); //window.axios.defaults.withCredentials = true;
+
 
 
 
@@ -60209,22 +60210,27 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _vm.pek_price > 0
-            ? _c("div", { staticClass: "row align-items-center my-0 mb-1" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "col-10 text-end",
-                    staticStyle: { color: "#888" }
-                  },
-                  [
-                    _vm.pek_response
-                      ? _c(
-                          "p",
-                          { staticClass: "m-0" },
+          _vm.price_subtotal > 0
+            ? _c("div", { staticClass: "total" }, [
+                _c("div", { staticClass: "row align-items-center m-0 p-0" }, [
+                  _c("div", { staticClass: "col-6" }, [_vm._v("Подитог:")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-6 text-end text-primary" }, [
+                    _vm._v(_vm._s(parseInt(_vm.price_subtotal)) + " ₽")
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm.delivery_block && _vm.pek_price > 0
+                  ? _c(
+                      "div",
+                      { staticClass: "row align-items-center m-0 p-0" },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "col-6" },
                           [
                             _vm._v(
-                              "\n                        Доставка\n                        "
+                              "\n                        Доставка:\n                        "
                             ),
                             _vm.pek_response.auto[1]
                               ? [
@@ -60260,21 +60266,21 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        _vm._s(_vm.selected_boxes_length) +
+                                        _vm._s(_vm.selected_box_length) +
                                           "м × " +
-                                          _vm._s(_vm.selected_boxes_width) +
+                                          _vm._s(_vm.selected_box_width) +
                                           "м × " +
-                                          _vm._s(_vm.selected_boxes_height) +
+                                          _vm._s(_vm.selected_box_height) +
                                           "м, " +
                                           _vm._s(
                                             (
-                                              _vm.selected_boxes_width *
-                                              _vm.selected_boxes_height *
-                                              _vm.selected_boxes_length
+                                              _vm.selected_box_width *
+                                              _vm.selected_box_height *
+                                              _vm.selected_box_length
                                             ).toFixed(2)
                                           ) +
                                           "м³, " +
-                                          _vm._s(_vm.selected_boxes_weight) +
+                                          _vm._s(_vm.selected_box_weight) +
                                           "кг"
                                       )
                                     ]
@@ -60283,26 +60289,26 @@ var render = function() {
                               : _vm._e()
                           ],
                           2
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "col-6 text-end text-primary" },
+                          [_vm._v(_vm._s(parseInt(_vm.pek_price)) + " ₽")]
                         )
-                      : _vm._e()
-                  ]
-                ),
+                      ]
+                    )
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-2 text-end" }, [
-                  _c("h4", { staticClass: "text-primary m-0" }, [
-                    _vm._v(_vm._s(_vm.pek_price) + " ₽")
-                  ])
-                ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.price_subtotal > 0
-            ? _c("div", { staticClass: "total" }, [
                 _c("div", { staticClass: "row align-items-center m-0 p-0" }, [
                   _c("div", { staticClass: "col-6" }, [_vm._v("Итого:")]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-6 text-end text-primary" }, [
-                    _vm._v(_vm._s(parseInt(_vm.price_subtotal)) + " ₽")
+                    _vm._v(
+                      _vm._s(
+                        parseInt(_vm.price_subtotal) + parseInt(_vm.pek_price)
+                      ) + " ₽"
+                    )
                   ])
                 ]),
                 _vm._v(" "),
@@ -61941,6 +61947,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control mb-3",
+            staticStyle: { height: "300px" },
             attrs: { id: "boxes_input", multiple: "" },
             on: {
               change: function($event) {
@@ -62343,6 +62350,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control mb-3",
+            staticStyle: { height: "300px" },
             attrs: { id: "boxes_input", multiple: "" },
             on: {
               change: function($event) {
