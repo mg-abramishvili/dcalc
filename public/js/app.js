@@ -5596,12 +5596,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       project: {},
       offer: {},
-      moment: moment
+      moment: moment,
+      chat_messages: {},
+      chat_message: ''
     };
   },
   created: function created() {
@@ -5609,6 +5647,9 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get("/api/project/".concat(this.$route.params.id)).then(function (response) {
       return _this.project = response.data;
+    });
+    axios.get("/api/messages/".concat(this.$route.params.id)).then(function (response) {
+      return _this.chat_messages = response.data;
     });
   },
   methods: {
@@ -5629,6 +5670,23 @@ __webpack_require__.r(__webpack_exports__);
           id: id
         }
       });
+    },
+    saveMessage: function saveMessage() {
+      var _this2 = this;
+
+      if (this.chat_message && this.chat_message.length > 0) {
+        axios.post('/api/messages', {
+          user_id: this.$parent.user.id,
+          project_id: this.project.id,
+          message: this.chat_message
+        }).then(function (response) {
+          axios.get("/api/messages/".concat(_this2.$route.params.id)).then(function (response) {
+            return _this2.chat_messages = response.data, _this2.chat_message = '';
+          });
+        });
+      } else {
+        alert('Введите сообщение');
+      }
     }
   },
   watch: {},
@@ -64168,109 +64226,232 @@ var render = function() {
             attrs: { id: "tab_general", role: "tabpanel" }
           },
           [
-            _c("div", { staticClass: "progress mb-3" }, [
-              _vm.project.status === "new"
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "progress-bar bg-primary",
-                      staticStyle: { width: "25%" },
-                      attrs: { role: "progressbar" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Статус: Новый\n                    "
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-12 col-md-6" }, [
+                _c("div", { staticClass: "progress mb-3" }, [
+                  _vm.project.status === "new"
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "progress-bar bg-primary",
+                          staticStyle: { width: "25%" },
+                          attrs: { role: "progressbar" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Статус: Новый\n                            "
+                          )
+                        ]
                       )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.project.status === "in_works"
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "progress-bar bg-primary",
-                      staticStyle: { width: "50%" },
-                      attrs: { role: "progressbar" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Статус: В работе\n                    "
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.project.status === "in_works"
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "progress-bar bg-primary",
+                          staticStyle: { width: "50%" },
+                          attrs: { role: "progressbar" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Статус: В работе\n                            "
+                          )
+                        ]
                       )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.project.status === "warehouse"
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "progress-bar bg-primary",
-                      staticStyle: { width: "75%" },
-                      attrs: { role: "progressbar" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Статус: Склад\n                    "
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.project.status === "warehouse"
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "progress-bar bg-primary",
+                          staticStyle: { width: "75%" },
+                          attrs: { role: "progressbar" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Статус: Склад\n                            "
+                          )
+                        ]
                       )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.project.status === "waiting_for_review"
-                ? _c(
-                    "div",
-                    {
-                      staticClass: "progress-bar bg-primary",
-                      staticStyle: { width: "90%" },
-                      attrs: { role: "progressbar" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Статус: Ожидает отзыва клиента\n                    "
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.project.status === "waiting_for_review"
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "progress-bar bg-primary",
+                          staticStyle: { width: "90%" },
+                          attrs: { role: "progressbar" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                Статус: Ожидает отзыва клиента\n                            "
+                          )
+                        ]
                       )
-                    ]
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row align-items-center mb-4" }, [
+                  _c("div", { staticClass: "col-6" }, [_vm._v("Срок сдачи")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-6 text-end" }, [
+                    _vm._v(
+                      _vm._s(
+                        _vm.moment(_vm.project.deadline).format("D MMMM YYYY")
+                      )
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row align-items-center mb-4" }, [
+                  _c("div", { staticClass: "col-6" }, [
+                    _vm._v("Ответственный")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-6 text-end" },
+                    [
+                      _vm._l(_vm.project.users, function(user) {
+                        return [
+                          _c("img", {
+                            staticClass: "rounded-circle me-2",
+                            attrs: {
+                              src: "/img/profile.png",
+                              width: "32",
+                              height: "32"
+                            }
+                          }),
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(user.name) +
+                              "\n                                "
+                          )
+                        ]
+                      })
+                    ],
+                    2
                   )
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row align-items-center mb-4" }, [
-              _c("div", { staticClass: "col-6" }, [_vm._v("Срок сдачи")]),
+                ])
+              ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-6 text-end" }, [
-                _vm._v(
-                  _vm._s(_vm.moment(_vm.project.deadline).format("D MMMM YYYY"))
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row align-items-center mb-4" }, [
-              _c("div", { staticClass: "col-6" }, [_vm._v("Ответственный")]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "col-6 text-end" },
-                [
-                  _vm._l(_vm.project.users, function(user) {
-                    return [
-                      _c("img", {
-                        staticClass: "rounded-circle me-2",
-                        attrs: {
-                          src: "/img/profile.png",
-                          width: "32",
-                          height: "32"
+              _c("div", { staticClass: "col-12 col-md-6" }, [
+                _c(
+                  "div",
+                  { staticClass: "project_chat" },
+                  [
+                    _vm.chat_messages && _vm.chat_messages.length
+                      ? _vm._l(_vm.chat_messages, function(cm) {
+                          return _c(
+                            "div",
+                            { staticClass: "chat-message-left pb-4" },
+                            [
+                              _vm._m(0, true),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "flex-shrink-1 bg-light rounded py-2 px-3 ms-3",
+                                  staticStyle: { width: "100%" }
+                                },
+                                [
+                                  _c(
+                                    "div",
+                                    { staticClass: "fw-bold small mb-1" },
+                                    [_vm._v(_vm._s(cm.user.name))]
+                                  ),
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(cm.message) +
+                                      "\n                                        "
+                                  ),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "text-muted small text-nowrap mt-2",
+                                      staticStyle: {
+                                        "font-size": "10px",
+                                        color: "rgb(169 169 169) !important"
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm
+                                            .moment(cm.created_at)
+                                            .format("DD.MM.YYYY H:mm")
+                                        )
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        })
+                      : [
+                          _c(
+                            "p",
+                            {
+                              staticClass: "m-0 text-center",
+                              staticStyle: { color: "#ccc" }
+                            },
+                            [_vm._v("Сообщений нет")]
+                          )
+                        ]
+                  ],
+                  2
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "project_chat_input" }, [
+                  _c("div", { staticClass: "row align-items-center mt-3" }, [
+                    _c("div", { staticClass: "col-8" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.chat_message,
+                            expression: "chat_message"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { rows: "2", placeholder: "Сообщение..." },
+                        domProps: { value: _vm.chat_message },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.chat_message = $event.target.value
+                          }
                         }
-                      }),
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(user.name) +
-                          "\n                        "
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-4" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-lg btn-primary",
+                          staticStyle: { width: "100%", height: "100%" },
+                          on: {
+                            click: function($event) {
+                              return _vm.saveMessage()
+                            }
+                          }
+                        },
+                        [_vm._v("Написать")]
                       )
-                    ]
-                  })
-                ],
-                2
-              )
+                    ])
+                  ])
+                ])
+              ])
             ])
           ]
         ),
@@ -64289,7 +64470,7 @@ var render = function() {
                   "table table-striped table-hover dataTable no-footer dtr-inline"
               },
               [
-                _vm._m(0),
+                _vm._m(1),
                 _vm._v(" "),
                 _c(
                   "tbody",
@@ -64428,7 +64609,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("table", { staticClass: "table table-sm mb-3" }, [
-                  _vm._m(1, true),
+                  _vm._m(2, true),
                   _vm._v(" "),
                   _c(
                     "tbody",
@@ -64483,6 +64664,17 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("img", {
+        staticClass: "rounded-circle me-1",
+        attrs: { src: "/img/profile.png", width: "40", height: "40" }
+      })
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

@@ -18,6 +18,10 @@ Route::get('/project/{id}','App\Http\Controllers\ProjectController@project_item'
 Route::post('/projects','App\Http\Controllers\ProjectController@projects_store');
 Route::get('/projects/search/{search}','App\Http\Controllers\ProjectController@projects_search');
 
+// Сообщения в проектах
+Route::post('/messages','App\Http\Controllers\MessageController@messages_store');
+Route::get('/messages/{project_id}','App\Http\Controllers\MessageController@messages_index');
+
 // Конечники
 Route::get('/clients','App\Http\Controllers\ClientController@clients');
 Route::post('/clients','App\Http\Controllers\ClientController@clients_store');

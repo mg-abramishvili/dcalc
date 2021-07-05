@@ -14,34 +14,69 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_general" role="tabpanel">
-                    <div class="progress mb-3">
-                        <div v-if="project.status === 'new'" class="progress-bar bg-primary" role="progressbar" style="width: 25%">
-                            Статус: Новый
-                        </div>
-                        <div v-if="project.status === 'in_works'" class="progress-bar bg-primary" role="progressbar" style="width: 50%">
-                            Статус: В работе
-                        </div>
-                        <div v-if="project.status === 'warehouse'" class="progress-bar bg-primary" role="progressbar" style="width: 75%">
-                            Статус: Склад
-                        </div>
-                        <div v-if="project.status === 'waiting_for_review'" class="progress-bar bg-primary" role="progressbar" style="width: 90%">
-                            Статус: Ожидает отзыва клиента
-                        </div>
-                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="progress mb-3">
+                                <div v-if="project.status === 'new'" class="progress-bar bg-primary" role="progressbar" style="width: 25%">
+                                    Статус: Новый
+                                </div>
+                                <div v-if="project.status === 'in_works'" class="progress-bar bg-primary" role="progressbar" style="width: 50%">
+                                    Статус: В работе
+                                </div>
+                                <div v-if="project.status === 'warehouse'" class="progress-bar bg-primary" role="progressbar" style="width: 75%">
+                                    Статус: Склад
+                                </div>
+                                <div v-if="project.status === 'waiting_for_review'" class="progress-bar bg-primary" role="progressbar" style="width: 90%">
+                                    Статус: Ожидает отзыва клиента
+                                </div>
+                            </div>
 
-                    <div class="row align-items-center mb-4">
-                        <div class="col-6">Срок сдачи</div>
-                        <div class="col-6 text-end">{{moment(project.deadline).format('D MMMM YYYY')}}</div>
-                    </div>
-                     <div class="row align-items-center mb-4">
-                        <div class="col-6">Ответственный</div>
-                        <div class="col-6 text-end">
-                            <template v-for="user in project.users">
-                                <img src="/img/profile.png" width="32" height="32" class="rounded-circle me-2">
-                                {{ user.name }}
-                            </template>
+                            <div class="row align-items-center mb-4">
+                                <div class="col-6">Срок сдачи</div>
+                                <div class="col-6 text-end">{{moment(project.deadline).format('D MMMM YYYY')}}</div>
+                            </div>
+                            <div class="row align-items-center mb-4">
+                                <div class="col-6">Ответственный</div>
+                                <div class="col-6 text-end">
+                                    <template v-for="user in project.users">
+                                        <img src="/img/profile.png" width="32" height="32" class="rounded-circle me-2">
+                                        {{ user.name }}
+                                    </template>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-12 col-md-6">
+                            <div class="project_chat">
+                                <template v-if="chat_messages && chat_messages.length">
+                                    <div v-for="cm in chat_messages" class="chat-message-left pb-4">
+                                        <div>
+                                            <img src="/img/profile.png" class="rounded-circle me-1" width="40" height="40">
+                                        </div>
+                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ms-3" style="width: 100%;">
+                                            <div class="fw-bold small mb-1">{{ cm.user.name }}</div>
+                                            {{ cm.message }}
+                                            <div class="text-muted small text-nowrap mt-2" style="font-size: 10px; color: rgb(169 169 169) !important">{{ moment(cm.created_at).format('DD.MM.YYYY H:mm') }}</div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <p class="m-0 text-center" style="color: #ccc;">Сообщений нет</p>
+                                </template>
+                            </div>
+                            <div class="project_chat_input">
+                                <div class="row align-items-center mt-3">
+                                    <div class="col-8">
+                                        <textarea v-model="chat_message" class="form-control" rows="2" placeholder="Сообщение..."></textarea>
+                                    </div>
+                                    <div class="col-4">
+                                        <button @click="saveMessage()" class="btn btn-lg btn-primary" style="width: 100%; height: 100%;">Написать</button>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>                    
                     
                 </div>
                 <div class="tab-pane" id="tab_calculations" role="tabpanel">
@@ -133,6 +168,7 @@
             </div>
         </div>
 
+
     </div>
 </template>
 
@@ -143,6 +179,9 @@
                 project: {},
                 offer: {},
                 moment: moment,
+
+                chat_messages: {},
+                chat_message: '',
             }
         },
         created() {
@@ -150,6 +189,11 @@
                 .get(`/api/project/${this.$route.params.id}`)
                 .then(response => (
                     this.project = response.data
+                ));
+            axios
+                .get(`/api/messages/${this.$route.params.id}`)
+                .then(response => (
+                    this.chat_messages = response.data
                 ));
         },
         methods: {
@@ -166,7 +210,23 @@
             },
             goToCalculation(id) {
                 this.$router.push({ name: 'CalculationItem', params: { id: id } });
-            }
+            },
+            saveMessage() {
+                if(this.chat_message && this.chat_message.length > 0) {
+                    axios
+                        .post('/api/messages', { user_id: this.$parent.user.id, project_id: this.project.id, message: this.chat_message })
+                        .then((response => {
+                            axios
+                                .get(`/api/messages/${this.$route.params.id}`)
+                                .then(response => (
+                                    this.chat_messages = response.data,
+                                    this.chat_message = ''
+                                ));
+                        }));
+                } else {
+                    alert('Введите сообщение')
+                }
+            },
         },
         watch: {
         },
