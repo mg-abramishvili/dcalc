@@ -1931,6 +1931,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -1943,6 +1948,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       user: {},
       authenticated: false,
+      login_error_message: '',
       counter_users: '',
       counter_projects: '',
       counter_clients: '',
@@ -1965,7 +1971,11 @@ __webpack_require__.r(__webpack_exports__);
       // send axios request to the login route
       axios.get('/sanctum/csrf-cookie').then(function (response) {
         axios.post('/api/login', _this.formData).then(function (response) {
-          _this.checkMe();
+          if (response.data === 'bad_login') {
+            _this.login_error_message = 'Неверный E-mail или пароль';
+          } else {
+            _this.checkMe();
+          }
         });
       });
     },
@@ -1973,10 +1983,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.post('/api/me').then(function (response) {
-        console.log(response);
         _this2.user = response.data;
 
-        if (_this2.user.name.length) {
+        if (_this2.user.name && _this2.user.name.length) {
           _this2.authenticated = true;
         } else {
           _this2.authenticated = false;
@@ -57476,6 +57485,32 @@ var render = function() {
                                   }
                                 },
                                 [
+                                  _vm.login_error_message.length
+                                    ? _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "alert alert-danger alert-dismissible",
+                                          attrs: { role: "alert" }
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "alert-message" },
+                                            [
+                                              _vm._v(
+                                                "\n\t\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                                  _vm._s(
+                                                    _vm.login_error_message
+                                                  ) +
+                                                  "\n\t\t\t\t\t\t\t\t\t\t\t\t"
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
                                   _c("div", { staticClass: "mb-3" }, [
                                     _c("label", { staticClass: "form-label" }, [
                                       _vm._v("E-mail")

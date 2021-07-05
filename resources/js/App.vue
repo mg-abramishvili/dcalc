@@ -15,6 +15,11 @@
 									<div class="card-body">
 										<div class="m-sm-4">
 											<form @submit.prevent="handleLogin">
+												<div v-if="login_error_message.length" class="alert alert-danger alert-dismissible" role="alert">
+													<div class="alert-message">
+														{{ login_error_message }}
+													</div>
+												</div>
 												<div class="mb-3">
 													<label class="form-label">E-mail</label>
 													<input type="email" name="email" class="form-control form-control-lg" v-model="formData.email" placeholder="">
@@ -99,6 +104,7 @@
 
 				user: {},
 				authenticated: false,
+				login_error_message: '',
 
 				counter_users: '',
 				counter_projects: '',
@@ -120,20 +126,23 @@
                 // send axios request to the login route
                 axios.get('/sanctum/csrf-cookie').then(response => {
                     axios.post('/api/login', this.formData).then(response => {
-                        this.checkMe()
-                    });
+						if(response.data === 'bad_login') {
+							this.login_error_message = 'Неверный E-mail или пароль'
+						} else {
+							this.checkMe()
+						}
+                    })
                 });
             },
 			checkMe() {
 				axios.post('/api/me').then(response => {
-					console.log(response)
 					this.user = response.data
-					if(this.user.name.length) {
+					if(this.user.name && this.user.name.length) {
 						this.authenticated = true
 					} else {
 						this.authenticated = false
 					}
-				});
+				})
 			},
 			counterUsers() {
 				axios.get('/api/counter_users').then(response => {
