@@ -68,7 +68,7 @@
                     <select v-model="selected_box" class="form-select form-select-lg mb-3">
                         <option value selected>&nbsp;</option>
                         <template v-for="box in boxes">
-                            <option v-bind:value="{ id: box.id, title: box.title, price: box.price, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ parseInt(box.price) }}₽</option>
+                            <option v-bind:value="{ id: box.id, title: box.title, price: box.price, width: box.width, length: box.length, height: box.height, weight: box.weight, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ parseInt(box.price) }}₽</option>
                         </template>
                     </select>
                     <button @click="tabSelect('tab_type')" class="btn btn-outline-primary">Назад</button>
@@ -95,6 +95,49 @@
                         </div>                        
                     </div>
                 </div>
+
+                <div v-if="delivery_block" class="delivery mt-4" id="delivery">
+                    <div class="alert alert-primary alert-outline">
+                        <div></div>
+                        <div class="alert-message">
+                            <h6 class="alert-heading">Город доставки (ПЭК):</h6>
+                            
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <select class="form-control" v-model="pek_city_selected" @change="onCityChange()">
+                                        <option v-for="pek_city in pek_cities" :value="pek_city">{{ pek_city }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <select class="form-control" v-model="pek_city_sub_selected" @change="calcDelivery()">
+                                        <option v-for="pek_city_sub in pek_cities_sub" :value="pek_city_sub.id">{{ pek_city_sub.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div v-if="pek_loading" class="spinner-border text-primary mt-4">
+                                <span class="sr-only">Загрузка...</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="pek_price > 0" class="row align-items-center my-0 mb-1">
+                    <div class="col-10 text-end" style="color: #888;">
+                        <p v-if="pek_response" class="m-0">
+                            Доставка
+                            <template v-if="pek_response.auto[1]">
+                                <small style="display:block; line-height: 1; font-size: 11px;">{{ pek_response.auto[1] }} ({{ pek_response.periods_days }} дней)</small>
+                                <small style="display:block; line-height: 1; font-size: 11px;">{{ selected_boxes_length }}м &times; {{ selected_boxes_width }}м &times; {{ selected_boxes_height }}м, {{ (selected_boxes_width * selected_boxes_height * selected_boxes_length).toFixed(2) }}м³, {{ selected_boxes_weight }}кг</small>
+                            </template>
+                        </p>
+                    </div>
+                    <div class="col-2 text-end">
+                        <h4 class="text-primary m-0">{{ pek_price }} ₽</h4>
+                    </div>
+                </div>
+
                 <div v-if="price_subtotal > 0" class="total">
                     <div class="row align-items-center m-0 p-0">
                         <div class="col-6">Итого:</div>
@@ -117,6 +160,10 @@
 
                 boxes: {},
                 selected_box: {},
+                selected_box_width: '',
+                selected_box_length: '',
+                selected_box_height: '',
+                selected_box_weight: '',
 
                 categories: {},
                 elements: {},
@@ -125,6 +172,16 @@
 
                 save_button: false,
                 overlay: true,
+
+                delivery_block: false,
+                pek_cities_data: {},
+                pek_cities: {},
+                pek_city_selected: '',
+                pek_cities_sub: {},
+                pek_city_sub_selected: '',
+                pek_response: '',
+                pek_price: 0,
+                pek_loading: false,
             }
         },
         created() {
@@ -143,6 +200,21 @@
                 .then(response => (
                     this.categories = response.data
                 ));
+            axios
+                //.get('http://www.pecom.ru/ru/calc/towns.php')
+                .get('/towns.php')
+                .then((response => {
+                    this.pek_cities_data = response.data
+                    
+                    var data = this.pek_cities_data;
+                    var pek_cities = [];
+
+                    for(var i in data) {
+                        pek_cities.push(i);
+                    }
+
+                    this.pek_cities = pek_cities.sort()
+                }));
         },
         methods: {
             onTypeSelect() {
@@ -186,6 +258,11 @@
 
                     this.price_subtotal = this.selected_box.price
 
+                    this.selected_box_width = this.selected_box.width
+                    this.selected_box_length = this.selected_box.length
+                    this.selected_box_height = this.selected_box.height
+                    this.selected_box_weight = this.selected_box.weight
+
                     this.categories.forEach(function(category) {
                         if(document.getElementById(category.slug + '_title')) {
                             document.getElementById(category.slug + '_title').innerHTML = ''
@@ -226,6 +303,7 @@
                         this.tabSelect('tab_' + this.categories[0+index+1].slug)
                     } else {
                         this.overlay = false
+                        this.delivery_block = true
                         this.save_button = true
                         /*document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
                         el.style.visibility = 'hidden';
@@ -271,6 +349,45 @@
             dopElementsClone(category) {
                 var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true)
                 document.getElementById('tab_' + category.slug).insertBefore(cln, document.getElementById('tab_' + category.slug).lastChild)
+            },
+            onCityChange() {
+                this.pek_response = ''
+                var data = this.pek_cities_data;
+                var pek_cities_sub = [];
+
+                for(var i in data) {
+                    if(i === this.pek_city_selected) {
+                        for (const [key, value] of Object.entries(data[i])) {
+                            pek_cities_sub.push({id: `${key}`, name: `${value}`});
+                        }
+                    }
+                }
+
+                this.pek_cities_sub = pek_cities_sub.sort((a, b) => (a.name > b.name) ? 1 : -1)
+            },
+            calcDelivery() {
+                this.pek_loading = true
+                axios
+                    .get('http://calc.pecom.ru/bitrix/components/pecom/calc/ajax.php', {
+                        params: {
+                            'places[0]': [ `${this.selected_box_width}`, `${this.selected_box_length}`, `${this.selected_box_height}`, `${(this.selected_box_width * this.selected_box_height * this.selected_box_length).toFixed(2)}`, `${this.selected_box_weight}`, 0, 1 ],
+                            'take[town]': '-463',
+                            'deliver[town]': `${this.pek_city_sub_selected}`
+                        }
+                    })
+                    .then(response => (
+                        this.pek_response = response.data,
+                        this.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[1]),
+                        this.pek_loading = false,
+                        console.log(response.data)
+                    ));
+            },
+            checkDelivery() {
+                if(document.getElementsByName('delivery[]')[0] && document.getElementsByName('delivery[]')[0].value === '55') {
+                    document.getElementById('delivery').style.display = 'block'
+                } else if(document.getElementById('delivery')) {
+                    document.getElementById('delivery').style.display = 'none'
+                }
             },
             calc() {
                 this.price_subtotal = 0

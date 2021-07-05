@@ -2953,6 +2953,61 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3070,11 +3125,24 @@ __webpack_require__.r(__webpack_exports__);
       selected_type: {},
       boxes: {},
       selected_box: {},
+      selected_box_width: '',
+      selected_box_length: '',
+      selected_box_height: '',
+      selected_box_weight: '',
       categories: {},
       elements: {},
       price_subtotal: '',
       save_button: false,
-      overlay: true
+      overlay: true,
+      delivery_block: false,
+      pek_cities_data: {},
+      pek_cities: {},
+      pek_city_selected: '',
+      pek_cities_sub: {},
+      pek_city_sub_selected: '',
+      pek_response: '',
+      pek_price: 0,
+      pek_loading: false
     };
   },
   created: function created() {
@@ -3088,6 +3156,18 @@ __webpack_require__.r(__webpack_exports__);
     });
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
+    });
+    axios //.get('http://www.pecom.ru/ru/calc/towns.php')
+    .get('/towns.php').then(function (response) {
+      _this.pek_cities_data = response.data;
+      var data = _this.pek_cities_data;
+      var pek_cities = [];
+
+      for (var i in data) {
+        pek_cities.push(i);
+      }
+
+      _this.pek_cities = pek_cities.sort();
     });
   },
   methods: {
@@ -3131,6 +3211,10 @@ __webpack_require__.r(__webpack_exports__);
         this.tabSelect('tab_' + this.categories[0].slug);
         this.overlay = true;
         this.price_subtotal = this.selected_box.price;
+        this.selected_box_width = this.selected_box.width;
+        this.selected_box_length = this.selected_box.length;
+        this.selected_box_height = this.selected_box.height;
+        this.selected_box_weight = this.selected_box.weight;
         this.categories.forEach(function (category) {
           if (document.getElementById(category.slug + '_title')) {
             document.getElementById(category.slug + '_title').innerHTML = '';
@@ -3174,6 +3258,7 @@ __webpack_require__.r(__webpack_exports__);
           this.tabSelect('tab_' + this.categories[0 + index + 1].slug);
         } else {
           this.overlay = false;
+          this.delivery_block = true;
           this.save_button = true;
           /*document.querySelectorAll('.btn-next').forEach.call(document.querySelectorAll('.btn-next'), function (el) {
           el.style.visibility = 'hidden';
@@ -3222,6 +3307,51 @@ __webpack_require__.r(__webpack_exports__);
       var cln = document.getElementsByName(category.slug + '[]')[0].cloneNode(true);
       document.getElementById('tab_' + category.slug).insertBefore(cln, document.getElementById('tab_' + category.slug).lastChild);
     },
+    onCityChange: function onCityChange() {
+      this.pek_response = '';
+      var data = this.pek_cities_data;
+      var pek_cities_sub = [];
+
+      for (var i in data) {
+        if (i === this.pek_city_selected) {
+          for (var _i = 0, _Object$entries = Object.entries(data[i]); _i < _Object$entries.length; _i++) {
+            var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+                key = _Object$entries$_i[0],
+                value = _Object$entries$_i[1];
+
+            pek_cities_sub.push({
+              id: "".concat(key),
+              name: "".concat(value)
+            });
+          }
+        }
+      }
+
+      this.pek_cities_sub = pek_cities_sub.sort(function (a, b) {
+        return a.name > b.name ? 1 : -1;
+      });
+    },
+    calcDelivery: function calcDelivery() {
+      var _this4 = this;
+
+      this.pek_loading = true;
+      axios.get('http://calc.pecom.ru/bitrix/components/pecom/calc/ajax.php', {
+        params: {
+          'places[0]': ["".concat(this.selected_box_width), "".concat(this.selected_box_length), "".concat(this.selected_box_height), "".concat((this.selected_box_width * this.selected_box_height * this.selected_box_length).toFixed(2)), "".concat(this.selected_box_weight), 0, 1],
+          'take[town]': '-463',
+          'deliver[town]': "".concat(this.pek_city_sub_selected)
+        }
+      }).then(function (response) {
+        return _this4.pek_response = response.data, _this4.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[1]), _this4.pek_loading = false, console.log(response.data);
+      });
+    },
+    checkDelivery: function checkDelivery() {
+      if (document.getElementsByName('delivery[]')[0] && document.getElementsByName('delivery[]')[0].value === '55') {
+        document.getElementById('delivery').style.display = 'block';
+      } else if (document.getElementById('delivery')) {
+        document.getElementById('delivery').style.display = 'none';
+      }
+    },
     calc: function calc() {
       this.price_subtotal = 0;
       var price_subtotal = [];
@@ -3255,7 +3385,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     saveCalculation: function saveCalculation() {
-      var _this4 = this;
+      var _this5 = this;
 
       var megred_select_form_values = [];
       this.categories.forEach(function (category) {
@@ -3275,7 +3405,7 @@ __webpack_require__.r(__webpack_exports__);
         box: this.selected_box.id,
         elements: megred_select_form_values
       }).then(function (response) {
-        return _this4.$router.push({
+        return _this5.$router.push({
           name: 'ProjectCreate',
           params: {
             calculation_id: response.data
@@ -59786,6 +59916,10 @@ var render = function() {
                               id: box.id,
                               title: box.title,
                               price: box.price,
+                              width: box.width,
+                              length: box.length,
+                              height: box.height,
+                              weight: box.weight,
                               descriptionmanager: box.descriptionmanager
                             }
                           }
@@ -59936,6 +60070,231 @@ var render = function() {
               ]
             )
           }),
+          _vm._v(" "),
+          _vm.delivery_block
+            ? _c(
+                "div",
+                { staticClass: "delivery mt-4", attrs: { id: "delivery" } },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "alert alert-primary alert-outline" },
+                    [
+                      _c("div"),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "alert-message" }, [
+                        _c("h6", { staticClass: "alert-heading" }, [
+                          _vm._v("Город доставки (ПЭК):")
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col-12 col-md-6" }, [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.pek_city_selected,
+                                    expression: "pek_city_selected"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                on: {
+                                  change: [
+                                    function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.pek_city_selected = $event.target
+                                        .multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    },
+                                    function($event) {
+                                      return _vm.onCityChange()
+                                    }
+                                  ]
+                                }
+                              },
+                              _vm._l(_vm.pek_cities, function(pek_city) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: pek_city } },
+                                  [_vm._v(_vm._s(pek_city))]
+                                )
+                              }),
+                              0
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-12 col-md-6" }, [
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.pek_city_sub_selected,
+                                    expression: "pek_city_sub_selected"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                on: {
+                                  change: [
+                                    function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.pek_city_sub_selected = $event.target
+                                        .multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    },
+                                    function($event) {
+                                      return _vm.calcDelivery()
+                                    }
+                                  ]
+                                }
+                              },
+                              _vm._l(_vm.pek_cities_sub, function(
+                                pek_city_sub
+                              ) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: pek_city_sub.id } },
+                                  [_vm._v(_vm._s(pek_city_sub.name))]
+                                )
+                              }),
+                              0
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _vm.pek_loading
+                          ? _c(
+                              "div",
+                              {
+                                staticClass: "spinner-border text-primary mt-4"
+                              },
+                              [
+                                _c("span", { staticClass: "sr-only" }, [
+                                  _vm._v("Загрузка...")
+                                ])
+                              ]
+                            )
+                          : _vm._e()
+                      ])
+                    ]
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.pek_price > 0
+            ? _c("div", { staticClass: "row align-items-center my-0 mb-1" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-10 text-end",
+                    staticStyle: { color: "#888" }
+                  },
+                  [
+                    _vm.pek_response
+                      ? _c(
+                          "p",
+                          { staticClass: "m-0" },
+                          [
+                            _vm._v(
+                              "\n                        Доставка\n                        "
+                            ),
+                            _vm.pek_response.auto[1]
+                              ? [
+                                  _c(
+                                    "small",
+                                    {
+                                      staticStyle: {
+                                        display: "block",
+                                        "line-height": "1",
+                                        "font-size": "11px"
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.pek_response.auto[1]) +
+                                          " (" +
+                                          _vm._s(
+                                            _vm.pek_response.periods_days
+                                          ) +
+                                          " дней)"
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "small",
+                                    {
+                                      staticStyle: {
+                                        display: "block",
+                                        "line-height": "1",
+                                        "font-size": "11px"
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.selected_boxes_length) +
+                                          "м × " +
+                                          _vm._s(_vm.selected_boxes_width) +
+                                          "м × " +
+                                          _vm._s(_vm.selected_boxes_height) +
+                                          "м, " +
+                                          _vm._s(
+                                            (
+                                              _vm.selected_boxes_width *
+                                              _vm.selected_boxes_height *
+                                              _vm.selected_boxes_length
+                                            ).toFixed(2)
+                                          ) +
+                                          "м³, " +
+                                          _vm._s(_vm.selected_boxes_weight) +
+                                          "кг"
+                                      )
+                                    ]
+                                  )
+                                ]
+                              : _vm._e()
+                          ],
+                          2
+                        )
+                      : _vm._e()
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-2 text-end" }, [
+                  _c("h4", { staticClass: "text-primary m-0" }, [
+                    _vm._v(_vm._s(_vm.pek_price) + " ₽")
+                  ])
+                ])
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _vm.price_subtotal > 0
             ? _c("div", { staticClass: "total" }, [
