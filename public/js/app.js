@@ -3156,6 +3156,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
     });
+    axios.get('/api/elements').then(function (response) {
+      return _this.elements = response.data;
+    });
     axios //.get('http://www.pecom.ru/ru/calc/towns.php')
     .get('/towns.php').then(function (response) {
       _this.pek_cities_data = response.data;

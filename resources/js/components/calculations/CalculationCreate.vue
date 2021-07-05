@@ -200,6 +200,11 @@
                     this.categories = response.data
                 ));
             axios
+                .get('/api/elements')
+                .then(response => (
+                    this.elements = response.data
+                ));
+            axios
                 //.get('http://www.pecom.ru/ru/calc/towns.php')
                 .get('/towns.php')
                 .then((response => {
