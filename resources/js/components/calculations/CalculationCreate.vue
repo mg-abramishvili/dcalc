@@ -75,6 +75,9 @@
                     <button @click="onBoxSelect()" class="btn btn-outline-primary">Далее</button>
                 </div>
                 <div v-for="(category, index) in categories" :key="'category_pane_' + category.id" :id="'tab_' + category.slug" class="tab-pane" role="tabpanel">
+                    <div v-if="elements_loader" class="spinner-border text-primary mt-4">
+                        <span class="sr-only">Загрузка...</span>
+                    </div>
                     <label class="mb-2"><strong>{{ category.title }}</strong></label>
                     <select :name="category.slug + '[]'" class="form-select form-select-lg mb-3">
                         <option value selected>&nbsp;</option>
@@ -166,6 +169,7 @@
 
                 categories: {},
                 elements: {},
+                elements_loader: false,
 
                 price_subtotal: '',
 
@@ -198,11 +202,6 @@
                 .get('/api/categories')
                 .then(response => (
                     this.categories = response.data
-                ));
-            axios
-                .get('/api/elements')
-                .then(response => (
-                    this.elements = response.data
                 ));
             axios
                 //.get('http://www.pecom.ru/ru/calc/towns.php')
@@ -240,10 +239,12 @@
             },
             onBoxSelect() {
                 if(!isNaN(this.selected_box.id)) {
+                    this.elements_loader = true
                     axios
                     .get(`/api/elements/filter/box/${this.selected_box.id}`)
                     .then(response => (
-                        this.elements = response.data
+                        this.elements = response.data,
+                        this.elements_loader = false
                     ));
 
                     if(document.getElementById('box_title')) {

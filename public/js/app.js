@@ -3117,6 +3117,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -3130,6 +3133,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       selected_box_weight: '',
       categories: {},
       elements: {},
+      elements_loader: false,
       price_subtotal: '',
       save_button: false,
       overlay: true,
@@ -3155,9 +3159,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     });
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
-    });
-    axios.get('/api/elements').then(function (response) {
-      return _this.elements = response.data;
     });
     axios //.get('http://www.pecom.ru/ru/calc/towns.php')
     .get('/towns.php').then(function (response) {
@@ -3194,8 +3195,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var _this3 = this;
 
       if (!isNaN(this.selected_box.id)) {
+        this.elements_loader = true;
         axios.get("/api/elements/filter/box/".concat(this.selected_box.id)).then(function (response) {
-          return _this3.elements = response.data;
+          return _this3.elements = response.data, _this3.elements_loader = false;
         });
 
         if (document.getElementById('box_title')) {
@@ -60038,6 +60040,18 @@ var render = function() {
                 attrs: { id: "tab_" + category.slug, role: "tabpanel" }
               },
               [
+                _vm.elements_loader
+                  ? _c(
+                      "div",
+                      { staticClass: "spinner-border text-primary mt-4" },
+                      [
+                        _c("span", { staticClass: "sr-only" }, [
+                          _vm._v("Загрузка...")
+                        ])
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
                 _c("label", { staticClass: "mb-2" }, [
                   _c("strong", [_vm._v(_vm._s(category.title))])
                 ]),
