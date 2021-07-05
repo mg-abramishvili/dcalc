@@ -13,15 +13,15 @@
 
                 <div class="row">
                     <div class="col-12 col-md-3">
-                        <label id="length_label">Длина, м</label>
+                        <label id="length_label">Длина, мм</label>
                         <input v-model="length" id="length_input" type="text" class="form-control mb-3">
                     </div>
                     <div class="col-12 col-md-3">
-                        <label id="width_label">Ширина, м</label>
+                        <label id="width_label">Ширина, мм</label>
                         <input v-model="width" id="width_input" type="text" class="form-control mb-3">
                     </div>
                     <div class="col-12 col-md-3">
-                        <label id="height_label">Высота, м</label>
+                        <label id="height_label">Высота, мм</label>
                         <input v-model="height" id="height_input" type="text" class="form-control mb-3">
                     </div>
                     <div class="col-12 col-md-3">

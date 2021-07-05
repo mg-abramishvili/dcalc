@@ -58411,7 +58411,7 @@ var render = function() {
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12 col-md-3" }, [
             _c("label", { attrs: { id: "length_label" } }, [
-              _vm._v("Длина, м")
+              _vm._v("Длина, мм")
             ]),
             _vm._v(" "),
             _c("input", {
@@ -58439,7 +58439,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
             _c("label", { attrs: { id: "width_label" } }, [
-              _vm._v("Ширина, м")
+              _vm._v("Ширина, мм")
             ]),
             _vm._v(" "),
             _c("input", {
@@ -58467,7 +58467,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
             _c("label", { attrs: { id: "height_label" } }, [
-              _vm._v("Высота, м")
+              _vm._v("Высота, мм")
             ]),
             _vm._v(" "),
             _c("input", {
@@ -58935,7 +58935,7 @@ var render = function() {
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12 col-md-3" }, [
             _c("label", { attrs: { id: "length_label" } }, [
-              _vm._v("Длина, м")
+              _vm._v("Длина, мм")
             ]),
             _vm._v(" "),
             _c("input", {
@@ -58963,7 +58963,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
             _c("label", { attrs: { id: "width_label" } }, [
-              _vm._v("Ширина, м")
+              _vm._v("Ширина, мм")
             ]),
             _vm._v(" "),
             _c("input", {
@@ -58991,7 +58991,7 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-3" }, [
             _c("label", { attrs: { id: "height_label" } }, [
-              _vm._v("Высота, м")
+              _vm._v("Высота, мм")
             ]),
             _vm._v(" "),
             _c("input", {
