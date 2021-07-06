@@ -3174,7 +3174,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     axios.get('/api/types').then(function (response) {
       return _this.types = response.data;
     });
-    axios.get('/api/boxes').then(function (response) {
+    axios.get("/api/boxes/type/all").then(function (response) {
       return _this.boxes = response.data;
     });
     axios.get('/api/categories').then(function (response) {
@@ -4356,7 +4356,7 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
     });
-    axios.get('/api/boxes').then(function (response) {
+    axios.get("/api/boxes/type/all").then(function (response) {
       return _this.boxes = response.data;
     });
     axios.get('https://www.cbr-xml-daily.ru/daily_json.js', {
@@ -4373,7 +4373,7 @@ __webpack_require__.r(__webpack_exports__);
     selectAllCat: function selectAllCat() {
       var _this2 = this;
 
-      axios.get('/api/boxes').then(function (response) {
+      axios.get('/api/boxes/type/all').then(function (response) {
         return _this2.selected_boxes = response.data.map(function (box) {
           return box.id;
         });
@@ -4602,7 +4602,7 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/categories').then(function (response) {
       return _this.categories = response.data;
     });
-    axios.get('/api/boxes').then(function (response) {
+    axios.get("/api/boxes/type/all").then(function (response) {
       return _this.boxes = response.data;
     });
     axios.get("https://www.cbr-xml-daily.ru/daily_json.js", {
@@ -4619,7 +4619,7 @@ __webpack_require__.r(__webpack_exports__);
     selectAllCat: function selectAllCat() {
       var _this2 = this;
 
-      axios.get('/api/boxes').then(function (response) {
+      axios.get('/api/boxes/type/all').then(function (response) {
         return _this2.selected_boxes = response.data.map(function (box) {
           return box.id;
         });

@@ -80,7 +80,7 @@
                     this.categories = response.data
                 ));
             axios
-                .get('/api/boxes')
+                .get(`/api/boxes/type/all`)
                 .then(response => (
                     this.boxes = response.data
                 ));
@@ -102,7 +102,7 @@
             },
             selectAllCat() {
                 axios
-                .get('/api/boxes')
+                .get('/api/boxes/type/all')
                 .then(response => (
                     this.selected_boxes = response.data.map(box => box.id)
                 ));

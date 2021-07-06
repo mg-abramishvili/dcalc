@@ -194,7 +194,7 @@
                     this.types = response.data
                 ));
             axios
-                .get('/api/boxes')
+                .get(`/api/boxes/type/all`)
                 .then(response => (
                     this.boxes = response.data
                 ));
