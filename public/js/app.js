@@ -3368,7 +3368,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           'deliver[town]': "".concat(this.pek_city_sub_selected)
         }
       }).then(function (response) {
-        return _this4.pek_response = response.data, _this4.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[1]), _this4.pek_loading = false, console.log(response.data);
+        _this4.pek_response = response.data;
+
+        if (response.data.auto[2].length && response.data.ADD[1].length) {
+          _this4.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[1]);
+        }
+
+        _this4.pek_loading = false;
       });
     },
     checkDelivery: function checkDelivery() {
@@ -60357,6 +60363,8 @@ var render = function() {
                             _vm._v(
                               "\n                        Доставка:\n                        "
                             ),
+                            _vm.pek_response &&
+                            _vm.pek_response.auto &&
                             _vm.pek_response.auto[1]
                               ? [
                                   _c(
