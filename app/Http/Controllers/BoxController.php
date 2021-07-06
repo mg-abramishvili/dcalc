@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 
 class BoxController extends Controller
 {
-    public function boxes()
+    public function boxes($type_id, Request $request)
     {
-        return Box::with('types')->get();
+        if($type_id !== 'all') {
+            return Box::with('types')->whereHas('types', function ($query) use($type_id) {
+                return $query->where('type_id', '=', $type_id);
+            })->get();
+        } else {
+            return Box::with('types')->get();
+        }        
     }
 
     public function boxes_filter($type_id, Request $request)

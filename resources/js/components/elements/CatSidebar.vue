@@ -3,7 +3,7 @@
         <div class="card mb-2">
             <div class="list-group list-group-flush">
                 <div>
-                    <router-link :to="{name: 'Boxes'}" class="list-group-item list-group-item-action">
+                    <router-link :to="{name: 'Boxes', params: {type_id: 'all'}}" class="list-group-item list-group-item-action">
                         Корпуса
                     </router-link>
                 </div>
@@ -23,6 +23,7 @@
         data() {
             return {
                 categories: [],
+                types: {},
             }
         },
         created() {
@@ -42,5 +43,10 @@
 <style scoped>
     .list-group-item:hover {
         cursor: pointer;
+    }
+
+    .list-group-item a {
+        color: #212529;
+        
     }
 </style>

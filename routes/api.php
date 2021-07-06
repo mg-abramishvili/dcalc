@@ -46,7 +46,7 @@ Route::post('/element/{id}/edit','App\Http\Controllers\ElementController@element
 Route::get('/element/{id}/delete','App\Http\Controllers\ElementController@element_delete');
 
 // Корпуса
-Route::get('/boxes','App\Http\Controllers\BoxController@boxes');
+Route::get('/boxes/type/{type_id}','App\Http\Controllers\BoxController@boxes');
 Route::get('/box/{id}','App\Http\Controllers\BoxController@box_item');
 Route::get('/boxes/filter/{type_id}','App\Http\Controllers\BoxController@boxes_filter');
 Route::post('/boxes','App\Http\Controllers\BoxController@boxes_store');

@@ -121,7 +121,7 @@ export const routes = [
         component: ElementDelete
     },
     {
-        path: '/boxes',
+        path: '/boxes/type/:type_id',
         name: 'Boxes',
         component: Boxes
     },

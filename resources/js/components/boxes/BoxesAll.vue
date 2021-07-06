@@ -14,6 +14,15 @@
                 <CatSidebar />
             </div>
             <div class="col-12 col-lg-9">
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <router-link v-for="type in types" :key="'type_' + type.id" :to="{name: 'Boxes', params: {type_id: type.id}}" class="btn btn-pill btn-outline-primary me-2 mb-0">
+                            {{ type.title }}
+                        </router-link>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
                     <table class="table table-striped">
@@ -53,13 +62,27 @@
         data() {
             return {
                 boxes: [],
+                types: {},
             }
         },
         created() {
+            if(this.$route.params.type_id === 'all') {
+                axios
+                    .get(`/api/boxes/type/all`)
+                    .then(response => (
+                        this.boxes = response.data
+                    ));
+            } else {
+                axios
+                    .get(`/api/boxes/type/${this.$route.params.type_id}`)
+                    .then(response => (
+                        this.boxes = response.data
+                    ));
+            }
             axios
-                .get('/api/boxes')
+                .get('/api/types')
                 .then(response => (
-                    this.boxes = response.data
+                    this.types = response.data
                 ));
         },
         methods: {
