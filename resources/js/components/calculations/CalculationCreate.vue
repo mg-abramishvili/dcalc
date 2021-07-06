@@ -134,7 +134,7 @@
                     <div v-if="delivery_block && pek_price > 0" class="row align-items-center m-0 p-0">
                         <div class="col-6">
                             Доставка:
-                            <template v-if="pek_response && pek_response.auto && pek_response.auto[1]">
+                            <template v-if="pek_response && pek_response.auto[1]">
                                 <small style="display:block; line-height: 1; font-size: 11px;">{{ pek_response.auto[1] }} ({{ pek_response.periods_days }} дней)</small>
                                 <small style="display:block; line-height: 1; font-size: 11px;">{{ selected_box_length }}м &times; {{ selected_box_width }}м &times; {{ selected_box_height }}м, {{ (selected_box_width * selected_box_height * selected_box_length).toFixed(2) }}м³, {{ selected_box_weight }}кг</small>
                             </template>
@@ -382,15 +382,12 @@
                             'deliver[town]': `${this.pek_city_sub_selected}`
                         }
                     })
-                    .then((response => {
-                        this.pek_response = response.data
-
-                        if(response.data.auto[2].length && response.data.ADD[1].length) {
-                            this.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[1])
-                        }
-
-                        this.pek_loading = false
-                    }));
+                    .then(response => (
+                        this.pek_response = response.data,
+                        this.pek_price = parseInt(response.data.auto[2]) + parseInt(response.data.ADD[1]),
+                        this.pek_loading = false,
+                        console.log(response.data)
+                    ));
             },
             checkDelivery() {
                 if(document.getElementsByName('delivery[]')[0] && document.getElementsByName('delivery[]')[0].value === '55') {
