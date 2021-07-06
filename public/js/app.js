@@ -4786,7 +4786,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    axios.get('/api/boxes').then(function (response) {
+    axios.get("/api/boxes/type/all").then(function (response) {
       return _this.boxes = response.data;
     });
     axios.get('/api/elements').then(function (response) {
