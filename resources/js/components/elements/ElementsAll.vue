@@ -14,6 +14,13 @@
                 <CatSidebar />
             </div>
             <div class="col-12 col-lg-9">
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <input v-model="searchInput" type="text" placeholder="Поиск" class="form-control form-control-lg">
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
                     <table class="table table-striped">
@@ -25,7 +32,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="box in boxes" :key="'box_' + box.id">
+                            <tr v-for="box in filteredBoxes" :key="'box_' + box.id">
                                 <td class="align-middle">{{ box.title }}</td>
                                 <td class="align-middle text-end">{{ box.price }} ₽</td>
                                 <td class="align-middle text-end">
@@ -37,7 +44,7 @@
                                     </router-link>
                                 </td>
                             </tr>
-                            <tr v-for="element in elements" :key="'element_' + element.id">
+                            <tr v-for="element in filteredElements" :key="'element_' + element.id">
                                 <td class="align-middle">{{ element.title }}</td>
                                 <td class="align-middle text-end">{{ element.price }} ₽</td>
                                 <td class="align-middle text-end">
@@ -66,6 +73,8 @@
             return {
                 elements: [],
                 boxes: [],
+
+                searchInput: '',
             }
         },
         created() {
@@ -81,6 +90,18 @@
                 ));
         },
         methods: {
+        },
+        computed: {
+            filteredBoxes() {
+                return this.boxes.filter(box => {
+                    return box.title.toLowerCase().includes(this.searchInput.toLowerCase())
+                })
+            },
+            filteredElements() {
+                return this.elements.filter(element => {
+                    return element.title.toLowerCase().includes(this.searchInput.toLowerCase())
+                })
+            }
         },
         components: {
             CatSidebar

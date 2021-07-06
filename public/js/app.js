@@ -4775,12 +4775,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       elements: [],
-      boxes: []
+      boxes: [],
+      searchInput: ''
     };
   },
   created: function created() {
@@ -4794,6 +4802,22 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {},
+  computed: {
+    filteredBoxes: function filteredBoxes() {
+      var _this2 = this;
+
+      return this.boxes.filter(function (box) {
+        return box.title.toLowerCase().includes(_this2.searchInput.toLowerCase());
+      });
+    },
+    filteredElements: function filteredElements() {
+      var _this3 = this;
+
+      return this.elements.filter(function (element) {
+        return element.title.toLowerCase().includes(_this3.searchInput.toLowerCase());
+      });
+    }
+  },
   components: {
     CatSidebar: _CatSidebar_vue__WEBPACK_IMPORTED_MODULE_0__.default
   }
@@ -62569,6 +62593,32 @@ var render = function() {
       _c("div", { staticClass: "col-12 col-lg-3" }, [_c("CatSidebar")], 1),
       _vm._v(" "),
       _c("div", { staticClass: "col-12 col-lg-9" }, [
+        _c("div", { staticClass: "card mb-4" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.searchInput,
+                  expression: "searchInput"
+                }
+              ],
+              staticClass: "form-control form-control-lg",
+              attrs: { type: "text", placeholder: "Поиск" },
+              domProps: { value: _vm.searchInput },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.searchInput = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("table", { staticClass: "table table-striped" }, [
@@ -62577,7 +62627,7 @@ var render = function() {
               _c(
                 "tbody",
                 [
-                  _vm._l(_vm.boxes, function(box) {
+                  _vm._l(_vm.filteredBoxes, function(box) {
                     return _c("tr", { key: "box_" + box.id }, [
                       _c("td", { staticClass: "align-middle" }, [
                         _vm._v(_vm._s(box.title))
@@ -62695,7 +62745,7 @@ var render = function() {
                     ])
                   }),
                   _vm._v(" "),
-                  _vm._l(_vm.elements, function(element) {
+                  _vm._l(_vm.filteredElements, function(element) {
                     return _c("tr", { key: "element_" + element.id }, [
                       _c("td", { staticClass: "align-middle" }, [
                         _vm._v(_vm._s(element.title))
