@@ -2465,7 +2465,10 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_0___default()((filepond_plu
 
       }).then(function (response) {
         return _this2.$parent.counterElementsBoxes(), _this2.$router.push({
-          path: '/boxes'
+          name: 'Boxes',
+          params: {
+            type_id: 'all'
+          }
         });
       })["catch"](function (error) {
         if (error.response) {
@@ -2806,7 +2809,10 @@ __webpack_require__.r(__webpack_exports__);
         descriptionmanager: this.descriptionmanager
       }).then(function (response) {
         return _this2.$router.push({
-          path: '/boxes'
+          name: 'Boxes',
+          params: {
+            type_id: 'all'
+          }
         });
       })["catch"](function (error) {
         if (error.response) {

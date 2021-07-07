@@ -170,7 +170,7 @@
                     descriptionmanager: this.descriptionmanager,
                 })
                 .then(response => (
-                    this.$router.push({path: '/boxes'}) 
+                    this.$router.push({name: 'Boxes', params: {type_id: 'all'}}) 
                 ))
                 .catch((error) => {
                     if(error.response) {
