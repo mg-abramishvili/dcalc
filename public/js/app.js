@@ -59733,7 +59733,7 @@ var render = function() {
                     _vm._v("Наименование")
                   ]),
                   _vm._v(" "),
-                  _vm.$parent.user.elements_prices === 1
+                  _vm.$parent.user.elements_prices === "1"
                     ? _c(
                         "th",
                         { staticClass: "text-end", attrs: { scope: "col" } },
@@ -59753,7 +59753,7 @@ var render = function() {
                       _vm._v(_vm._s(box.title))
                     ]),
                     _vm._v(" "),
-                    _vm.$parent.user.elements_prices === 1
+                    _vm.$parent.user.elements_prices === "1"
                       ? _c("td", { staticClass: "align-middle text-end" }, [
                           _vm._v(_vm._s(box.price) + " ₽")
                         ])
@@ -59763,7 +59763,7 @@ var render = function() {
                       "td",
                       { staticClass: "align-middle text-end" },
                       [
-                        _vm.$parent.user.elements_edit === 1
+                        _vm.$parent.user.elements_edit === "1"
                           ? _c(
                               "router-link",
                               {
@@ -59807,7 +59807,7 @@ var render = function() {
                             )
                           : _vm._e(),
                         _vm._v(" "),
-                        _vm.$parent.user.elements_edit === 1
+                        _vm.$parent.user.elements_edit === "1"
                           ? _c(
                               "router-link",
                               {
