@@ -25,12 +25,12 @@
 
                 <div class="user_permissions mt-4">
                     <div class="d-block mb-3">
-                        <input type="checkbox" v-model="elements_prices" id="elements_prices" class="checkbox_custom_input" />
+                        <input type="checkbox" v-model="elements_prices" true-value="1" false-value="0" id="elements_prices" class="checkbox_custom_input" />
                         <label for="elements_prices" class="checkbox_custom_label"></label>
                         <span class="checkbox_custom_span">Может видеть цены компонентов и корпусов</span>
                     </div>
                     <div>
-                        <input type="checkbox" v-model="elements_edit" id="elements_edit" class="checkbox_custom_input" />
+                        <input type="checkbox" v-model="elements_edit" true-value="1" false-value="0" id="elements_edit" class="checkbox_custom_input" />
                         <label for="elements_edit" class="checkbox_custom_label"></label>
                         <span class="checkbox_custom_span">Может редактировать компоненты и корпуса</span>
                     </div>
