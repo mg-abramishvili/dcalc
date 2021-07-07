@@ -115,11 +115,6 @@
         },
         created() {
 			this.checkMe()
-			this.counterUsers()
-			this.counterProjects()
-			this.counterClients()
-			this.counterPartners()
-			this.counterElementsBoxes()
         },
 		methods: {
 			handleLogin() {
@@ -139,6 +134,11 @@
 					this.user = response.data
 					if(this.user.name && this.user.name.length) {
 						this.authenticated = true
+						this.counterUsers()
+						this.counterProjects()
+						this.counterClients()
+						this.counterPartners()
+						this.counterElementsBoxes()
 					} else {
 						this.authenticated = false
 					}

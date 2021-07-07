@@ -1958,11 +1958,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.checkMe();
-    this.counterUsers();
-    this.counterProjects();
-    this.counterClients();
-    this.counterPartners();
-    this.counterElementsBoxes();
   },
   methods: {
     handleLogin: function handleLogin() {
@@ -1987,6 +1982,16 @@ __webpack_require__.r(__webpack_exports__);
 
         if (_this2.user.name && _this2.user.name.length) {
           _this2.authenticated = true;
+
+          _this2.counterUsers();
+
+          _this2.counterProjects();
+
+          _this2.counterClients();
+
+          _this2.counterPartners();
+
+          _this2.counterElementsBoxes();
         } else {
           _this2.authenticated = false;
         }
