@@ -31,6 +31,8 @@ class UserController extends Controller
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
+        $user->elements_prices = $data['elements_prices'];
+        $user->elements_edit = $data['elements_edit'];
         $user->save();
     }
 
@@ -45,6 +47,8 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $data['name'];
         $user->email = $data['email'];
+        $user->elements_prices = $data['elements_prices'];
+        $user->elements_edit = $data['elements_edit'];
         $user->save();
     }
 }

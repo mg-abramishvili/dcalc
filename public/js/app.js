@@ -6014,41 +6014,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       name: '',
       email: '',
       password: '',
+      elements_edit: 'false',
+      elements_prices: 'false',
       error_alert: false,
       error_message: ''
     };
@@ -6062,7 +6035,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/users', {
         name: this.name,
         email: this.email,
-        password: this.password
+        password: this.password,
+        elements_prices: this.elements_prices,
+        elements_edit: this.elements_edit
       }).then(function (response) {
         _this.$parent.counterUsers();
 
@@ -6139,6 +6114,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -6146,6 +6134,8 @@ __webpack_require__.r(__webpack_exports__);
       name: '',
       email: '',
       password: '',
+      elements_edit: '',
+      elements_prices: '',
       error_alert: false,
       error_message: ''
     };
@@ -6160,6 +6150,7 @@ __webpack_require__.r(__webpack_exports__);
              });*/
     axios.get("/api/user/".concat(this.$route.params.id)).then(function (response) {
       _this.user = response.data, _this.email = response.data.email, _this.name = response.data.name;
+      _this.elements_prices = response.data.elements_prices, _this.elements_edit = response.data.elements_edit;
     });
   },
   methods: {
@@ -6170,7 +6161,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/api/user/".concat(this.$route.params.id, "/edit"), {
         id: this.user.id,
         name: this.name,
-        email: this.email
+        email: this.email,
+        elements_prices: this.elements_prices,
+        elements_edit: this.elements_edit
       }).then(function (response) {
         _this2.$router.push({
           name: 'Users'
@@ -6829,6 +6822,54 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.table tr[data-v-198d6f46]:hover {\n    cursor: pointer;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.checkbox_custom_label[data-v-05aed679] {\n    cursor: pointer;\n    text-indent: -9999px;\n    width: 34px;\n    height: 18px;\n    background: grey;\n    display: inline-block;\n    vertical-align: middle;\n    border-radius: 100px;\n    position: relative;\n}\n.checkbox_custom_label[data-v-05aed679]:after {\n    content: '';\n    position: absolute;\n    top: 2px;\n    left: 2px;\n    width: 14px;\n    height: 14px;\n    background: #fff;\n    border-radius: 90px;\n    transition: 0.3s;\n}\n.checkbox_custom_label[data-v-05aed679]:active:after {\n    width: 15px;\n}\n.checkbox_custom_input[data-v-05aed679] {\n    height: 0;\n    width: 0;\n    visibility: hidden;\n}\n.checkbox_custom_input:checked + .checkbox_custom_label[data-v-05aed679] {\n    background: #3f80ea;\n}\n.checkbox_custom_input:checked + .checkbox_custom_label[data-v-05aed679]:after {\n    left: calc(100% - 2px);\n    transform: translateX(-100%);\n}\n.checkbox_custom_span[data-v-05aed679] {\n    display: inline-block;\n    vertical-align: middle;\n    margin-left: 5px;\n}\n.user_permissions[data-v-05aed679] {\n    background-color: #f5f5f5;\n    padding: 25px;\n    border-radius: 4px;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.checkbox_custom_label[data-v-4a4c61c7] {\n    cursor: pointer;\n    text-indent: -9999px;\n    width: 34px;\n    height: 18px;\n    background: grey;\n    display: inline-block;\n    vertical-align: middle;\n    border-radius: 100px;\n    position: relative;\n}\n.checkbox_custom_label[data-v-4a4c61c7]:after {\n    content: '';\n    position: absolute;\n    top: 2px;\n    left: 2px;\n    width: 14px;\n    height: 14px;\n    background: #fff;\n    border-radius: 90px;\n    transition: 0.3s;\n}\n.checkbox_custom_label[data-v-4a4c61c7]:active:after {\n    width: 15px;\n}\n.checkbox_custom_input[data-v-4a4c61c7] {\n    height: 0;\n    width: 0;\n    visibility: hidden;\n}\n.checkbox_custom_input:checked + .checkbox_custom_label[data-v-4a4c61c7] {\n    background: #3f80ea;\n}\n.checkbox_custom_input:checked + .checkbox_custom_label[data-v-4a4c61c7]:after {\n    left: calc(100% - 2px);\n    transform: translateX(-100%);\n}\n.checkbox_custom_span[data-v-4a4c61c7] {\n    display: inline-block;\n    vertical-align: middle;\n    margin-left: 5px;\n}\n.user_permissions[data-v-4a4c61c7] {\n    background-color: #f5f5f5;\n    padding: 25px;\n    border-radius: 4px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -56210,23 +56251,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _UserCreate_vue_vue_type_template_id_05aed679___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserCreate.vue?vue&type=template&id=05aed679& */ "./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&");
+/* harmony import */ var _UserCreate_vue_vue_type_template_id_05aed679_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserCreate.vue?vue&type=template&id=05aed679&scoped=true& */ "./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&scoped=true&");
 /* harmony import */ var _UserCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/users/UserCreate.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _UserCreate_vue_vue_type_style_index_0_id_05aed679_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css& */ "./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
+;
 
 
 /* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
   _UserCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _UserCreate_vue_vue_type_template_id_05aed679___WEBPACK_IMPORTED_MODULE_0__.render,
-  _UserCreate_vue_vue_type_template_id_05aed679___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _UserCreate_vue_vue_type_template_id_05aed679_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _UserCreate_vue_vue_type_template_id_05aed679_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  null,
+  "05aed679",
   null
   
 )
@@ -56249,23 +56292,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _UserEdit_vue_vue_type_template_id_4a4c61c7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserEdit.vue?vue&type=template&id=4a4c61c7& */ "./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&");
+/* harmony import */ var _UserEdit_vue_vue_type_template_id_4a4c61c7_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserEdit.vue?vue&type=template&id=4a4c61c7&scoped=true& */ "./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&scoped=true&");
 /* harmony import */ var _UserEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/users/UserEdit.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _UserEdit_vue_vue_type_style_index_0_id_4a4c61c7_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css& */ "./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
+;
 
 
 /* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
   _UserEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _UserEdit_vue_vue_type_template_id_4a4c61c7___WEBPACK_IMPORTED_MODULE_0__.render,
-  _UserEdit_vue_vue_type_template_id_4a4c61c7___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _UserEdit_vue_vue_type_template_id_4a4c61c7_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _UserEdit_vue_vue_type_template_id_4a4c61c7_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  null,
+  "4a4c61c7",
   null
   
 )
@@ -57437,36 +57482,36 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&scoped=true&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&scoped=true& ***!
+  \*************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_template_id_05aed679___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_template_id_05aed679___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_template_id_05aed679_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_template_id_05aed679_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_template_id_05aed679___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserCreate.vue?vue&type=template&id=05aed679& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_template_id_05aed679_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserCreate.vue?vue&type=template&id=05aed679&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&scoped=true&");
 
 
 /***/ }),
 
-/***/ "./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&":
-/*!***********************************************************************************!*\
-  !*** ./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7& ***!
-  \***********************************************************************************/
+/***/ "./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&scoped=true&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&scoped=true& ***!
+  \***********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_template_id_4a4c61c7___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_template_id_4a4c61c7___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_template_id_4a4c61c7_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_template_id_4a4c61c7_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_template_id_4a4c61c7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserEdit.vue?vue&type=template&id=4a4c61c7& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_template_id_4a4c61c7_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserEdit.vue?vue&type=template&id=4a4c61c7&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&scoped=true&");
 
 
 /***/ }),
@@ -57670,6 +57715,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectsAll_vue_vue_type_style_index_0_id_198d6f46_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectsAll_vue_vue_type_style_index_0_id_198d6f46_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectsAll_vue_vue_type_style_index_0_id_198d6f46_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ProjectsAll_vue_vue_type_style_index_0_id_198d6f46_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css&":
+/*!***************************************************************************************************************!*\
+  !*** ./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css& ***!
+  \***************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_style_index_0_id_05aed679_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css& */ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_style_index_0_id_05aed679_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_style_index_0_id_05aed679_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_style_index_0_id_05aed679_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserCreate_vue_vue_type_style_index_0_id_05aed679_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+
+
+/***/ }),
+
+/***/ "./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css&":
+/*!*************************************************************************************************************!*\
+  !*** ./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css& ***!
+  \*************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_style_index_0_id_4a4c61c7_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-style-loader/index.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css& */ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_style_index_0_id_4a4c61c7_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_style_index_0_id_4a4c61c7_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_style_index_0_id_4a4c61c7_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _node_modules_vue_style_loader_index_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_UserEdit_vue_vue_type_style_index_0_id_4a4c61c7_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -59648,7 +59727,23 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("table", { staticClass: "table table-striped" }, [
-              _vm._m(1),
+              _c("thead", [
+                _c("tr", [
+                  _c("th", { attrs: { scope: "col" } }, [
+                    _vm._v("Наименование")
+                  ]),
+                  _vm._v(" "),
+                  _vm.$parent.user.elements_prices === "true"
+                    ? _c(
+                        "th",
+                        { staticClass: "text-end", attrs: { scope: "col" } },
+                        [_vm._v("Цена")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("th", { attrs: { scope: "col" } }, [_vm._v(" ")])
+                ])
+              ]),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -59658,109 +59753,121 @@ var render = function() {
                       _vm._v(_vm._s(box.title))
                     ]),
                     _vm._v(" "),
-                    _c("td", { staticClass: "align-middle text-end" }, [
-                      _vm._v(_vm._s(box.price) + " ₽")
-                    ]),
+                    _vm.$parent.user.elements_prices === "true"
+                      ? _c("td", { staticClass: "align-middle text-end" }, [
+                          _vm._v(_vm._s(box.price) + " ₽")
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _c(
                       "td",
                       { staticClass: "align-middle text-end" },
                       [
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "btn btn-outline-warning",
-                            attrs: {
-                              to: { name: "BoxEdit", params: { id: box.id } }
-                            }
-                          },
-                          [
-                            _c(
-                              "svg",
+                        _vm.$parent.user.elements_edit === "true"
+                          ? _c(
+                              "router-link",
                               {
-                                staticClass:
-                                  "feather feather-edit-3 align-middle",
+                                staticClass: "btn btn-outline-warning",
                                 attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  width: "24",
-                                  height: "24",
-                                  viewBox: "0 0 24 24",
-                                  fill: "none",
-                                  stroke: "currentColor",
-                                  "stroke-width": "2",
-                                  "stroke-linecap": "round",
-                                  "stroke-linejoin": "round"
+                                  to: {
+                                    name: "BoxEdit",
+                                    params: { id: box.id }
+                                  }
                                 }
                               },
                               [
-                                _c("path", { attrs: { d: "M12 20h9" } }),
-                                _c("path", {
-                                  attrs: {
-                                    d:
-                                      "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
-                                  }
-                                })
+                                _c(
+                                  "svg",
+                                  {
+                                    staticClass:
+                                      "feather feather-edit-3 align-middle",
+                                    attrs: {
+                                      xmlns: "http://www.w3.org/2000/svg",
+                                      width: "24",
+                                      height: "24",
+                                      viewBox: "0 0 24 24",
+                                      fill: "none",
+                                      stroke: "currentColor",
+                                      "stroke-width": "2",
+                                      "stroke-linecap": "round",
+                                      "stroke-linejoin": "round"
+                                    }
+                                  },
+                                  [
+                                    _c("path", { attrs: { d: "M12 20h9" } }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                                      }
+                                    })
+                                  ]
+                                )
                               ]
                             )
-                          ]
-                        ),
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "btn btn-outline-danger",
-                            attrs: {
-                              to: { name: "BoxDelete", params: { id: box.id } }
-                            }
-                          },
-                          [
-                            _c(
-                              "svg",
+                        _vm.$parent.user.elements_edit === "true"
+                          ? _c(
+                              "router-link",
                               {
-                                staticClass:
-                                  "feather feather-trash-2 align-middle",
+                                staticClass: "btn btn-outline-danger",
                                 attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  width: "24",
-                                  height: "24",
-                                  viewBox: "0 0 24 24",
-                                  fill: "none",
-                                  stroke: "currentColor",
-                                  "stroke-width": "2",
-                                  "stroke-linecap": "round",
-                                  "stroke-linejoin": "round"
+                                  to: {
+                                    name: "BoxDelete",
+                                    params: { id: box.id }
+                                  }
                                 }
                               },
                               [
-                                _c("polyline", {
-                                  attrs: { points: "3 6 5 6 21 6" }
-                                }),
-                                _c("path", {
-                                  attrs: {
-                                    d:
-                                      "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                                  }
-                                }),
-                                _c("line", {
-                                  attrs: {
-                                    x1: "10",
-                                    y1: "11",
-                                    x2: "10",
-                                    y2: "17"
-                                  }
-                                }),
-                                _c("line", {
-                                  attrs: {
-                                    x1: "14",
-                                    y1: "11",
-                                    x2: "14",
-                                    y2: "17"
-                                  }
-                                })
+                                _c(
+                                  "svg",
+                                  {
+                                    staticClass:
+                                      "feather feather-trash-2 align-middle",
+                                    attrs: {
+                                      xmlns: "http://www.w3.org/2000/svg",
+                                      width: "24",
+                                      height: "24",
+                                      viewBox: "0 0 24 24",
+                                      fill: "none",
+                                      stroke: "currentColor",
+                                      "stroke-width": "2",
+                                      "stroke-linecap": "round",
+                                      "stroke-linejoin": "round"
+                                    }
+                                  },
+                                  [
+                                    _c("polyline", {
+                                      attrs: { points: "3 6 5 6 21 6" }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "10",
+                                        y1: "11",
+                                        x2: "10",
+                                        y2: "17"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "14",
+                                        y1: "11",
+                                        x2: "14",
+                                        y2: "17"
+                                      }
+                                    })
+                                  ]
+                                )
                               ]
                             )
-                          ]
-                        )
+                          : _vm._e()
                       ],
                       1
                     )
@@ -59786,22 +59893,6 @@ var staticRenderFns = [
         { staticClass: "h3 m-0", staticStyle: { position: "relative" } },
         [_vm._v("Корпуса")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Наименование")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-end", attrs: { scope: "col" } }, [
-          _vm._v("Цена")
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v(" ")])
-      ])
     ])
   }
 ]
@@ -62628,7 +62719,23 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("table", { staticClass: "table table-striped" }, [
-              _vm._m(1),
+              _c("thead", [
+                _c("tr", [
+                  _c("th", { attrs: { scope: "col" } }, [
+                    _vm._v("Наименование")
+                  ]),
+                  _vm._v(" "),
+                  _vm.$parent.user.elements_prices === "true"
+                    ? _c(
+                        "th",
+                        { staticClass: "text-end", attrs: { scope: "col" } },
+                        [_vm._v("Цена")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("th", { attrs: { scope: "col" } }, [_vm._v(" ")])
+                ])
+              ]),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -62639,112 +62746,121 @@ var render = function() {
                         _vm._v(_vm._s(box.title))
                       ]),
                       _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-end" }, [
-                        _vm._v(_vm._s(box.price) + " ₽")
-                      ]),
+                      _vm.$parent.user.elements_prices === "true"
+                        ? _c("td", { staticClass: "align-middle text-end" }, [
+                            _vm._v(_vm._s(box.price) + " ₽")
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "td",
                         { staticClass: "align-middle text-end" },
                         [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-outline-warning",
-                              attrs: {
-                                to: { name: "BoxEdit", params: { id: box.id } }
-                              }
-                            },
-                            [
-                              _c(
-                                "svg",
+                          _vm.$parent.user.elements_edit === "true"
+                            ? _c(
+                                "router-link",
                                 {
-                                  staticClass:
-                                    "feather feather-edit-3 align-middle",
+                                  staticClass: "btn btn-outline-warning",
                                   attrs: {
-                                    xmlns: "http://www.w3.org/2000/svg",
-                                    width: "24",
-                                    height: "24",
-                                    viewBox: "0 0 24 24",
-                                    fill: "none",
-                                    stroke: "currentColor",
-                                    "stroke-width": "2",
-                                    "stroke-linecap": "round",
-                                    "stroke-linejoin": "round"
+                                    to: {
+                                      name: "BoxEdit",
+                                      params: { id: box.id }
+                                    }
                                   }
                                 },
                                 [
-                                  _c("path", { attrs: { d: "M12 20h9" } }),
-                                  _c("path", {
-                                    attrs: {
-                                      d:
-                                        "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
-                                    }
-                                  })
+                                  _c(
+                                    "svg",
+                                    {
+                                      staticClass:
+                                        "feather feather-edit-3 align-middle",
+                                      attrs: {
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                        width: "24",
+                                        height: "24",
+                                        viewBox: "0 0 24 24",
+                                        fill: "none",
+                                        stroke: "currentColor",
+                                        "stroke-width": "2",
+                                        "stroke-linecap": "round",
+                                        "stroke-linejoin": "round"
+                                      }
+                                    },
+                                    [
+                                      _c("path", { attrs: { d: "M12 20h9" } }),
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                                        }
+                                      })
+                                    ]
+                                  )
                                 ]
                               )
-                            ]
-                          ),
+                            : _vm._e(),
                           _vm._v(" "),
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-outline-danger",
-                              attrs: {
-                                to: {
-                                  name: "BoxDelete",
-                                  params: { id: box.id }
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "svg",
+                          _vm.$parent.user.elements_edit === "true"
+                            ? _c(
+                                "router-link",
                                 {
-                                  staticClass:
-                                    "feather feather-trash-2 align-middle",
+                                  staticClass: "btn btn-outline-danger",
                                   attrs: {
-                                    xmlns: "http://www.w3.org/2000/svg",
-                                    width: "24",
-                                    height: "24",
-                                    viewBox: "0 0 24 24",
-                                    fill: "none",
-                                    stroke: "currentColor",
-                                    "stroke-width": "2",
-                                    "stroke-linecap": "round",
-                                    "stroke-linejoin": "round"
+                                    to: {
+                                      name: "BoxDelete",
+                                      params: { id: box.id }
+                                    }
                                   }
                                 },
                                 [
-                                  _c("polyline", {
-                                    attrs: { points: "3 6 5 6 21 6" }
-                                  }),
-                                  _c("path", {
-                                    attrs: {
-                                      d:
-                                        "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                                    }
-                                  }),
-                                  _c("line", {
-                                    attrs: {
-                                      x1: "10",
-                                      y1: "11",
-                                      x2: "10",
-                                      y2: "17"
-                                    }
-                                  }),
-                                  _c("line", {
-                                    attrs: {
-                                      x1: "14",
-                                      y1: "11",
-                                      x2: "14",
-                                      y2: "17"
-                                    }
-                                  })
+                                  _c(
+                                    "svg",
+                                    {
+                                      staticClass:
+                                        "feather feather-trash-2 align-middle",
+                                      attrs: {
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                        width: "24",
+                                        height: "24",
+                                        viewBox: "0 0 24 24",
+                                        fill: "none",
+                                        stroke: "currentColor",
+                                        "stroke-width": "2",
+                                        "stroke-linecap": "round",
+                                        "stroke-linejoin": "round"
+                                      }
+                                    },
+                                    [
+                                      _c("polyline", {
+                                        attrs: { points: "3 6 5 6 21 6" }
+                                      }),
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                        }
+                                      }),
+                                      _c("line", {
+                                        attrs: {
+                                          x1: "10",
+                                          y1: "11",
+                                          x2: "10",
+                                          y2: "17"
+                                        }
+                                      }),
+                                      _c("line", {
+                                        attrs: {
+                                          x1: "14",
+                                          y1: "11",
+                                          x2: "14",
+                                          y2: "17"
+                                        }
+                                      })
+                                    ]
+                                  )
                                 ]
                               )
-                            ]
-                          )
+                            : _vm._e()
                         ],
                         1
                       )
@@ -62757,115 +62873,121 @@ var render = function() {
                         _vm._v(_vm._s(element.title))
                       ]),
                       _vm._v(" "),
-                      _c("td", { staticClass: "align-middle text-end" }, [
-                        _vm._v(_vm._s(element.price) + " ₽")
-                      ]),
+                      _vm.$parent.user.elements_prices === "true"
+                        ? _c("td", { staticClass: "align-middle text-end" }, [
+                            _vm._v(_vm._s(element.price) + " ₽")
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "td",
                         { staticClass: "align-middle text-end" },
                         [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-outline-warning",
-                              attrs: {
-                                to: {
-                                  name: "ElementEdit",
-                                  params: { id: element.id }
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "svg",
+                          _vm.$parent.user.elements_edit === "true"
+                            ? _c(
+                                "router-link",
                                 {
-                                  staticClass:
-                                    "feather feather-edit-3 align-middle",
+                                  staticClass: "btn btn-outline-warning",
                                   attrs: {
-                                    xmlns: "http://www.w3.org/2000/svg",
-                                    width: "24",
-                                    height: "24",
-                                    viewBox: "0 0 24 24",
-                                    fill: "none",
-                                    stroke: "currentColor",
-                                    "stroke-width": "2",
-                                    "stroke-linecap": "round",
-                                    "stroke-linejoin": "round"
+                                    to: {
+                                      name: "ElementEdit",
+                                      params: { id: element.id }
+                                    }
                                   }
                                 },
                                 [
-                                  _c("path", { attrs: { d: "M12 20h9" } }),
-                                  _c("path", {
-                                    attrs: {
-                                      d:
-                                        "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
-                                    }
-                                  })
+                                  _c(
+                                    "svg",
+                                    {
+                                      staticClass:
+                                        "feather feather-edit-3 align-middle",
+                                      attrs: {
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                        width: "24",
+                                        height: "24",
+                                        viewBox: "0 0 24 24",
+                                        fill: "none",
+                                        stroke: "currentColor",
+                                        "stroke-width": "2",
+                                        "stroke-linecap": "round",
+                                        "stroke-linejoin": "round"
+                                      }
+                                    },
+                                    [
+                                      _c("path", { attrs: { d: "M12 20h9" } }),
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                                        }
+                                      })
+                                    ]
+                                  )
                                 ]
                               )
-                            ]
-                          ),
+                            : _vm._e(),
                           _vm._v(" "),
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-outline-danger",
-                              attrs: {
-                                to: {
-                                  name: "ElementDelete",
-                                  params: { id: element.id }
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "svg",
+                          _vm.$parent.user.elements_edit === "true"
+                            ? _c(
+                                "router-link",
                                 {
-                                  staticClass:
-                                    "feather feather-trash-2 align-middle",
+                                  staticClass: "btn btn-outline-danger",
                                   attrs: {
-                                    xmlns: "http://www.w3.org/2000/svg",
-                                    width: "24",
-                                    height: "24",
-                                    viewBox: "0 0 24 24",
-                                    fill: "none",
-                                    stroke: "currentColor",
-                                    "stroke-width": "2",
-                                    "stroke-linecap": "round",
-                                    "stroke-linejoin": "round"
+                                    to: {
+                                      name: "ElementDelete",
+                                      params: { id: element.id }
+                                    }
                                   }
                                 },
                                 [
-                                  _c("polyline", {
-                                    attrs: { points: "3 6 5 6 21 6" }
-                                  }),
-                                  _c("path", {
-                                    attrs: {
-                                      d:
-                                        "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                                    }
-                                  }),
-                                  _c("line", {
-                                    attrs: {
-                                      x1: "10",
-                                      y1: "11",
-                                      x2: "10",
-                                      y2: "17"
-                                    }
-                                  }),
-                                  _c("line", {
-                                    attrs: {
-                                      x1: "14",
-                                      y1: "11",
-                                      x2: "14",
-                                      y2: "17"
-                                    }
-                                  })
+                                  _c(
+                                    "svg",
+                                    {
+                                      staticClass:
+                                        "feather feather-trash-2 align-middle",
+                                      attrs: {
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                        width: "24",
+                                        height: "24",
+                                        viewBox: "0 0 24 24",
+                                        fill: "none",
+                                        stroke: "currentColor",
+                                        "stroke-width": "2",
+                                        "stroke-linecap": "round",
+                                        "stroke-linejoin": "round"
+                                      }
+                                    },
+                                    [
+                                      _c("polyline", {
+                                        attrs: { points: "3 6 5 6 21 6" }
+                                      }),
+                                      _c("path", {
+                                        attrs: {
+                                          d:
+                                            "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                        }
+                                      }),
+                                      _c("line", {
+                                        attrs: {
+                                          x1: "10",
+                                          y1: "11",
+                                          x2: "10",
+                                          y2: "17"
+                                        }
+                                      }),
+                                      _c("line", {
+                                        attrs: {
+                                          x1: "14",
+                                          y1: "11",
+                                          x2: "14",
+                                          y2: "17"
+                                        }
+                                      })
+                                    ]
+                                  )
                                 ]
                               )
-                            ]
-                          )
+                            : _vm._e()
                         ],
                         1
                       )
@@ -62892,22 +63014,6 @@ var staticRenderFns = [
         { staticClass: "h3 m-0", staticStyle: { position: "relative" } },
         [_vm._v("Компоненты")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Наименование")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-end", attrs: { scope: "col" } }, [
-          _vm._v("Цена")
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v(" ")])
-      ])
     ])
   }
 ]
@@ -62989,7 +63095,23 @@ var render = function() {
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("table", { staticClass: "table table-striped" }, [
-              _vm._m(0),
+              _c("thead", [
+                _c("tr", [
+                  _c("th", { attrs: { scope: "col" } }, [
+                    _vm._v("Наименование")
+                  ]),
+                  _vm._v(" "),
+                  _vm.$parent.user.elements_prices === "true"
+                    ? _c(
+                        "th",
+                        { staticClass: "text-end", attrs: { scope: "col" } },
+                        [_vm._v("Цена")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("th", { attrs: { scope: "col" } }, [_vm._v(" ")])
+                ])
+              ]),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -62999,115 +63121,121 @@ var render = function() {
                       _vm._v(_vm._s(element.title))
                     ]),
                     _vm._v(" "),
-                    _c("td", { staticClass: "align-middle text-end" }, [
-                      _vm._v(_vm._s(element.price) + " ₽")
-                    ]),
+                    _vm.$parent.user.elements_prices === "true"
+                      ? _c("td", { staticClass: "align-middle text-end" }, [
+                          _vm._v(_vm._s(element.price) + " ₽")
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
                     _c(
                       "td",
                       { staticClass: "align-middle text-end" },
                       [
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "btn btn-outline-warning",
-                            attrs: {
-                              to: {
-                                name: "ElementEdit",
-                                params: { id: element.id }
-                              }
-                            }
-                          },
-                          [
-                            _c(
-                              "svg",
+                        _vm.$parent.user.elements_edit === "true"
+                          ? _c(
+                              "router-link",
                               {
-                                staticClass:
-                                  "feather feather-edit-3 align-middle",
+                                staticClass: "btn btn-outline-warning",
                                 attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  width: "24",
-                                  height: "24",
-                                  viewBox: "0 0 24 24",
-                                  fill: "none",
-                                  stroke: "currentColor",
-                                  "stroke-width": "2",
-                                  "stroke-linecap": "round",
-                                  "stroke-linejoin": "round"
+                                  to: {
+                                    name: "ElementEdit",
+                                    params: { id: element.id }
+                                  }
                                 }
                               },
                               [
-                                _c("path", { attrs: { d: "M12 20h9" } }),
-                                _c("path", {
-                                  attrs: {
-                                    d:
-                                      "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
-                                  }
-                                })
+                                _c(
+                                  "svg",
+                                  {
+                                    staticClass:
+                                      "feather feather-edit-3 align-middle",
+                                    attrs: {
+                                      xmlns: "http://www.w3.org/2000/svg",
+                                      width: "24",
+                                      height: "24",
+                                      viewBox: "0 0 24 24",
+                                      fill: "none",
+                                      stroke: "currentColor",
+                                      "stroke-width": "2",
+                                      "stroke-linecap": "round",
+                                      "stroke-linejoin": "round"
+                                    }
+                                  },
+                                  [
+                                    _c("path", { attrs: { d: "M12 20h9" } }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                                      }
+                                    })
+                                  ]
+                                )
                               ]
                             )
-                          ]
-                        ),
+                          : _vm._e(),
                         _vm._v(" "),
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "btn btn-outline-danger",
-                            attrs: {
-                              to: {
-                                name: "ElementDelete",
-                                params: { id: element.id }
-                              }
-                            }
-                          },
-                          [
-                            _c(
-                              "svg",
+                        _vm.$parent.user.elements_edit === "true"
+                          ? _c(
+                              "router-link",
                               {
-                                staticClass:
-                                  "feather feather-trash-2 align-middle",
+                                staticClass: "btn btn-outline-danger",
                                 attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  width: "24",
-                                  height: "24",
-                                  viewBox: "0 0 24 24",
-                                  fill: "none",
-                                  stroke: "currentColor",
-                                  "stroke-width": "2",
-                                  "stroke-linecap": "round",
-                                  "stroke-linejoin": "round"
+                                  to: {
+                                    name: "ElementDelete",
+                                    params: { id: element.id }
+                                  }
                                 }
                               },
                               [
-                                _c("polyline", {
-                                  attrs: { points: "3 6 5 6 21 6" }
-                                }),
-                                _c("path", {
-                                  attrs: {
-                                    d:
-                                      "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                                  }
-                                }),
-                                _c("line", {
-                                  attrs: {
-                                    x1: "10",
-                                    y1: "11",
-                                    x2: "10",
-                                    y2: "17"
-                                  }
-                                }),
-                                _c("line", {
-                                  attrs: {
-                                    x1: "14",
-                                    y1: "11",
-                                    x2: "14",
-                                    y2: "17"
-                                  }
-                                })
+                                _c(
+                                  "svg",
+                                  {
+                                    staticClass:
+                                      "feather feather-trash-2 align-middle",
+                                    attrs: {
+                                      xmlns: "http://www.w3.org/2000/svg",
+                                      width: "24",
+                                      height: "24",
+                                      viewBox: "0 0 24 24",
+                                      fill: "none",
+                                      stroke: "currentColor",
+                                      "stroke-width": "2",
+                                      "stroke-linecap": "round",
+                                      "stroke-linejoin": "round"
+                                    }
+                                  },
+                                  [
+                                    _c("polyline", {
+                                      attrs: { points: "3 6 5 6 21 6" }
+                                    }),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "10",
+                                        y1: "11",
+                                        x2: "10",
+                                        y2: "17"
+                                      }
+                                    }),
+                                    _c("line", {
+                                      attrs: {
+                                        x1: "14",
+                                        y1: "11",
+                                        x2: "14",
+                                        y2: "17"
+                                      }
+                                    })
+                                  ]
+                                )
                               ]
                             )
-                          ]
-                        )
+                          : _vm._e()
                       ],
                       1
                     )
@@ -63122,24 +63250,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Наименование")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-end", attrs: { scope: "col" } }, [
-          _vm._v("Цена")
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v(" ")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -65143,10 +65254,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&":
-/*!****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679& ***!
-  \****************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=template&id=05aed679&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -65178,9 +65289,9 @@ var render = function() {
                   [
                     _c("div", { staticClass: "alert-message" }, [
                       _vm._v(
-                        "\n                        " +
+                        "\n                    " +
                           _vm._s(msg) +
-                          "\n                    "
+                          "\n                "
                       )
                     ])
                   ]
@@ -65268,10 +65379,122 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
+          _c("div", { staticClass: "user_permissions mt-4" }, [
+            _c("div", { staticClass: "d-block mb-3" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.elements_prices,
+                    expression: "elements_prices"
+                  }
+                ],
+                staticClass: "checkbox_custom_input",
+                attrs: {
+                  type: "checkbox",
+                  "true-value": "true",
+                  "false-value": "false",
+                  id: "elements_prices"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.elements_prices)
+                    ? _vm._i(_vm.elements_prices, null) > -1
+                    : _vm._q(_vm.elements_prices, "true")
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.elements_prices,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? "true" : "false"
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.elements_prices = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.elements_prices = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.elements_prices = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", {
+                staticClass: "checkbox_custom_label",
+                attrs: { for: "elements_prices" }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "checkbox_custom_span" }, [
+                _vm._v("Может видеть цены компонентов и корпусов")
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.elements_edit,
+                    expression: "elements_edit"
+                  }
+                ],
+                staticClass: "checkbox_custom_input",
+                attrs: {
+                  type: "checkbox",
+                  "true-value": "true",
+                  "false-value": "false",
+                  id: "elements_edit"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.elements_edit)
+                    ? _vm._i(_vm.elements_edit, null) > -1
+                    : _vm._q(_vm.elements_edit, "true")
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.elements_edit,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? "true" : "false"
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.elements_edit = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.elements_edit = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.elements_edit = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", {
+                staticClass: "checkbox_custom_label",
+                attrs: { for: "elements_edit" }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "checkbox_custom_span" }, [
+                _vm._v("Может редактировать компоненты и корпуса")
+              ])
+            ])
+          ]),
+          _vm._v(" "),
           _c(
             "button",
             {
-              staticClass: "btn btn-primary",
+              staticClass: "btn btn-primary mt-4",
               on: {
                 click: function($event) {
                   return _vm.storeUser()
@@ -65293,10 +65516,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&":
-/*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7& ***!
-  \**************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=template&id=4a4c61c7&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -65387,10 +65610,122 @@ var render = function() {
           })
         ]),
         _vm._v(" "),
+        _c("div", { staticClass: "user_permissions mt-4" }, [
+          _c("div", { staticClass: "d-block mb-3" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.elements_prices,
+                  expression: "elements_prices"
+                }
+              ],
+              staticClass: "checkbox_custom_input",
+              attrs: {
+                type: "checkbox",
+                "true-value": "true",
+                "false-value": "false",
+                id: "elements_prices"
+              },
+              domProps: {
+                checked: Array.isArray(_vm.elements_prices)
+                  ? _vm._i(_vm.elements_prices, null) > -1
+                  : _vm._q(_vm.elements_prices, "true")
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.elements_prices,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? "true" : "false"
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 && (_vm.elements_prices = $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        (_vm.elements_prices = $$a
+                          .slice(0, $$i)
+                          .concat($$a.slice($$i + 1)))
+                    }
+                  } else {
+                    _vm.elements_prices = $$c
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("label", {
+              staticClass: "checkbox_custom_label",
+              attrs: { for: "elements_prices" }
+            }),
+            _vm._v(" "),
+            _c("span", { staticClass: "checkbox_custom_span" }, [
+              _vm._v("Может видеть цены компонентов и корпусов")
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.elements_edit,
+                  expression: "elements_edit"
+                }
+              ],
+              staticClass: "checkbox_custom_input",
+              attrs: {
+                type: "checkbox",
+                "true-value": "true",
+                "false-value": "false",
+                id: "elements_edit"
+              },
+              domProps: {
+                checked: Array.isArray(_vm.elements_edit)
+                  ? _vm._i(_vm.elements_edit, null) > -1
+                  : _vm._q(_vm.elements_edit, "true")
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.elements_edit,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? "true" : "false"
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 && (_vm.elements_edit = $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        (_vm.elements_edit = $$a
+                          .slice(0, $$i)
+                          .concat($$a.slice($$i + 1)))
+                    }
+                  } else {
+                    _vm.elements_edit = $$c
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("label", {
+              staticClass: "checkbox_custom_label",
+              attrs: { for: "elements_edit" }
+            }),
+            _vm._v(" "),
+            _c("span", { staticClass: "checkbox_custom_span" }, [
+              _vm._v("Может редактировать компоненты и корпуса")
+            ])
+          ])
+        ]),
+        _vm._v(" "),
         _c(
           "button",
           {
-            staticClass: "btn btn-primary",
+            staticClass: "btn btn-primary mt-4",
             on: {
               click: function($event) {
                 return _vm.updateProfile()
@@ -69063,6 +69398,48 @@ if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = __webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "./node_modules/vue-style-loader/lib/addStylesClient.js").default
 var update = add("21cf08db", content, false, {});
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserCreate.vue?vue&type=style&index=0&id=05aed679&scoped=true&lang=css&");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.id, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "./node_modules/vue-style-loader/lib/addStylesClient.js").default
+var update = add("54ff851c", content, false, {});
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-style-loader/index.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UserEdit.vue?vue&type=style&index=0&id=4a4c61c7&scoped=true&lang=css&");
+if(content.__esModule) content = content.default;
+if(typeof content === 'string') content = [[module.id, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__(/*! !../../../../node_modules/vue-style-loader/lib/addStylesClient.js */ "./node_modules/vue-style-loader/lib/addStylesClient.js").default
+var update = add("59ae1f0a", content, false, {});
 // Hot Module Replacement
 if(false) {}
 

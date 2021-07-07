@@ -25,49 +25,20 @@
                     <input v-model="password" type="text" class="form-control" placeholder="Пароль">
                 </div>
 
-                <!--
-                <div class="mb-3 row">
-					<label class="col-form-label col-sm-6 text-sm-right pt-sm-0">Может создавать расчеты</label>
-                    <div class="col-sm-6">
-                        <label class="form-check m-0">
-                            <input type="checkbox" class="form-check-input">
-                            <span class="form-check-label"></span>
-                        </label>
+                <div class="user_permissions mt-4">
+                    <div class="d-block mb-3">
+                        <input type="checkbox" v-model="elements_prices" true-value="true" false-value="false" id="elements_prices" class="checkbox_custom_input" />
+                        <label for="elements_prices" class="checkbox_custom_label"></label>
+                        <span class="checkbox_custom_span">Может видеть цены компонентов и корпусов</span>
                     </div>
-				</div>
-
-                <div class="mb-3 row">
-					<label class="col-form-label col-sm-6 text-sm-right pt-sm-0">Может создавать КП</label>
-                    <div class="col-sm-6">
-                        <label class="form-check m-0">
-                            <input type="checkbox" class="form-check-input">
-                            <span class="form-check-label"></span>
-                        </label>
+                    <div>
+                        <input type="checkbox" v-model="elements_edit" true-value="true" false-value="false" id="elements_edit" class="checkbox_custom_input" />
+                        <label for="elements_edit" class="checkbox_custom_label"></label>
+                        <span class="checkbox_custom_span">Может редактировать компоненты и корпуса</span>
                     </div>
-				</div>
+                </div>
 
-                <div class="mb-3 row">
-					<label class="col-form-label col-sm-6 text-sm-right pt-sm-0">Может редактировать каталог</label>
-                    <div class="col-sm-6">
-                        <label class="form-check m-0">
-                            <input type="checkbox" class="form-check-input">
-                            <span class="form-check-label"></span>
-                        </label>
-                    </div>
-				</div>
-
-                <div class="mb-3 row">
-					<label class="col-form-label col-sm-6 text-sm-right pt-sm-0">Может назначать задачи другим пользователям</label>
-                    <div class="col-sm-6">
-                        <label class="form-check m-0">
-                            <input type="checkbox" class="form-check-input">
-                            <span class="form-check-label"></span>
-                        </label>
-                    </div>
-				</div>
-                -->
-
-                <button @click="storeUser()" class="btn btn-primary">Добавить</button>
+                <button @click="storeUser()" class="btn btn-primary mt-4">Добавить</button>
             </div>
         </div>
     </div>
@@ -79,6 +50,9 @@
                 name: '',
                 email: '',
                 password: '',
+
+                elements_edit: 'false',
+                elements_prices: 'false',
 
                 error_alert: false,
                 error_message: '',
@@ -95,6 +69,8 @@
                     name: this.name,
                     email: this.email,
                     password: this.password,
+                    elements_prices: this.elements_prices,
+                    elements_edit: this.elements_edit
                 })
                 .then((response => {
                     this.$parent.counterUsers()
@@ -124,3 +100,52 @@
         }
     }
 </script>
+<style scoped>
+    .checkbox_custom_label {
+        cursor: pointer;
+        text-indent: -9999px;
+        width: 34px;
+        height: 18px;
+        background: grey;
+        display: inline-block;
+        vertical-align: middle;
+        border-radius: 100px;
+        position: relative;
+    }
+    .checkbox_custom_label:after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 14px;
+        height: 14px;
+        background: #fff;
+        border-radius: 90px;
+        transition: 0.3s;
+    }
+    .checkbox_custom_label:active:after {
+        width: 15px;
+    }
+    .checkbox_custom_input {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+    }
+    .checkbox_custom_input:checked + .checkbox_custom_label {
+        background: #3f80ea;
+    }
+    .checkbox_custom_input:checked + .checkbox_custom_label:after {
+        left: calc(100% - 2px);
+        transform: translateX(-100%);
+    }
+    .checkbox_custom_span {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+    .user_permissions {
+        background-color: #f5f5f5;
+        padding: 25px;
+        border-radius: 4px;
+    }
+</style>
