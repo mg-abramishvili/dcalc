@@ -6020,8 +6020,8 @@ __webpack_require__.r(__webpack_exports__);
       name: '',
       email: '',
       password: '',
-      elements_edit: 'false',
-      elements_prices: 'false',
+      elements_edit: '0',
+      elements_prices: '0',
       error_alert: false,
       error_message: ''
     };
@@ -62725,7 +62725,7 @@ var render = function() {
                     _vm._v("Наименование")
                   ]),
                   _vm._v(" "),
-                  _vm.$parent.user.elements_prices === "true"
+                  _vm.$parent.user.elements_prices === "1"
                     ? _c(
                         "th",
                         { staticClass: "text-end", attrs: { scope: "col" } },
@@ -62746,7 +62746,7 @@ var render = function() {
                         _vm._v(_vm._s(box.title))
                       ]),
                       _vm._v(" "),
-                      _vm.$parent.user.elements_prices === "true"
+                      _vm.$parent.user.elements_prices === "1"
                         ? _c("td", { staticClass: "align-middle text-end" }, [
                             _vm._v(_vm._s(box.price) + " ₽")
                           ])
@@ -62756,7 +62756,7 @@ var render = function() {
                         "td",
                         { staticClass: "align-middle text-end" },
                         [
-                          _vm.$parent.user.elements_edit === "true"
+                          _vm.$parent.user.elements_edit === "1"
                             ? _c(
                                 "router-link",
                                 {
@@ -62800,7 +62800,7 @@ var render = function() {
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _vm.$parent.user.elements_edit === "true"
+                          _vm.$parent.user.elements_edit === "1"
                             ? _c(
                                 "router-link",
                                 {
@@ -62873,7 +62873,7 @@ var render = function() {
                         _vm._v(_vm._s(element.title))
                       ]),
                       _vm._v(" "),
-                      _vm.$parent.user.elements_prices === "true"
+                      _vm.$parent.user.elements_prices === "1"
                         ? _c("td", { staticClass: "align-middle text-end" }, [
                             _vm._v(_vm._s(element.price) + " ₽")
                           ])
@@ -62883,7 +62883,7 @@ var render = function() {
                         "td",
                         { staticClass: "align-middle text-end" },
                         [
-                          _vm.$parent.user.elements_edit === "true"
+                          _vm.$parent.user.elements_edit === "1"
                             ? _c(
                                 "router-link",
                                 {
@@ -62927,7 +62927,7 @@ var render = function() {
                               )
                             : _vm._e(),
                           _vm._v(" "),
-                          _vm.$parent.user.elements_edit === "true"
+                          _vm.$parent.user.elements_edit === "1"
                             ? _c(
                                 "router-link",
                                 {
@@ -63101,7 +63101,7 @@ var render = function() {
                     _vm._v("Наименование")
                   ]),
                   _vm._v(" "),
-                  _vm.$parent.user.elements_prices === "true"
+                  _vm.$parent.user.elements_prices === "1"
                     ? _c(
                         "th",
                         { staticClass: "text-end", attrs: { scope: "col" } },
@@ -63121,7 +63121,7 @@ var render = function() {
                       _vm._v(_vm._s(element.title))
                     ]),
                     _vm._v(" "),
-                    _vm.$parent.user.elements_prices === "true"
+                    _vm.$parent.user.elements_prices === "1"
                       ? _c("td", { staticClass: "align-middle text-end" }, [
                           _vm._v(_vm._s(element.price) + " ₽")
                         ])
@@ -63131,7 +63131,7 @@ var render = function() {
                       "td",
                       { staticClass: "align-middle text-end" },
                       [
-                        _vm.$parent.user.elements_edit === "true"
+                        _vm.$parent.user.elements_edit === "1"
                           ? _c(
                               "router-link",
                               {
@@ -63175,7 +63175,7 @@ var render = function() {
                             )
                           : _vm._e(),
                         _vm._v(" "),
-                        _vm.$parent.user.elements_edit === "true"
+                        _vm.$parent.user.elements_edit === "1"
                           ? _c(
                               "router-link",
                               {
@@ -65393,20 +65393,20 @@ var render = function() {
                 staticClass: "checkbox_custom_input",
                 attrs: {
                   type: "checkbox",
-                  "true-value": "true",
-                  "false-value": "false",
+                  "true-value": "1",
+                  "false-value": "0",
                   id: "elements_prices"
                 },
                 domProps: {
                   checked: Array.isArray(_vm.elements_prices)
                     ? _vm._i(_vm.elements_prices, null) > -1
-                    : _vm._q(_vm.elements_prices, "true")
+                    : _vm._q(_vm.elements_prices, "1")
                 },
                 on: {
                   change: function($event) {
                     var $$a = _vm.elements_prices,
                       $$el = $event.target,
-                      $$c = $$el.checked ? "true" : "false"
+                      $$c = $$el.checked ? "1" : "0"
                     if (Array.isArray($$a)) {
                       var $$v = null,
                         $$i = _vm._i($$a, $$v)
@@ -65448,20 +65448,20 @@ var render = function() {
                 staticClass: "checkbox_custom_input",
                 attrs: {
                   type: "checkbox",
-                  "true-value": "true",
-                  "false-value": "false",
+                  "true-value": "1",
+                  "false-value": "0",
                   id: "elements_edit"
                 },
                 domProps: {
                   checked: Array.isArray(_vm.elements_edit)
                     ? _vm._i(_vm.elements_edit, null) > -1
-                    : _vm._q(_vm.elements_edit, "true")
+                    : _vm._q(_vm.elements_edit, "1")
                 },
                 on: {
                   change: function($event) {
                     var $$a = _vm.elements_edit,
                       $$el = $event.target,
-                      $$c = $$el.checked ? "true" : "false"
+                      $$c = $$el.checked ? "1" : "0"
                     if (Array.isArray($$a)) {
                       var $$v = null,
                         $$i = _vm._i($$a, $$v)
