@@ -85,7 +85,7 @@
                 pre_usd: '',
                 marzha: '',
                 sborka: '',
-                price: '',
+                price: 0,
                 description: '',
                 descriptionmanager: '',
                 currencies: {},
@@ -130,7 +130,6 @@
                 .then(response => (
                     this.types = response.data
                 ));
-            this.TotalPrice()
         },
         methods: {
             onChange(index, event) {

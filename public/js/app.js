@@ -2743,7 +2743,7 @@ __webpack_require__.r(__webpack_exports__);
       pre_usd: '',
       marzha: '',
       sborka: '',
-      price: '',
+      price: 0,
       description: '',
       descriptionmanager: '',
       currencies: {},
@@ -2773,7 +2773,6 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/types').then(function (response) {
       return _this.types = response.data;
     });
-    this.TotalPrice();
   },
   methods: {
     onChange: function onChange(index, event) {},
