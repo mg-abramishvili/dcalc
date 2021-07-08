@@ -59760,7 +59760,7 @@ var render = function() {
                     _vm._v(" "),
                     _vm.$parent.user.elements_prices === "1"
                       ? _c("td", { staticClass: "align-middle text-end" }, [
-                          _vm._v(_vm._s(box.price) + " ₽")
+                          _vm._v(_vm._s(parseInt(box.price).toFixed(0)) + " ₽")
                         ])
                       : _vm._e(),
                     _vm._v(" "),
@@ -62753,7 +62753,9 @@ var render = function() {
                       _vm._v(" "),
                       _vm.$parent.user.elements_prices === "1"
                         ? _c("td", { staticClass: "align-middle text-end" }, [
-                            _vm._v(_vm._s(box.price) + " ₽")
+                            _vm._v(
+                              _vm._s(parseInt(box.price).toFixed(0)) + " ₽"
+                            )
                           ])
                         : _vm._e(),
                       _vm._v(" "),
@@ -62880,7 +62882,9 @@ var render = function() {
                       _vm._v(" "),
                       _vm.$parent.user.elements_prices === "1"
                         ? _c("td", { staticClass: "align-middle text-end" }, [
-                            _vm._v(_vm._s(element.price) + " ₽")
+                            _vm._v(
+                              _vm._s(parseInt(element.price).toFixed(0)) + " ₽"
+                            )
                           ])
                         : _vm._e(),
                       _vm._v(" "),
@@ -63128,7 +63132,9 @@ var render = function() {
                     _vm._v(" "),
                     _vm.$parent.user.elements_prices === "1"
                       ? _c("td", { staticClass: "align-middle text-end" }, [
-                          _vm._v(_vm._s(element.price) + " ₽")
+                          _vm._v(
+                            _vm._s(parseInt(element.price).toFixed(0)) + " ₽"
+                          )
                         ])
                       : _vm._e(),
                     _vm._v(" "),

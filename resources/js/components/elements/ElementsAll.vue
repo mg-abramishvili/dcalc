@@ -34,7 +34,7 @@
                         <tbody>
                             <tr v-for="box in filteredBoxes" :key="'box_' + box.id">
                                 <td class="align-middle">{{ box.title }}</td>
-                                <td v-if="$parent.user.elements_prices === '1'" class="align-middle text-end">{{ box.price }} ₽</td>
+                                <td v-if="$parent.user.elements_prices === '1'" class="align-middle text-end">{{ parseInt(box.price).toFixed(0) }} ₽</td>
                                 <td class="align-middle text-end">
                                     <router-link v-if="$parent.user.elements_edit === '1'" :to="{name: 'BoxEdit', params: {id: box.id}}" class="btn btn-outline-warning">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 align-middle"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
@@ -46,7 +46,7 @@
                             </tr>
                             <tr v-for="element in filteredElements" :key="'element_' + element.id">
                                 <td class="align-middle">{{ element.title }}</td>
-                                <td v-if="$parent.user.elements_prices === '1'" class="align-middle text-end">{{ element.price }} ₽</td>
+                                <td v-if="$parent.user.elements_prices === '1'" class="align-middle text-end">{{ parseInt(element.price).toFixed(0) }} ₽</td>
                                 <td class="align-middle text-end">
                                     <router-link v-if="$parent.user.elements_edit === '1'" :to="{name: 'ElementEdit', params: {id: element.id}}" class="btn btn-outline-warning">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 align-middle"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
