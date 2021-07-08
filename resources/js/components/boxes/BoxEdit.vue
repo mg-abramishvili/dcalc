@@ -182,7 +182,7 @@
                 });
             },
             TotalPrice() {
-                this.price = Math.ceil((parseInt(this.pre_rub) + (parseFloat(this.currencies.Value) * parseInt(this.pre_usd)) + parseInt(this.marzha) + parseInt(this.sborka)) / 50)*50
+                this.price = Math.ceil((parseFloat(this.pre_rub) + (parseFloat(this.currencies.Value) * parseFloat(this.pre_usd)) + parseFloat(this.marzha) + parseFloat(this.sborka)) / 50)*50
             }
         },
         watch: {
