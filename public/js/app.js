@@ -2743,7 +2743,7 @@ __webpack_require__.r(__webpack_exports__);
       pre_usd: '',
       marzha: '',
       sborka: '',
-      price: 0,
+      price: '',
       description: '',
       descriptionmanager: '',
       currencies: {},
@@ -2829,7 +2829,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     TotalPrice: function TotalPrice() {
-      this.price = Math.ceil((this.pre_rub + parseFloat(this.currencies.Value) * this.pre_usd + this.marzha + this.sborka) / 50) * 50;
+      this.price = Math.ceil((parseInt(this.pre_rub) + parseFloat(this.currencies.Value) * parseInt(this.pre_usd) + parseInt(this.marzha) + parseInt(this.sborka)) / 50) * 50;
     }
   },
   watch: {
