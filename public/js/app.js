@@ -2761,7 +2761,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get("/api/box/".concat(this.$route.params.id)).then(function (response) {
-      return _this.box = response.data, _this.title = response.data.title, _this.pre_rub = response.data.pre_rub, _this.pre_usd = response.data.pre_usd, _this.marzha = response.data.marzha, _this.sborka = response.data.sborka, _this.price = response.data.price, _this.selected_types = response.data.types.map(function (type) {
+      return _this.box = response.data, _this.title = response.data.title, _this.pre_rub = response.data.pre_rub, _this.pre_usd = response.data.pre_usd, _this.marzha = response.data.marzha, _this.sborka = response.data.sborka, _this.price = parseInt(response.data.price), _this.selected_types = response.data.types.map(function (type) {
         return type.id;
       }), _this.width = response.data.width, _this.height = response.data.height, _this.length = response.data.length, _this.weight = response.data.weight, _this.description = response.data.description, _this.descriptionmanager = response.data.descriptionmanager;
     });
