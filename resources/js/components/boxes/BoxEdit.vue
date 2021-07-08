@@ -110,7 +110,7 @@
                     this.pre_usd = response.data.pre_usd,
                     this.marzha = response.data.marzha,
                     this.sborka = response.data.sborka,
-                    this.price = parseInt(response.data.price),
+                    this.price = response.data.price,
                     this.selected_types = response.data.types.map(type => type.id),
                     this.width = response.data.width,
                     this.height = response.data.height,
@@ -130,6 +130,7 @@
                 .then(response => (
                     this.types = response.data
                 ));
+            this.TotalPrice()
         },
         methods: {
             onChange(index, event) {
