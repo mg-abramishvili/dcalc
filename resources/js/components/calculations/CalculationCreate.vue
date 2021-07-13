@@ -68,7 +68,7 @@
                     <select v-model="selected_box" class="form-select form-select-lg mb-3">
                         <option value selected>&nbsp;</option>
                         <template v-for="box in boxes">
-                            <option v-bind:value="{ id: box.id, title: box.title, pre_rub: box.pre_rub, pre_usd: box.pre_usd, price: box.price, width: box.width, length: box.length, height: box.height, weight: box.weight, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ parseInt(box.price) }}₽</option>
+                            <option v-bind:value="{ id: box.id, title: box.title, pre_rub: box.pre_rub, pre_usd: box.pre_usd, sborka: box.sborka, marzha: box.marzha, price: box.price, width: box.width, length: box.length, height: box.height, weight: box.weight, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ parseInt(box.price) }}₽</option>
                         </template>
                     </select>
                     <button @click="tabSelect('tab_type')" class="btn btn-outline-primary">Назад</button>
@@ -424,7 +424,7 @@
                 );
 
                 price_subtotal_rub = price_subtotal_rub.reduce((a, b) => a + b, 0)
-                this.price_subtotal_rub = parseInt(this.selected_box.pre_rub) + price_subtotal_rub
+                this.price_subtotal_rub = parseInt(this.selected_box.pre_rub + this.selected_box.marzha + this.selected_box.sborka) + price_subtotal_rub
 
                 price_subtotal_usd = price_subtotal_usd.reduce((a, b) => a + b, 0)
                 this.price_subtotal_usd = parseInt(this.selected_box.pre_usd) + price_subtotal_usd

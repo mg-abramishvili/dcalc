@@ -3416,7 +3416,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       price_subtotal_rub = price_subtotal_rub.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.price_subtotal_rub = parseInt(this.selected_box.pre_rub) + price_subtotal_rub;
+      this.price_subtotal_rub = parseInt(this.selected_box.pre_rub + this.selected_box.marzha + this.selected_box.sborka) + price_subtotal_rub;
       price_subtotal_usd = price_subtotal_usd.reduce(function (a, b) {
         return a + b;
       }, 0);
@@ -60175,6 +60175,8 @@ var render = function() {
                               title: box.title,
                               pre_rub: box.pre_rub,
                               pre_usd: box.pre_usd,
+                              sborka: box.sborka,
+                              marzha: box.marzha,
                               price: box.price,
                               width: box.width,
                               length: box.length,
