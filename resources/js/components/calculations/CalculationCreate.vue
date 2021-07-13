@@ -83,7 +83,7 @@
                         <option value selected>&nbsp;</option>
                         <template v-for="element in elements">
                             <template v-for="ect in element.categories">
-                                <option v-if="ect.id === category.id" :value="element.id" :data-title="element.title" :data-price="element.price">{{ element.title }} - {{ parseInt(element.price) }}₽</option>
+                                <option v-if="ect.id === category.id" :value="element.id" :data-title="element.title" :data-pre_rub="element.pre_rub" :data-pre_usd="element.pre_usd" :data-price="element.price">{{ element.title }} - {{ parseInt(element.price) }}₽</option>
                             </template>
                         </template>
                     </select>
@@ -128,8 +128,8 @@
 
                 <div v-if="price_subtotal > 0" class="total">
                     <div class="row align-items-center m-0 p-0">
-                        <div class="col-6">Подитог:</div>
-                        <div class="col-6 text-end text-primary">{{ parseInt(price_subtotal) }} ₽</div>
+                        <div class="col-6">Цена за 1 ед:</div>
+                        <div class="col-6 text-end text-primary">{{ parseInt(price_subtotal) }} ₽ <small v-if="price_subtotal_rub && price_subtotal_rub > 0 || price_subtotal_usd && price_subtotal_usd > 0"  style="display: block; line-height: 1; font-size: 14px; color: #777; font-weight: 500;">детали - {{ price_subtotal_rub }}₽ / ${{ price_subtotal_usd }}</small></div>
                     </div>
                     <div v-if="delivery_block && pek_price > 0" class="row align-items-center m-0 p-0">
                         <div class="col-6">
@@ -172,6 +172,8 @@
                 elements_loader: false,
 
                 price_subtotal: '',
+                price_subtotal_rub: '',
+                price_subtotal_usd: '',
 
                 save_button: false,
                 overlay: true,
@@ -400,14 +402,32 @@
                 this.price_subtotal = 0
                 var price_subtotal =  [];
 
+                this.price_subtotal_rub = 0
+                var price_subtotal_rub =  [];
+
+                this.price_subtotal_usd = 0
+                var price_subtotal_usd =  [];
+
                 this.categories.forEach(function(category) {
                         document.getElementsByName(category.slug + '[]').forEach((child) => {
+                            if(child.options[child.selectedIndex].getAttribute('data-pre_rub')) {
+                                price_subtotal_rub.push(parseInt(child.options[child.selectedIndex].getAttribute('data-pre_rub')))
+                            }
+                            if(child.options[child.selectedIndex].getAttribute('data-pre_usd')) {
+                                price_subtotal_usd.push(parseInt(child.options[child.selectedIndex].getAttribute('data-pre_usd')))
+                            }
                             if(child.options[child.selectedIndex].getAttribute('data-price')) {
                                 price_subtotal.push(parseInt(child.options[child.selectedIndex].getAttribute('data-price')))
                             }
                         });
                     }
                 );
+
+                price_subtotal_rub = price_subtotal_rub.reduce((a, b) => a + b, 0)
+                this.price_subtotal_rub = price_subtotal_rub
+
+                price_subtotal_usd = price_subtotal_usd.reduce((a, b) => a + b, 0)
+                this.price_subtotal_usd = price_subtotal_usd
 
                 price_subtotal = price_subtotal.reduce((a, b) => a + b, 0)
                 this.price_subtotal = parseInt(this.selected_box.price) + price_subtotal

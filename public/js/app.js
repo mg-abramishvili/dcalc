@@ -3166,6 +3166,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       elements: {},
       elements_loader: false,
       price_subtotal: '',
+      price_subtotal_rub: '',
+      price_subtotal_usd: '',
       save_button: false,
       overlay: true,
       delivery_block: false,
@@ -3392,13 +3394,33 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     calc: function calc() {
       this.price_subtotal = 0;
       var price_subtotal = [];
+      this.price_subtotal_rub = 0;
+      var price_subtotal_rub = [];
+      this.price_subtotal_usd = 0;
+      var price_subtotal_usd = [];
       this.categories.forEach(function (category) {
         document.getElementsByName(category.slug + '[]').forEach(function (child) {
+          if (child.options[child.selectedIndex].getAttribute('data-pre_rub')) {
+            price_subtotal_rub.push(parseInt(child.options[child.selectedIndex].getAttribute('data-pre_rub')));
+          }
+
+          if (child.options[child.selectedIndex].getAttribute('data-pre_usd')) {
+            price_subtotal_usd.push(parseInt(child.options[child.selectedIndex].getAttribute('data-pre_usd')));
+          }
+
           if (child.options[child.selectedIndex].getAttribute('data-price')) {
             price_subtotal.push(parseInt(child.options[child.selectedIndex].getAttribute('data-price')));
           }
         });
       });
+      price_subtotal_rub = price_subtotal_rub.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      this.price_subtotal_rub = price_subtotal_rub;
+      price_subtotal_usd = price_subtotal_usd.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      this.price_subtotal_usd = price_subtotal_usd;
       price_subtotal = price_subtotal.reduce(function (a, b) {
         return a + b;
       }, 0);
@@ -60253,6 +60275,8 @@ var render = function() {
                                   {
                                     attrs: {
                                       "data-title": element.title,
+                                      "data-pre_rub": element.pre_rub,
+                                      "data-pre_usd": element.pre_usd,
                                       "data-price": element.price
                                     },
                                     domProps: { value: element.id }
@@ -60464,10 +60488,35 @@ var render = function() {
           _vm.price_subtotal > 0
             ? _c("div", { staticClass: "total" }, [
                 _c("div", { staticClass: "row align-items-center m-0 p-0" }, [
-                  _c("div", { staticClass: "col-6" }, [_vm._v("Подитог:")]),
+                  _c("div", { staticClass: "col-6" }, [
+                    _vm._v("Цена за 1 ед:")
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-6 text-end text-primary" }, [
-                    _vm._v(_vm._s(parseInt(_vm.price_subtotal)) + " ₽")
+                    _vm._v(_vm._s(parseInt(_vm.price_subtotal)) + " ₽ "),
+                    (_vm.price_subtotal_rub && _vm.price_subtotal_rub > 0) ||
+                    (_vm.price_subtotal_usd && _vm.price_subtotal_usd > 0)
+                      ? _c(
+                          "small",
+                          {
+                            staticStyle: {
+                              display: "block",
+                              "line-height": "1",
+                              "font-size": "14px",
+                              color: "#777",
+                              "font-weight": "500"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "детали - " +
+                                _vm._s(_vm.price_subtotal_rub) +
+                                "₽ / $" +
+                                _vm._s(_vm.price_subtotal_usd)
+                            )
+                          ]
+                        )
+                      : _vm._e()
                   ])
                 ]),
                 _vm._v(" "),
