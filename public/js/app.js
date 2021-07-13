@@ -3416,11 +3416,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       price_subtotal_rub = price_subtotal_rub.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.price_subtotal_rub = price_subtotal_rub;
+      this.price_subtotal_rub = parseInt(this.selected_box.pre_rub) + price_subtotal_rub;
       price_subtotal_usd = price_subtotal_usd.reduce(function (a, b) {
         return a + b;
       }, 0);
-      this.price_subtotal_usd = price_subtotal_usd;
+      this.price_subtotal_usd = parseInt(this.selected_box.pre_usd) + price_subtotal_usd;
       price_subtotal = price_subtotal.reduce(function (a, b) {
         return a + b;
       }, 0);
@@ -60173,6 +60173,8 @@ var render = function() {
                             value: {
                               id: box.id,
                               title: box.title,
+                              pre_rub: box.pre_rub,
+                              pre_usd: box.pre_usd,
                               price: box.price,
                               width: box.width,
                               length: box.length,
@@ -60509,8 +60511,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "детали - " +
-                                _vm._s(_vm.price_subtotal_rub) +
+                              _vm._s(_vm.price_subtotal_rub) +
                                 "₽ / $" +
                                 _vm._s(_vm.price_subtotal_usd)
                             )

@@ -68,7 +68,7 @@
                     <select v-model="selected_box" class="form-select form-select-lg mb-3">
                         <option value selected>&nbsp;</option>
                         <template v-for="box in boxes">
-                            <option v-bind:value="{ id: box.id, title: box.title, price: box.price, width: box.width, length: box.length, height: box.height, weight: box.weight, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ parseInt(box.price) }}₽</option>
+                            <option v-bind:value="{ id: box.id, title: box.title, pre_rub: box.pre_rub, pre_usd: box.pre_usd, price: box.price, width: box.width, length: box.length, height: box.height, weight: box.weight, descriptionmanager: box.descriptionmanager }">{{ box.title }} - {{ parseInt(box.price) }}₽</option>
                         </template>
                     </select>
                     <button @click="tabSelect('tab_type')" class="btn btn-outline-primary">Назад</button>
@@ -129,7 +129,7 @@
                 <div v-if="price_subtotal > 0" class="total">
                     <div class="row align-items-center m-0 p-0">
                         <div class="col-6">Цена за 1 ед:</div>
-                        <div class="col-6 text-end text-primary">{{ parseInt(price_subtotal) }} ₽ <small v-if="price_subtotal_rub && price_subtotal_rub > 0 || price_subtotal_usd && price_subtotal_usd > 0"  style="display: block; line-height: 1; font-size: 14px; color: #777; font-weight: 500;">детали - {{ price_subtotal_rub }}₽ / ${{ price_subtotal_usd }}</small></div>
+                        <div class="col-6 text-end text-primary">{{ parseInt(price_subtotal) }} ₽ <small v-if="price_subtotal_rub && price_subtotal_rub > 0 || price_subtotal_usd && price_subtotal_usd > 0"  style="display: block; line-height: 1; font-size: 14px; color: #777; font-weight: 500;">{{ price_subtotal_rub }}₽ / ${{ price_subtotal_usd }}</small></div>
                     </div>
                     <div v-if="delivery_block && pek_price > 0" class="row align-items-center m-0 p-0">
                         <div class="col-6">
@@ -424,10 +424,10 @@
                 );
 
                 price_subtotal_rub = price_subtotal_rub.reduce((a, b) => a + b, 0)
-                this.price_subtotal_rub = price_subtotal_rub
+                this.price_subtotal_rub = parseInt(this.selected_box.pre_rub) + price_subtotal_rub
 
                 price_subtotal_usd = price_subtotal_usd.reduce((a, b) => a + b, 0)
-                this.price_subtotal_usd = price_subtotal_usd
+                this.price_subtotal_usd = parseInt(this.selected_box.pre_usd) + price_subtotal_usd
 
                 price_subtotal = price_subtotal.reduce((a, b) => a + b, 0)
                 this.price_subtotal = parseInt(this.selected_box.price) + price_subtotal
