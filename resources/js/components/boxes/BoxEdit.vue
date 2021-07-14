@@ -218,6 +218,11 @@
                     this.sborka = 0
                 }
             },
+            price: function (val) {
+                if(isNaN(parseFloat(val))) {
+                    this.TotalPrice()
+                }
+            },
         },
         components: {
         }

@@ -2857,6 +2857,11 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.sborka = 0;
       }
+    },
+    price: function price(val) {
+      if (isNaN(parseFloat(val))) {
+        this.TotalPrice();
+      }
     }
   },
   components: {}
