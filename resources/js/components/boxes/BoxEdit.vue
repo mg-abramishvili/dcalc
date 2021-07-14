@@ -102,6 +102,12 @@
         },
         created() {
             axios
+                .get('https://www.cbr-xml-daily.ru/daily_json.js', { withCredentials: false })
+                .then(response => (
+                    this.currencies = response.data.Valute.USD,
+                    this.currencies_date = response.data.Date
+                ));
+            axios
                 .get(`/api/box/${this.$route.params.id}`)
                 .then(response => (
                     this.box = response.data,
@@ -118,12 +124,6 @@
                     this.weight = response.data.weight,
                     this.description = response.data.description,
                     this.descriptionmanager = response.data.descriptionmanager
-                ));
-            axios
-                .get('https://www.cbr-xml-daily.ru/daily_json.js', { withCredentials: false })
-                .then(response => (
-                    this.currencies = response.data.Valute.USD,
-                    this.currencies_date = response.data.Date
                 ));
             axios
                 .get('/api/types')

@@ -2138,13 +2138,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -2760,15 +2753,15 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    axios.get("/api/box/".concat(this.$route.params.id)).then(function (response) {
-      return _this.box = response.data, _this.title = response.data.title, _this.pre_rub = response.data.pre_rub, _this.pre_usd = response.data.pre_usd, _this.marzha = response.data.marzha, _this.sborka = response.data.sborka, _this.price = response.data.price, _this.selected_types = response.data.types.map(function (type) {
-        return type.id;
-      }), _this.width = response.data.width, _this.height = response.data.height, _this.length = response.data.length, _this.weight = response.data.weight, _this.description = response.data.description, _this.descriptionmanager = response.data.descriptionmanager;
-    });
     axios.get('https://www.cbr-xml-daily.ru/daily_json.js', {
       withCredentials: false
     }).then(function (response) {
       return _this.currencies = response.data.Valute.USD, _this.currencies_date = response.data.Date;
+    });
+    axios.get("/api/box/".concat(this.$route.params.id)).then(function (response) {
+      return _this.box = response.data, _this.title = response.data.title, _this.pre_rub = response.data.pre_rub, _this.pre_usd = response.data.pre_usd, _this.marzha = response.data.marzha, _this.sborka = response.data.sborka, _this.price = response.data.price, _this.selected_types = response.data.types.map(function (type) {
+        return type.id;
+      }), _this.width = response.data.width, _this.height = response.data.height, _this.length = response.data.length, _this.weight = response.data.weight, _this.description = response.data.description, _this.descriptionmanager = response.data.descriptionmanager;
     });
     axios.get('/api/types').then(function (response) {
       return _this.types = response.data;
@@ -4151,10 +4144,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       name: '',
+      type: '',
       inn: '',
       phone: '',
       email: ''
@@ -4167,6 +4169,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post('/api/clients', {
         name: this.name,
+        type: this.type,
         inn: this.inn,
         phone: this.phone,
         email: this.email
@@ -4194,6 +4197,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -58335,61 +58347,11 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c("span", { staticClass: "align-middle" }, [
-                  _vm._v("Конечники")
+                  _vm._v("Клиенты")
                 ]),
                 _vm._v(" "),
                 _c("span", { staticClass: "badge badge-sidebar-primary" }, [
                   _vm._v(_vm._s(_vm.$parent.counter_clients))
-                ])
-              ]
-            )
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          { staticClass: "sidebar-item" },
-          [
-            _c(
-              "router-link",
-              {
-                staticClass: "sidebar-link",
-                attrs: { to: { name: "Partners" } }
-              },
-              [
-                _c(
-                  "svg",
-                  {
-                    staticClass: "feather feather-users align-middle",
-                    attrs: {
-                      xmlns: "http://www.w3.org/2000/svg",
-                      width: "24",
-                      height: "24",
-                      viewBox: "0 0 24 24",
-                      fill: "none",
-                      stroke: "currentColor",
-                      "stroke-width": "2",
-                      "stroke-linecap": "round",
-                      "stroke-linejoin": "round"
-                    }
-                  },
-                  [
-                    _c("path", {
-                      attrs: { d: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" }
-                    }),
-                    _c("circle", { attrs: { cx: "9", cy: "7", r: "4" } }),
-                    _c("path", { attrs: { d: "M23 21v-2a4 4 0 0 0-3-3.87" } }),
-                    _c("path", { attrs: { d: "M16 3.13a4 4 0 0 1 0 7.75" } })
-                  ]
-                ),
-                _vm._v(" "),
-                _c("span", { staticClass: "align-middle" }, [
-                  _vm._v("Партнеры")
-                ]),
-                _vm._v(" "),
-                _c("span", { staticClass: "badge badge-sidebar-primary" }, [
-                  _vm._v(_vm._s(_vm.$parent.counter_partners))
                 ])
               ]
             )
@@ -61671,6 +61633,48 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { id: "type_label" } }, [_vm._v("Тип")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.type,
+                  expression: "type"
+                }
+              ],
+              staticClass: "form-control mb-3",
+              attrs: { id: "type_input" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.type = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "endclient" } }, [
+                _vm._v("Конечник")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "partner" } }, [_vm._v("Партнер")])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
           _c("label", { attrs: { id: "inn_label" } }, [_vm._v("ИНН")]),
           _vm._v(" "),
           _c("input", {
@@ -61834,6 +61838,29 @@ var render = function() {
                   _vm._v(_vm._s(client.name))
                 ]),
                 _vm._v(" "),
+                _c(
+                  "td",
+                  { staticClass: "align-middle" },
+                  [
+                    client.type === "endclient"
+                      ? [
+                          _vm._v(
+                            "\n                                конечник\n                            "
+                          )
+                        ]
+                      : _vm._e(),
+                    _vm._v(" "),
+                    client.type === "partner"
+                      ? [
+                          _vm._v(
+                            "\n                                партнер\n                            "
+                          )
+                        ]
+                      : _vm._e()
+                  ],
+                  2
+                ),
+                _vm._v(" "),
                 _c("td", { staticClass: "align-middle" }, [
                   _vm._v(_vm._s(client.inn))
                 ]),
@@ -61860,7 +61887,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-12 col-lg-6" }, [
-      _c("h1", { staticClass: "h3 m-0" }, [_vm._v("Конечники")])
+      _c("h1", { staticClass: "h3 m-0" }, [_vm._v("Клиенты")])
     ])
   },
   function() {
@@ -61870,6 +61897,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", { attrs: { scope: "col" } }),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Тип")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("ИНН")]),
         _vm._v(" "),

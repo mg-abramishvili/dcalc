@@ -14,6 +14,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label id="type_label">Тип</label>
+                    <select v-model="type" id="type_input" class="form-control mb-3">
+                        <option value="endclient">Конечник</option>
+                        <option value="partner">Партнер</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label id="inn_label">ИНН</label>
                     <input v-model="inn" id="inn_input" type="text" class="form-control mb-3">
                 </div>
@@ -41,6 +49,7 @@
         data() {
             return {
                 name: '',
+                type: '',
                 inn: '',
                 phone: '',
                 email: '',
@@ -51,7 +60,7 @@
         methods: {
             saveProject() {
                 axios
-                .post('/api/clients', { name: this.name, inn: this.inn, phone: this.phone, email: this.email })
+                .post('/api/clients', { name: this.name, type: this.type, inn: this.inn, phone: this.phone, email: this.email })
                 .then(response => (
                     this.$parent.counterClients(),
                     this.$router.push({path: '/clients'}) 
