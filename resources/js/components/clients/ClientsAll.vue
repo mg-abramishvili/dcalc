@@ -14,7 +14,6 @@
                     <thead>
                         <tr>
                             <th scope="col"></th>
-                            <th scope="col">Тип</th>
                             <th scope="col">ИНН</th>
                             <th scope="col">Телефон</th>
                             <th scope="col">E-mail</th>
@@ -23,14 +22,6 @@
                     <tbody>
                         <tr v-for="client in clients" :key="client.id">
                             <td class="align-middle">{{ client.name }}</td>
-                            <td class="align-middle">
-                                <template v-if="client.type === 'endclient'">
-                                    конечник
-                                </template>
-                                <template v-if="client.type === 'partner'">
-                                    партнер
-                                </template>
-                            </td>
                             <td class="align-middle">{{ client.inn }}</td>
                             <td class="align-middle">{{ client.phone }}</td>
                             <td class="align-middle">{{ client.email }}</td>

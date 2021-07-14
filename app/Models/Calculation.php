@@ -16,7 +16,7 @@ class Calculation extends Model
 
     public function elements()
     {
-        return $this->belongsToMany('App\Models\Element');
+        return $this->belongsToMany('App\Models\Element')->withPivot('price');
     }
 
     public function types()

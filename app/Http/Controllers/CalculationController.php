@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Calculation;
+use App\Models\Element;
 use Brick\Math\Internal\Calculator;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,10 @@ class CalculationController extends Controller
         
         for ($element=0; $element < count($elements); $element++) {
             if ($elements[$element] != '') {
-                $calculation->elements()->attach($elements[$element], []);
+                $el = Element::find($elements[$element]);
+                $calculation->elements()->attach($elements[$element], [
+                    'price' => $el->price,
+                ]);
             }
         }
 

@@ -453,15 +453,14 @@
             saveCalculation() {
                 var megred_select_form_values = [];
                 this.categories.forEach(function(category) {
-                        document.getElementsByName(category.slug + '[]').forEach((child) => {
-                            if(document.getElementsByName(category.slug + '[]')[0].value) {
-                                megred_select_form_values.push(child.value)
-                            } else {
-                                console.log(category.slug + ' - none')
-                            }
-                        });
-                    }
-                );
+                    document.getElementsByName(category.slug + '[]').forEach((child) => {
+                        if(document.getElementsByName(category.slug + '[]')[0].value) {
+                            megred_select_form_values.push(child.value)
+                        } else {
+                            console.log(category.slug + ' - none')
+                        }
+                    });
+                });
 
                 console.log(megred_select_form_values)
                 

@@ -4149,19 +4149,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       name: '',
-      type: '',
       inn: '',
       phone: '',
       email: ''
@@ -4174,7 +4165,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post('/api/clients', {
         name: this.name,
-        type: this.type,
         inn: this.inn,
         phone: this.phone,
         email: this.email
@@ -4202,15 +4192,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -61638,48 +61619,6 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { id: "type_label" } }, [_vm._v("Тип")]),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.type,
-                  expression: "type"
-                }
-              ],
-              staticClass: "form-control mb-3",
-              attrs: { id: "type_input" },
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.type = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                }
-              }
-            },
-            [
-              _c("option", { attrs: { value: "endclient" } }, [
-                _vm._v("Конечник")
-              ]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "partner" } }, [_vm._v("Партнер")])
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
           _c("label", { attrs: { id: "inn_label" } }, [_vm._v("ИНН")]),
           _vm._v(" "),
           _c("input", {
@@ -61843,29 +61782,6 @@ var render = function() {
                   _vm._v(_vm._s(client.name))
                 ]),
                 _vm._v(" "),
-                _c(
-                  "td",
-                  { staticClass: "align-middle" },
-                  [
-                    client.type === "endclient"
-                      ? [
-                          _vm._v(
-                            "\n                                конечник\n                            "
-                          )
-                        ]
-                      : _vm._e(),
-                    _vm._v(" "),
-                    client.type === "partner"
-                      ? [
-                          _vm._v(
-                            "\n                                партнер\n                            "
-                          )
-                        ]
-                      : _vm._e()
-                  ],
-                  2
-                ),
-                _vm._v(" "),
                 _c("td", { staticClass: "align-middle" }, [
                   _vm._v(_vm._s(client.inn))
                 ]),
@@ -61902,8 +61818,6 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", { attrs: { scope: "col" } }),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Тип")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("ИНН")]),
         _vm._v(" "),
