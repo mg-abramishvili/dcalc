@@ -5123,6 +5123,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5512,6 +5515,7 @@ __webpack_require__.r(__webpack_exports__);
       clients: '',
       users_data: {},
       calculation_id: '',
+      offer_id: '',
       checkedNext: false,
       checkedProjects: {},
       checkedClients: ''
@@ -5521,6 +5525,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.calculation_id = this.$route.params.calculation_id;
+    this.offer_id = this.$route.params.offer_id;
     axios.get('/api/users').then(function (response) {
       return _this.users_data = response.data;
     });
@@ -5548,6 +5553,7 @@ __webpack_require__.r(__webpack_exports__);
         payment: this.payment,
         description: this.description,
         calculation_id: this.calculation_id,
+        offer_id: this.offer_id,
         users: this.users
       }).then(function (response) {
         return _this3.$parent.counterProjects(), _this3.$router.push({
@@ -6460,7 +6466,7 @@ var routes = [{
   name: 'Projects',
   component: _components_projects_ProjectsAll_vue__WEBPACK_IMPORTED_MODULE_4__.default
 }, {
-  path: '/projects/create/:calculation_id',
+  path: '/projects/create/:calculation_id/:offer_id',
   name: 'ProjectCreate',
   component: _components_projects_ProjectCreate_vue__WEBPACK_IMPORTED_MODULE_5__.default
 }, {
@@ -63603,13 +63609,39 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-12 col-lg-6 text-end" }, [
-        _c(
-          "a",
-          { staticClass: "btn btn-primary", on: { click: _vm.generatePdf } },
-          [_vm._v("\n                Скачать PDF\n            ")]
-        )
-      ])
+      _c(
+        "div",
+        { staticClass: "col-12 col-lg-6 text-end" },
+        [
+          _vm.offer.calculations && _vm.offer.calculations.length
+            ? [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: {
+                      to: {
+                        name: "ProjectCreate",
+                        params: {
+                          calculation_id: _vm.offer.calculations[0].id,
+                          offer_id: _vm.offer.id
+                        }
+                      }
+                    }
+                  },
+                  [_vm._v("Создать проект из КП")]
+                )
+              ]
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-danger", on: { click: _vm.generatePdf } },
+            [_vm._v("\n                Скачать PDF\n            ")]
+          )
+        ],
+        2
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [

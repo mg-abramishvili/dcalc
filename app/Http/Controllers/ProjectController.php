@@ -34,16 +34,9 @@ class ProjectController extends Controller
         $project->payment = $data['payment'];
         $project->description = $data['description'];
         $project->save();
-        $offer = new Offer([
-            'client' => '',
-            'comment' => '',
-        ]);
-        $offer->save();
-        $offer->calculations()->attach($request->calculation_id, ['offer_id' => $offer->id]);
         $project->calculations()->attach($request->calculation_id, ['project_id' => $project->id]);
-        $project->offers()->attach($offer->id, ['project_id' => $project->id]);
+        $project->offers()->attach($request->offer_id, ['project_id' => $project->id]);
         $project->users()->attach($request->users, ['project_id' => $project->id]);
         $project->clients()->attach($request->clients, ['project_id' => $project->id]);
-        $project->partners()->attach($request->partners, ['project_id' => $project->id]);
     }
 }

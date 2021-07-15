@@ -66,7 +66,7 @@ export const routes = [
         component: Projects
     },
     {
-        path: '/projects/create/:calculation_id',
+        path: '/projects/create/:calculation_id/:offer_id',
         name: 'ProjectCreate',
         component: ProjectCreate
     },

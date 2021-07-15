@@ -111,6 +111,7 @@
                 users_data: {},
 
                 calculation_id: '',
+                offer_id: '',
 
                 checkedNext: false,
                 checkedProjects: {},
@@ -119,6 +120,7 @@
         },
         created() {
             this.calculation_id = this.$route.params.calculation_id
+            this.offer_id = this.$route.params.offer_id
 
             axios
                 .get('/api/users')
@@ -140,7 +142,7 @@
             },
             saveProject() {
                 axios
-                .post('/api/projects', { name: this.name, status: this.status, priority: this.priority, deadline: this.deadline, payment: this.payment, description: this.description, calculation_id: this.calculation_id, users: this.users })
+                .post('/api/projects', { name: this.name, status: this.status, priority: this.priority, deadline: this.deadline, payment: this.payment, description: this.description, calculation_id: this.calculation_id, offer_id: this.offer_id, users: this.users })
                 .then(response => (
                     this.$parent.counterProjects(),
                     this.$router.push({path: '/projects'}) 

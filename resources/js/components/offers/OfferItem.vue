@@ -5,7 +5,10 @@
                 <h1 class="h3 mb-0">КП №{{offer.id}} для {{ offer.client }}</h1>
             </div>
             <div class="col-12 col-lg-6 text-end">
-                <a @click="generatePdf" class="btn btn-primary">
+                <template v-if="offer.calculations && offer.calculations.length">
+                    <router-link :to="{name: 'ProjectCreate', params: { calculation_id: offer.calculations[0].id, offer_id: offer.id }}" class="btn btn-primary">Создать проект из КП</router-link>
+                </template>
+                <a @click="generatePdf" class="btn btn-danger">
                     Скачать PDF
                 </a>
             </div>
