@@ -5126,6 +5126,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5500,8 +5505,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5513,6 +5516,8 @@ __webpack_require__.r(__webpack_exports__);
       description: '',
       users: '',
       clients: '',
+      endclient: '',
+      partner: '',
       users_data: {},
       calculation_id: '',
       offer_id: '',
@@ -5526,8 +5531,12 @@ __webpack_require__.r(__webpack_exports__);
 
     this.calculation_id = this.$route.params.calculation_id;
     this.offer_id = this.$route.params.offer_id;
+    this.users = this.$parent.user.id;
     axios.get('/api/users').then(function (response) {
       return _this.users_data = response.data;
+    });
+    axios.get('/api/clients').then(function (response) {
+      return _this.clients = response.data;
     });
   },
   methods: {
@@ -5554,7 +5563,8 @@ __webpack_require__.r(__webpack_exports__);
         description: this.description,
         calculation_id: this.calculation_id,
         offer_id: this.offer_id,
-        users: this.users
+        users: this.users,
+        endclient: this.endclient
       }).then(function (response) {
         return _this3.$parent.counterProjects(), _this3.$router.push({
           path: '/projects'
@@ -5579,6 +5589,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -61951,7 +61977,7 @@ var render = function() {
             _vm._l(_vm.clients, function(client) {
               return _c("tr", { key: client.id }, [
                 _c("td", { staticClass: "align-middle" }, [
-                  _vm._v(_vm._s(client.name))
+                  _vm._v(_vm._s(client.id) + " " + _vm._s(client.name))
                 ]),
                 _vm._v(" "),
                 _c("td", { staticClass: "align-middle" }, [
@@ -63615,22 +63641,40 @@ var render = function() {
         [
           _vm.offer.calculations && _vm.offer.calculations.length
             ? [
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: {
-                      to: {
-                        name: "ProjectCreate",
-                        params: {
-                          calculation_id: _vm.offer.calculations[0].id,
-                          offer_id: _vm.offer.id
-                        }
-                      }
-                    }
-                  },
-                  [_vm._v("Создать проект из КП")]
-                )
+                _vm.offer.projects && _vm.offer.projects.length
+                  ? [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: {
+                            to: {
+                              name: "ProjectItem",
+                              params: { id: _vm.offer.projects[0].id }
+                            }
+                          }
+                        },
+                        [_vm._v("Перейти в проект")]
+                      )
+                    ]
+                  : [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: {
+                            to: {
+                              name: "ProjectCreate",
+                              params: {
+                                calculation_id: _vm.offer.calculations[0].id,
+                                offer_id: _vm.offer.id
+                              }
+                            }
+                          }
+                        },
+                        [_vm._v("Создать проект из КП")]
+                      )
+                    ]
               ]
             : _vm._e(),
           _vm._v(" "),
@@ -64159,7 +64203,7 @@ var render = function() {
           _c("div", { staticClass: "col-12 col-md-6" }, [
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { id: "name_label" } }, [
-                _vm._v("Название")
+                _vm._v("Название проекта")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -64186,8 +64230,106 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { id: "clients_label" } }, [
-                _vm._v("ИНН Конечника")
+              _c("label", { attrs: { id: "status_label" } }, [
+                _vm._v("Статус")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.status,
+                      expression: "status"
+                    }
+                  ],
+                  staticClass: "form-control mb-3",
+                  attrs: { id: "status_input" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.status = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "in_works" } }, [
+                    _vm._v("В работе")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "waiting_for_review" } }, [
+                    _vm._v("Ждет отзыва клиента")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "warehouse" } }, [
+                    _vm._v("Склад")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "new" } }, [_vm._v("Новый")])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { id: "priority_label" } }, [
+                _vm._v("Приоритет")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.priority,
+                      expression: "priority"
+                    }
+                  ],
+                  staticClass: "form-control mb-3",
+                  attrs: { id: "priority_input" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.priority = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "normal" } }, [
+                    _vm._v("Нормальный")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "high" } }, [
+                    _vm._v("Срочный")
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { id: "deadline_label" } }, [
+                _vm._v("Срок сдачи")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -64195,326 +64337,210 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.clients,
-                    expression: "clients"
+                    value: _vm.deadline,
+                    expression: "deadline"
                   }
                 ],
                 staticClass: "form-control mb-3",
-                attrs: { id: "clients_input", type: "text" },
-                domProps: { value: _vm.clients },
+                attrs: { id: "deadline_input", type: "date" },
+                domProps: { value: _vm.deadline },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.clients = $event.target.value
+                    _vm.deadline = $event.target.value
                   }
                 }
               })
             ]),
             _vm._v(" "),
-            _vm.checkedNext === false
-              ? _c("div", [
-                  _c(
-                    "button",
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { id: "payment_label" } }, [
+                _vm._v("Оплата")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
                     {
-                      staticClass: "btn btn-primary",
-                      on: {
-                        click: function($event) {
-                          return _vm.checkNext()
-                        }
-                      }
-                    },
-                    [_vm._v("Продолжить")]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.checkedNext === true
-              ? _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { id: "status_label" } }, [
-                    _vm._v("Статус")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.status,
-                          expression: "status"
-                        }
-                      ],
-                      staticClass: "form-control mb-3",
-                      attrs: { id: "status_input" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.status = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "in_works" } }, [
-                        _vm._v("В работе")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "waiting_for_review" } }, [
-                        _vm._v("Ждет отзыва клиента")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "warehouse" } }, [
-                        _vm._v("Склад")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "new" } }, [
-                        _vm._v("Новый")
-                      ])
-                    ]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.checkedNext === true
-              ? _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { id: "priority_label" } }, [
-                    _vm._v("Приоритет")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.priority,
-                          expression: "priority"
-                        }
-                      ],
-                      staticClass: "form-control mb-3",
-                      attrs: { id: "priority_input" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.priority = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "normal" } }, [
-                        _vm._v("Нормальный")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "high" } }, [
-                        _vm._v("Срочный")
-                      ])
-                    ]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.checkedNext === true
-              ? _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { id: "deadline_label" } }, [
-                    _vm._v("Срок сдачи")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.deadline,
-                        expression: "deadline"
-                      }
-                    ],
-                    staticClass: "form-control mb-3",
-                    attrs: { id: "deadline_input", type: "date" },
-                    domProps: { value: _vm.deadline },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.deadline = $event.target.value
-                      }
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.payment,
+                      expression: "payment"
                     }
-                  })
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.checkedNext === true
-              ? _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { id: "payment_label" } }, [
-                    _vm._v("Оплата")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.payment,
-                          expression: "payment"
-                        }
-                      ],
-                      staticClass: "form-control mb-3",
-                      attrs: { id: "payment_input" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.payment = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "pre100" } }, [
-                        _vm._v("Предоплата 100%")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "pre50" } }, [
-                        _vm._v("Предоплата 50%")
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "after" } }, [
-                        _vm._v("Оплата после поставки")
-                      ])
-                    ]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.checkedNext === true
-              ? _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { id: "description_label" } }, [
-                    _vm._v("Описание")
-                  ]),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.description,
-                        expression: "description"
-                      }
-                    ],
-                    staticClass: "form-control mb-3",
-                    attrs: { id: "description_input" },
-                    domProps: { value: _vm.description },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.description = $event.target.value
-                      }
+                  ],
+                  staticClass: "form-control mb-3",
+                  attrs: { id: "payment_input" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.payment = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
                     }
-                  })
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.checkedNext === true
-              ? _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { id: "users_label" } }, [
-                    _vm._v("Ответственный")
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "pre100" } }, [
+                    _vm._v("Предоплата 100%")
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.users,
-                          expression: "users"
-                        }
-                      ],
-                      staticClass: "form-control mb-3",
-                      attrs: { id: "users_input" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.users = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _vm._l(_vm.users_data, function(user) {
-                        return [
-                          user.id !== 9999
-                            ? [
-                                _c("option", { domProps: { value: user.id } }, [
-                                  _vm._v(_vm._s(user.name))
-                                ])
-                              ]
-                            : _vm._e()
-                        ]
-                      })
-                    ],
-                    2
-                  )
-                ])
-              : _vm._e(),
+                  _c("option", { attrs: { value: "pre50" } }, [
+                    _vm._v("Предоплата 50%")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "after" } }, [
+                    _vm._v("Оплата после поставки")
+                  ])
+                ]
+              )
+            ]),
             _vm._v(" "),
-            _vm.checkedNext === true
-              ? _c("div", [
-                  _c(
-                    "button",
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { id: "description_label" } }, [
+                _vm._v("Описание")
+              ]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.description,
+                    expression: "description"
+                  }
+                ],
+                staticClass: "form-control mb-3",
+                attrs: { id: "description_input" },
+                domProps: { value: _vm.description },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.description = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { id: "users_label" } }, [
+                _vm._v("Ответственный")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
                     {
-                      staticClass: "btn btn-primary",
-                      on: {
-                        click: function($event) {
-                          return _vm.saveProject()
-                        }
-                      }
-                    },
-                    [_vm._v("Сохранить")]
-                  )
-                ])
-              : _vm._e()
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.users,
+                      expression: "users"
+                    }
+                  ],
+                  staticClass: "form-control mb-3",
+                  attrs: { id: "users_input" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.users = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _vm._l(_vm.users_data, function(user) {
+                    return [
+                      user.id !== 9999
+                        ? [
+                            _c("option", { domProps: { value: user.id } }, [
+                              _vm._v(_vm._s(user.name))
+                            ])
+                          ]
+                        : _vm._e()
+                    ]
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { id: "users_label" } }, [
+                _vm._v("Конечник")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.endclient,
+                      expression: "endclient"
+                    }
+                  ],
+                  staticClass: "form-control mb-3",
+                  attrs: { id: "endclient_input" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.endclient = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                _vm._l(_vm.clients, function(client) {
+                  return _c("option", { domProps: { value: client.id } }, [
+                    _vm._v(_vm._s(client.name))
+                  ])
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.saveProject()
+                    }
+                  }
+                },
+                [_vm._v("Сохранить")]
+              )
+            ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-12 col-md-6" }, [
@@ -64771,6 +64797,48 @@ var render = function() {
                           _vm._v(
                             "\n                                    " +
                               _vm._s(user.name) +
+                              "\n                                "
+                          )
+                        ]
+                      })
+                    ],
+                    2
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row align-items-center mb-4" }, [
+                  _c("div", { staticClass: "col-6" }, [_vm._v("Конечник")]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-6 text-end" },
+                    [
+                      _vm._l(_vm.project.endclients, function(endclient) {
+                        return [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(endclient.name) +
+                              "\n                                "
+                          )
+                        ]
+                      })
+                    ],
+                    2
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row align-items-center mb-4" }, [
+                  _c("div", { staticClass: "col-6" }, [_vm._v("Партнер")]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col-6 text-end" },
+                    [
+                      _vm._l(_vm.project.partners, function(partner) {
+                        return [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(partner.name) +
                               "\n                                "
                           )
                         ]

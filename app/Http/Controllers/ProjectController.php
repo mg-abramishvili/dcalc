@@ -15,7 +15,7 @@ class ProjectController extends Controller
 
     public function project_item($id)
     {
-        return Project::with('calculations.boxes', 'calculations.elements.categories', 'offers.calculations.elements', 'users')->find($id);
+        return Project::with('calculations.boxes', 'calculations.elements.categories', 'offers.calculations.elements', 'users', 'endclients', 'partners')->find($id);
     }
 
     public function projects_search($search, Request $request)
@@ -37,6 +37,6 @@ class ProjectController extends Controller
         $project->calculations()->attach($request->calculation_id, ['project_id' => $project->id]);
         $project->offers()->attach($request->offer_id, ['project_id' => $project->id]);
         $project->users()->attach($request->users, ['project_id' => $project->id]);
-        $project->clients()->attach($request->clients, ['project_id' => $project->id]);
+        $project->endclients()->attach($request->endclient, ['project_id' => $project->id]);
     }
 }

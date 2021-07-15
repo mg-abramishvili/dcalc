@@ -33,13 +33,13 @@ class Project extends Model
         return $this->belongsToMany('App\Models\User');
     }
 
-    public function clients()
+    public function endclients()
     {
-        return $this->belongsToMany('App\Models\Client');
+        return $this->belongsToMany('App\Models\Client', 'cendclient_project');
     }
 
     public function partners()
     {
-        return $this->belongsToMany('App\Models\Client');
+        return $this->belongsToMany('App\Models\Client', 'cpartner_project');
     }
 }

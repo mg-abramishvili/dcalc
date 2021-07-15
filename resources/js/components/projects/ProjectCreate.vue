@@ -11,20 +11,11 @@
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <div class="form-group">
-                            <label id="name_label">Название</label>
+                            <label id="name_label">Название проекта</label>
                             <input v-model="name" id="name_input" type="text" class="form-control mb-3">
                         </div>
 
                         <div class="form-group">
-                            <label id="clients_label">ИНН Конечника</label>
-                            <input v-model="clients" id="clients_input" type="text" class="form-control mb-3">
-                        </div>
-
-                        <div v-if="checkedNext === false">
-                            <button @click="checkNext()" class="btn btn-primary">Продолжить</button>
-                        </div>
-
-                        <div v-if="checkedNext === true" class="form-group">
                             <label id="status_label">Статус</label>
                             <select v-model="status" id="status_input" class="form-control mb-3">
                                 <option value="in_works">В работе</option>
@@ -34,7 +25,7 @@
                             </select>
                         </div>
 
-                        <div v-if="checkedNext === true" class="form-group">
+                        <div class="form-group">
                             <label id="priority_label">Приоритет</label>
                             <select v-model="priority" id="priority_input" class="form-control mb-3">
                                 <option value="normal">Нормальный</option>
@@ -42,12 +33,12 @@
                             </select>
                         </div>
 
-                        <div v-if="checkedNext === true" class="form-group">
+                        <div class="form-group">
                             <label id="deadline_label">Срок сдачи</label>
                             <input v-model="deadline" id="deadline_input" type="date" class="form-control mb-3">
                         </div>
 
-                        <div v-if="checkedNext === true" class="form-group">
+                        <div class="form-group">
                             <label id="payment_label">Оплата</label>
                             <select v-model="payment" id="payment_input" class="form-control mb-3">
                                 <option value="pre100">Предоплата 100%</option>
@@ -56,12 +47,12 @@
                             </select>
                         </div>
 
-                        <div v-if="checkedNext === true" class="form-group">
+                        <div class="form-group">
                             <label id="description_label">Описание</label>
                             <textarea v-model="description" id="description_input" class="form-control mb-3"></textarea>
                         </div>
 
-                        <div v-if="checkedNext === true" class="form-group">
+                        <div class="form-group">
                             <label id="users_label">Ответственный</label>
                             <select v-model="users" id="users_input" class="form-control mb-3">
                                 <template v-for="user in users_data">
@@ -72,7 +63,14 @@
                             </select>
                         </div>
 
-                        <div v-if="checkedNext === true">
+                        <div class="form-group">
+                            <label id="users_label">Конечник</label>
+                            <select v-model="endclient" id="endclient_input" class="form-control mb-3">
+                                <option v-for="client in clients" :value="client.id">{{ client.name }}</option>
+                            </select>
+                        </div>
+
+                        <div>
                             <button @click="saveProject()" class="btn btn-primary">Сохранить</button>
                         </div>
                     </div>
@@ -107,6 +105,8 @@
                 description: '',
                 users: '',
                 clients: '',
+                endclient: '',
+                partner: '',
 
                 users_data: {},
 
@@ -121,11 +121,17 @@
         created() {
             this.calculation_id = this.$route.params.calculation_id
             this.offer_id = this.$route.params.offer_id
+            this.users = this.$parent.user.id
 
             axios
                 .get('/api/users')
                 .then(response => (
                     this.users_data = response.data
+                ));
+            axios
+                .get('/api/clients')
+                .then(response => (
+                    this.clients = response.data
                 ));
         },
         methods: {
@@ -142,7 +148,7 @@
             },
             saveProject() {
                 axios
-                .post('/api/projects', { name: this.name, status: this.status, priority: this.priority, deadline: this.deadline, payment: this.payment, description: this.description, calculation_id: this.calculation_id, offer_id: this.offer_id, users: this.users })
+                .post('/api/projects', { name: this.name, status: this.status, priority: this.priority, deadline: this.deadline, payment: this.payment, description: this.description, calculation_id: this.calculation_id, offer_id: this.offer_id, users: this.users, endclient: this.endclient })
                 .then(response => (
                     this.$parent.counterProjects(),
                     this.$router.push({path: '/projects'}) 

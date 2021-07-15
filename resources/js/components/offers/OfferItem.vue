@@ -6,7 +6,12 @@
             </div>
             <div class="col-12 col-lg-6 text-end">
                 <template v-if="offer.calculations && offer.calculations.length">
-                    <router-link :to="{name: 'ProjectCreate', params: { calculation_id: offer.calculations[0].id, offer_id: offer.id }}" class="btn btn-primary">Создать проект из КП</router-link>
+                    <template v-if="offer.projects && offer.projects.length">
+                        <router-link :to="{name: 'ProjectItem', params: { id: offer.projects[0].id }}" class="btn btn-primary">Перейти в проект</router-link>
+                    </template>
+                    <template v-else>
+                        <router-link :to="{name: 'ProjectCreate', params: { calculation_id: offer.calculations[0].id, offer_id: offer.id }}" class="btn btn-primary">Создать проект из КП</router-link>
+                    </template>
                 </template>
                 <a @click="generatePdf" class="btn btn-danger">
                     Скачать PDF

@@ -23,7 +23,7 @@ class Element extends Model
 
     public function calculations()
     {
-        return $this->belongsToMany('App\Models\Calculation');
+        return $this->belongsToMany('App\Models\Calculation')->withPivot('price');
     }
 
     public function boxes()

@@ -44,6 +44,22 @@
                                     </template>
                                 </div>
                             </div>
+                            <div class="row align-items-center mb-4">
+                                <div class="col-6">Конечник</div>
+                                <div class="col-6 text-end">
+                                    <template v-for="endclient in project.endclients">
+                                        {{ endclient.name }}
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="row align-items-center mb-4">
+                                <div class="col-6">Партнер</div>
+                                <div class="col-6 text-end">
+                                    <template v-for="partner in project.partners">
+                                        {{ partner.name }}
+                                    </template>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="project_chat">
