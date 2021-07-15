@@ -6,7 +6,7 @@
                 <h1 class="h3 m-0">Коммерческие предложения</h1>
             </div>
             <div class="col-12 col-lg-6 text-end">
-                <router-link to="/offers/create" class="btn btn-primary">Новое КП</router-link>
+                <!--<router-link to="/offers/create" class="btn btn-primary">Новое КП</router-link>-->
             </div>
         </div>
 
@@ -23,7 +23,10 @@
                     <tbody>
                         <tr v-for="offer in offers" :key="offer.id" @click="goTo(offer.id)">
                             <td class="align-middle">
-                                <img src="https://appstack.bootlab.io/img/avatars/avatar-3.jpg" width="48" height="48" class="rounded-circle me-2" alt="Avatar"> Петр Иванов
+                                <img src="/img/profile.png" width="48" height="48" class="rounded-circle me-2" alt="Avatar">
+                                <template v-for="user in offer.users">
+                                    {{ user.name }}
+                                </template>
                             </td>
                             <td class="align-middle">
                                 {{ offer.client }}

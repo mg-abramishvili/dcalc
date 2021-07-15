@@ -29,6 +29,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function calculations()
+    {
+        return $this->belongsToMany('App\Models\Calculation');
+    }
+
+    public function offers()
+    {
+        return $this->belongsToMany('App\Models\Offer');
+    }
+
     public function projects()
     {
         return $this->belongsToMany('App\Models\Project');

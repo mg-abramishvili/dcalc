@@ -465,7 +465,7 @@
                 console.log(megred_select_form_values)
                 
                 axios
-                .post(`/api/calculations`, { comment: 'no comment', price_total: this.price_subtotal, type: this.selected_type.id, box: this.selected_box.id, elements: megred_select_form_values })
+                .post(`/api/calculations`, { comment: 'no comment', price_total: this.price_subtotal, type: this.selected_type.id, box: this.selected_box.id, elements: megred_select_form_values, user: this.$parent.user.id })
                 .then(response => (
                     this.$router.push({name: 'ProjectCreate', params: {calculation_id: response.data}})
                 ));

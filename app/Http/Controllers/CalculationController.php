@@ -11,7 +11,7 @@ class CalculationController extends Controller
 {
     public function index()
     {
-        return Calculation::orderBy('created_at', 'desc')->get();
+        return Calculation::orderBy('created_at', 'desc')->with('users')->get();
     }
 
     public function create(Request $request)
@@ -26,6 +26,8 @@ class CalculationController extends Controller
         $calculation->comment = $data['comment'];
         $calculation->price_total = $data['price_total'];
         $calculation->save();
+
+        $calculation->users()->attach($request->user, ['calculation_id' => $calculation->id]);
 
         $calculation->types()->attach($request->type, ['calculation_id' => $calculation->id]);
         $calculation->boxes()->attach($request->box, ['calculation_id' => $calculation->id]);
@@ -72,7 +74,7 @@ class CalculationController extends Controller
 
     public function show($id)
     {
-        return Calculation::with('elements.categories', 'boxes', 'types')->find($id);
+        return Calculation::with('elements.categories', 'boxes', 'types', 'users', 'offers')->find($id);
     }
 
 }

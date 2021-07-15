@@ -23,4 +23,9 @@ class Offer extends Model
     {
         return $this->belongsToMany('App\Models\Project');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\User');
+    }
 }

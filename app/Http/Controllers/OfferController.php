@@ -11,7 +11,7 @@ class OfferController extends Controller
 {
     public function index()
     {
-        return Offer::orderBy('created_at', 'desc')->get();
+        return Offer::orderBy('created_at', 'desc')->with('users')->get();
     }
 
     public function index_count()
@@ -32,10 +32,11 @@ class OfferController extends Controller
         $offer->client = $data['client'];
         $offer->save();
         $offer->calculations()->attach($request->calculations, ['offer_id' => $offer->id]);
+        $offer->users()->attach($request->user, ['offer_id' => $offer->id]);
     }
 
     public function show($id)
     {
-        return Offer::with('calculations.elements')->find($id);
+        return Offer::with('calculations.elements', 'users')->find($id);
     }
 }

@@ -2138,6 +2138,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -3460,7 +3472,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         price_total: this.price_subtotal,
         type: this.selected_type.id,
         box: this.selected_box.id,
-        elements: megred_select_form_values
+        elements: megred_select_form_values,
+        user: this.$parent.user.id
       }).then(function (response) {
         return _this5.$router.push({
           name: 'ProjectCreate',
@@ -3847,6 +3860,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -3877,7 +3906,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
 //
 //
 //
@@ -4983,11 +5011,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       calculations: {},
-      calculation_selected: '',
+      calculation_selected: this.$route.params.calculation_id,
       comment: '',
       client: ''
     };
@@ -5007,7 +5037,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/offers', {
         client: this.client,
         comment: this.comment,
-        calculations: this.calculation_selected
+        calculations: this.calculation_selected,
+        user: this.$parent.user.id
       }).then(function (response) {
         return _this2.$router.push({
           path: '/offers'
@@ -5142,6 +5173,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -6514,7 +6548,7 @@ var routes = [{
   name: 'Offers',
   component: _components_offers_OffersAll_vue__WEBPACK_IMPORTED_MODULE_26__.default
 }, {
-  path: '/offers/create',
+  path: '/offers/create/:calculation_id',
   name: 'OfferCreate',
   component: _components_offers_OfferCreate_vue__WEBPACK_IMPORTED_MODULE_27__.default
 }, {
@@ -58158,7 +58192,7 @@ var render = function() {
         "div",
         { staticClass: "sidebar-brand" },
         [
-          _c("router-link", { attrs: { to: "/calculations" } }, [
+          _c("router-link", { attrs: { to: { name: "Projects" } } }, [
             _c("img", { attrs: { src: "/img/logo.svg", alt: "DreamApp" } }),
             _vm._v(" "),
             _c("span", [_vm._v("DreamApp CRM")])
@@ -58181,6 +58215,53 @@ var render = function() {
               {
                 staticClass: "sidebar-link",
                 attrs: { to: { name: "CalculationCreate" } }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "feather feather-plus-circle align-middle",
+                    attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 24 24",
+                      fill: "none",
+                      stroke: "currentColor",
+                      "stroke-width": "2",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round"
+                    }
+                  },
+                  [
+                    _c("circle", { attrs: { cx: "12", cy: "12", r: "10" } }),
+                    _c("line", {
+                      attrs: { x1: "12", y1: "8", x2: "12", y2: "16" }
+                    }),
+                    _c("line", {
+                      attrs: { x1: "8", y1: "12", x2: "16", y2: "12" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("span", { staticClass: "align-middle" }, [
+                  _vm._v("Новый расчёт")
+                ])
+              ]
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          { staticClass: "sidebar-item" },
+          [
+            _c(
+              "router-link",
+              {
+                staticClass: "sidebar-link",
+                attrs: { to: { name: "Calculations" } }
               },
               [
                 _c(
@@ -58230,9 +58311,59 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _c("span", { staticClass: "align-middle" }, [
-                  _vm._v("Новый расчёт")
-                ])
+                _c("span", { staticClass: "align-middle" }, [_vm._v("Расчеты")])
+              ]
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          { staticClass: "sidebar-item" },
+          [
+            _c(
+              "router-link",
+              {
+                staticClass: "sidebar-link",
+                attrs: { to: { name: "Offers" } }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "feather feather-file-text align-middle",
+                    attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 24 24",
+                      fill: "none",
+                      stroke: "currentColor",
+                      "stroke-width": "2",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                      }
+                    }),
+                    _c("polyline", { attrs: { points: "14 2 14 8 20 8" } }),
+                    _c("line", {
+                      attrs: { x1: "16", y1: "13", x2: "8", y2: "13" }
+                    }),
+                    _c("line", {
+                      attrs: { x1: "16", y1: "17", x2: "8", y2: "17" }
+                    }),
+                    _c("polyline", { attrs: { points: "10 9 9 9 8 9" } })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("span", { staticClass: "align-middle" }, [_vm._v("КП")])
               ]
             )
           ],
@@ -58253,7 +58384,7 @@ var render = function() {
                 _c(
                   "svg",
                   {
-                    staticClass: "feather feather-box align-middle",
+                    staticClass: "feather feather-briefcase align-middle",
                     attrs: {
                       xmlns: "http://www.w3.org/2000/svg",
                       width: "24",
@@ -58267,17 +58398,18 @@ var render = function() {
                     }
                   },
                   [
-                    _c("path", {
+                    _c("rect", {
                       attrs: {
-                        d:
-                          "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                        x: "2",
+                        y: "7",
+                        width: "20",
+                        height: "14",
+                        rx: "2",
+                        ry: "2"
                       }
                     }),
-                    _c("polyline", {
-                      attrs: { points: "3.27 6.96 12 12.01 20.73 6.96" }
-                    }),
-                    _c("line", {
-                      attrs: { x1: "12", y1: "22.08", x2: "12", y2: "12" }
+                    _c("path", {
+                      attrs: { d: "M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" }
                     })
                   ]
                 ),
@@ -61076,20 +61208,85 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row align-items-center mb-4" }, [
-      _c("div", { staticClass: "col-12 col-lg-6" }, [
-        _c("h1", { staticClass: "h3 m-0" }, [
-          _vm._v(
-            "Расчет №" +
-              _vm._s(_vm.calculation.id) +
-              " от " +
-              _vm._s(
-                _vm.moment(_vm.calculation.created_at).format("D MMMM YYYY")
-              )
-          )
-        ])
-      ]),
+      _c(
+        "div",
+        { staticClass: "col-12 col-lg-6" },
+        [
+          _c("h1", { staticClass: "h3 m-0" }, [
+            _vm._v(
+              "\n                Расчет №" +
+                _vm._s(_vm.calculation.id) +
+                " от " +
+                _vm._s(
+                  _vm.moment(_vm.calculation.created_at).format("D MMMM YYYY")
+                ) +
+                "\n            "
+            )
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.calculation.users, function(user) {
+            return [
+              _c("span", { staticClass: "text-sm" }, [
+                _vm._v("автор: " + _vm._s(user.name))
+              ])
+            ]
+          })
+        ],
+        2
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-12 col-lg-6 text-end" })
+      _c(
+        "div",
+        { staticClass: "col-12 col-lg-6 text-end" },
+        [
+          _vm.calculation.offers && _vm.calculation.offers.length
+            ? [
+                _c("div", { staticClass: "text-sm" }, [
+                  _vm._v("У расчета есть КП: ")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.calculation.offers, function(offer) {
+                  return [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "btn btn-outline-primary",
+                        attrs: {
+                          to: { name: "OfferItem", params: { id: offer.id } }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "КП №" +
+                            _vm._s(offer.id) +
+                            " от " +
+                            _vm._s(
+                              _vm.moment(offer.created_at).format("D MMMM YYYY")
+                            )
+                        )
+                      ]
+                    )
+                  ]
+                })
+              ]
+            : [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: {
+                      to: {
+                        name: "OfferCreate",
+                        params: { calculation_id: _vm.calculation.id }
+                      }
+                    }
+                  },
+                  [_vm._v("Создать КП из расчета")]
+                )
+              ]
+        ],
+        2
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
@@ -61101,8 +61298,6 @@ var render = function() {
               "table table-striped table-hover dataTable no-footer dtr-inline"
           },
           [
-            _vm._m(0),
-            _vm._v(" "),
             _c(
               "tbody",
               [
@@ -61119,15 +61314,21 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _vm._l(_vm.calculation.elements, function(element) {
-                  return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(element.categories[0].title))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(element.title))]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-end" }, [
-                      _vm._v(_vm._s(element.price) + " ₽")
-                    ])
-                  ])
+                  return [
+                    element.price > 0
+                      ? _c("tr", [
+                          _c("td", [
+                            _vm._v(_vm._s(element.categories[0].title))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(element.title))]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-end" }, [
+                            _vm._v(_vm._s(element.price) + " ₽")
+                          ])
+                        ])
+                      : _vm._e()
+                  ]
                 })
               ],
               2
@@ -61142,45 +61343,12 @@ var render = function() {
               _vm._v(_vm._s(_vm.calculation.price_total) + " ₽")
             ])
           ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "mt-4" }, [
-          _c("div", { staticClass: "alert alert-primary alert-outline" }, [
-            _c("div"),
-            _vm._v(" "),
-            _c("div", { staticClass: "alert-message" }, [
-              _c("h6", { staticClass: "alert-heading" }, [
-                _vm._v("Комментарий:")
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "mb-0" }, [
-                _vm._v(_vm._s(_vm.calculation.comment))
-              ])
-            ])
-          ])
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("th"),
-      _vm._v(" "),
-      _c("th", [
-        _vm._v("\n                        Наименование\n                    ")
-      ]),
-      _vm._v(" "),
-      _c("th", { staticClass: "text-end" }, [
-        _vm._v("\n                        Цена\n                    ")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -61249,20 +61417,37 @@ var render = function() {
                     }
                   },
                   [
-                    _vm._m(2, true),
+                    _c(
+                      "td",
+                      { staticClass: "align-middle" },
+                      [
+                        _c("img", {
+                          staticClass: "rounded-circle me-2",
+                          attrs: {
+                            src: "/img/profile.png",
+                            width: "48",
+                            height: "48",
+                            alt: "Avatar"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm._l(calculation.users, function(user) {
+                          return [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(user.name) +
+                                "\n                            "
+                            )
+                          ]
+                        })
+                      ],
+                      2
+                    ),
                     _vm._v(" "),
                     _c("td", { staticClass: "align-middle" }, [
                       _vm._v(
                         "\n                            Расчет №" +
                           _vm._s(calculation.id) +
-                          "\n                        "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "align-middle" }, [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(calculation.comment) +
                           "\n                        "
                       )
                     ]),
@@ -61308,27 +61493,8 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("№")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Комментарий")]),
-        _vm._v(" "),
         _c("th", { staticClass: "text-end" }, [_vm._v("Дата расчета")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "align-middle" }, [
-      _c("img", {
-        staticClass: "rounded-circle me-2",
-        attrs: {
-          src: "https://appstack.bootlab.io/img/avatars/avatar-3.jpg",
-          width: "48",
-          height: "48",
-          alt: "Avatar"
-        }
-      }),
-      _vm._v(" Петр Иванов\n                        ")
     ])
   }
 ]
@@ -63327,6 +63493,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control mb-3",
+            attrs: { disabled: "" },
             on: {
               change: function($event) {
                 var $$selectedVal = Array.prototype.filter
@@ -63347,14 +63514,14 @@ var render = function() {
             _vm._l(_vm.calculations, function(calculation) {
               return [
                 _c("option", { domProps: { value: calculation.id } }, [
-                  _vm._v(_vm._s(calculation.comment))
+                  _vm._v("Расчет №" + _vm._s(calculation.id))
                 ])
               ]
             })
           ],
           2
         ),
-        _vm._v("\n            Текст КП:\n            "),
+        _vm._v("\n\n            Текст КП:\n            "),
         _c("textarea", {
           directives: [
             {
@@ -63552,22 +63719,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "row align-items-center mb-4" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "col-12 col-lg-6 text-end" },
-        [
-          _c(
-            "router-link",
-            { staticClass: "btn btn-primary", attrs: { to: "/offers/create" } },
-            [_vm._v("Новое КП")]
-          )
-        ],
-        1
-      )
-    ]),
+    _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-body pt-1" }, [
@@ -63594,7 +63746,32 @@ var render = function() {
                     }
                   },
                   [
-                    _vm._m(2, true),
+                    _c(
+                      "td",
+                      { staticClass: "align-middle" },
+                      [
+                        _c("img", {
+                          staticClass: "rounded-circle me-2",
+                          attrs: {
+                            src: "/img/profile.png",
+                            width: "48",
+                            height: "48",
+                            alt: "Avatar"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm._l(offer.users, function(user) {
+                          return [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(user.name) +
+                                "\n                            "
+                            )
+                          ]
+                        })
+                      ],
+                      2
+                    ),
                     _vm._v(" "),
                     _c("td", { staticClass: "align-middle" }, [
                       _vm._v(
@@ -63629,8 +63806,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12 col-lg-6" }, [
-      _c("h1", { staticClass: "h3 m-0" }, [_vm._v("Коммерческие предложения")])
+    return _c("div", { staticClass: "row align-items-center mb-4" }, [
+      _c("div", { staticClass: "col-12 col-lg-6" }, [
+        _c("h1", { staticClass: "h3 m-0" }, [
+          _vm._v("Коммерческие предложения")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-12 col-lg-6 text-end" })
     ])
   },
   function() {
@@ -63645,23 +63828,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticClass: "text-end" }, [_vm._v("Дата создания")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "align-middle" }, [
-      _c("img", {
-        staticClass: "rounded-circle me-2",
-        attrs: {
-          src: "https://appstack.bootlab.io/img/avatars/avatar-3.jpg",
-          width: "48",
-          height: "48",
-          alt: "Avatar"
-        }
-      }),
-      _vm._v(" Петр Иванов\n                        ")
     ])
   }
 ]

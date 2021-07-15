@@ -176,7 +176,7 @@ export const routes = [
         component: Offers
     },
     {
-        path: '/offers/create',
+        path: '/offers/create/:calculation_id',
         name: 'OfferCreate',
         component: OfferCreate
     },

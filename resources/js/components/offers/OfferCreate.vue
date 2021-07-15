@@ -10,12 +10,14 @@
             <div class="card-body">
                 <label>Клиент</label>
                 <input v-model="client" type="text" class="form-control mb-3">
+                
                 <label>Расчет</label>
-                <select v-model="calculation_selected" class="form-control mb-3">
+                <select v-model="calculation_selected" class="form-control mb-3" disabled>
                     <template v-for="calculation in calculations">
-                        <option :value="calculation.id">{{ calculation.comment }}</option>
+                        <option :value="calculation.id">Расчет №{{ calculation.id }}</option>
                     </template>
                 </select>
+
                 Текст КП:
                 <textarea class="form-control mb-2" v-model="comment"></textarea>
                 <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
@@ -29,7 +31,7 @@
         data() {
             return {
                 calculations: {},
-                calculation_selected: '',
+                calculation_selected: this.$route.params.calculation_id,
                 comment: '',
                 client: '',
             }
@@ -47,7 +49,7 @@
             },
             saveCalculation() {
                 axios
-                .post('/api/offers', { client: this.client, comment: this.comment, calculations: this.calculation_selected })
+                .post('/api/offers', { client: this.client, comment: this.comment, calculations: this.calculation_selected, user: this.$parent.user.id })
                 .then(response => (
                     this.$router.push({path: '/offers'}) 
                 ));
