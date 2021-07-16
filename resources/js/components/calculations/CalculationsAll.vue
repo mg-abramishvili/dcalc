@@ -17,6 +17,7 @@
                         <tr>
                             <th>Автор расчета</th>
                             <th>№</th>
+                            <th></th>
                             <th class="text-end">Дата расчета</th>
                         </tr>
                     </thead>
@@ -30,6 +31,11 @@
                             </td>
                             <td class="align-middle">
                                 Расчет №{{ calculation.id }}
+                            </td>
+                            <td class="align-middle">
+                                <template v-for="box in calculation.boxes">
+                                    {{ box.title }}
+                                </template>
                             </td>
                             <td class="align-middle text-end">
                                 {{moment(calculation.created_at).format('D MMMM YYYY')}}

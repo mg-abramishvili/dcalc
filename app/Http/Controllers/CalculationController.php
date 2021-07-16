@@ -11,7 +11,7 @@ class CalculationController extends Controller
 {
     public function index()
     {
-        return Calculation::orderBy('created_at', 'desc')->with('users')->get();
+        return Calculation::orderBy('created_at', 'desc')->with('users', 'boxes')->get();
     }
 
     public function create(Request $request)

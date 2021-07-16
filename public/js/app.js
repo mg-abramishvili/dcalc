@@ -3950,6 +3950,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -61484,6 +61490,23 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
+                    _c(
+                      "td",
+                      { staticClass: "align-middle" },
+                      [
+                        _vm._l(calculation.boxes, function(box) {
+                          return [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(box.title) +
+                                "\n                            "
+                            )
+                          ]
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
                     _c("td", { staticClass: "align-middle text-end" }, [
                       _vm._v(
                         "\n                            " +
@@ -61524,6 +61547,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Автор расчета")]),
         _vm._v(" "),
         _c("th", [_vm._v("№")]),
+        _vm._v(" "),
+        _c("th"),
         _vm._v(" "),
         _c("th", { staticClass: "text-end" }, [_vm._v("Дата расчета")])
       ])
