@@ -10,26 +10,20 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "axios": "^0.21",
-        "laravel-mix": "^6.0.16",
+        "axios": "^0.21.4",
+        "laravel-mix": "^6.0.34",
         "lodash": "^4.17.19",
-        "postcss": "^8.1.14",
-        "resolve-url-loader": "^3.1.2",
-        "sass": "^1.32.8",
-        "sass-loader": "^11.0.1",
-        "vue": "^2.6.12",
-        "vue-loader": "^15.9.5",
-        "vue-template-compiler": "^2.6.12"
+        "postcss": "^8.3.1",
+        "vue": "^2.6.14",
+        "vue-loader": "^15.9.8",
+        "vue-template-compiler": "^2.6.14"
     },
     "dependencies": {
+        "filepond": "^4.29.1",
         "filepond-plugin-file-validate-type": "^1.2.6",
-        "filepond-plugin-image-preview": "^4.6.6",
-        "html2canvas": "^1.0.0-rc.7",
-        "jspdf": "^2.3.1",
+        "filepond-plugin-image-preview": "^4.6.10",
+        "hooper": "^0.3.4",
         "moment": "^2.29.1",
-        "swiper": "^5.4.5",
-        "vue-awesome-swiper": "^4.1.1",
-        "vue-axios": "^3.2.4",
         "vue-filepond": "^6.0.0",
         "vue-router": "^3.5.1"
     }

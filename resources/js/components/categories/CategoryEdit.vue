@@ -12,7 +12,7 @@
                 <input v-model="title" type="text" class="form-control mb-3">
 
                 <label id="title_label">Код</label>
-                <input v-model="slug" type="text" class="form-control mb-3">
+                <input v-model="slug" type="text" class="form-control mb-3" disabled>
 
                 <div class="d-flex justify-content-between">
                     <button @click="saveCategory()" class="btn btn-primary">Сохранить</button>

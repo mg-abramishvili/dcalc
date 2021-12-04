@@ -424,7 +424,7 @@
                 );
 
                 price_subtotal_rub = price_subtotal_rub.reduce((a, b) => a + b, 0)
-                this.price_subtotal_rub = parseInt(this.selected_box.pre_rub) + parseInt(this.selected_box.marzha) + parseInt(this.selected_box.sborka) + price_subtotal_rub
+                this.price_subtotal_rub = parseInt(this.selected_box.pre_rub) + parseInt(this.selected_box.marzha) + parseInt(this.selected_box.sborka) + parseInt(price_subtotal_rub)
 
                 price_subtotal_usd = price_subtotal_usd.reduce((a, b) => a + b, 0)
                 this.price_subtotal_usd = parseInt(this.selected_box.pre_usd) + price_subtotal_usd

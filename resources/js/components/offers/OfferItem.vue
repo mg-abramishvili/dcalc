@@ -64,8 +64,6 @@
     </div>
 </template>
 <script>
-    import jsPDF from 'jspdf'
-    import html2canvas from 'html2canvas'
 
     export default {
         data() {
@@ -82,18 +80,8 @@
                 ));
         },
         methods: {
-            generatePdf() {
-                html2canvas(document.getElementById('offer'), {imageTimeout: 5000, useCORS: true}).then(canvas => {
-                    let img = canvas.toDataURL('image/png')
-                    let pdf = new jsPDF('p', 'pt', 'a4')
-                    pdf.addImage(img, 'JPEG', 5, 5, 595.28, 841.89)
-                    pdf.save(`KP_${this.offer.id}.pdf`)
-                })
-            }
         },
         components: {
-            jsPDF,
-            html2canvas
         }
     }
 </script>
