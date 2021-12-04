@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="categories && categories.length > 0 && boxes && boxes.length > 0 && usdKurs && usdKurs > 0">
         <div class="row align-items-center mb-4">
             <div class="col-12 col-lg-6">
                 <h1 class="h3 m-0">Новый компонент</h1>
@@ -11,17 +11,17 @@
                 <label id="title_label">Название</label>
                 <input v-model="title" id="title_input" type="text" class="form-control mb-3">
 
-                <label>Курс USD <small>(на {{moment(currencies_date).format('DD.MM.YYYY')}})</small></label>
-                <input type="text" class="form-control mb-3" :value="currencies.Value" disabled>
+                <label>Курс USD <small>(на {{moment(usdKursDate).format('DD.MM.YYYY')}})</small></label>
+                <input v-model="usdKurs" type="text" class="form-control mb-3" disabled>
 
                 <div class="row" style="position: relative">
                     <div class="col-6">
                         <label id="pre_rub_label">Цена RUB</label>
-                        <input type="text" id="pre_rub_input" class="form-control mb-3" v-model="pre_rub">
+                        <input v-model="pre_rub" id="pre_rub_input" type="text" class="form-control mb-3">
                     </div>
                     <div class="col-6">
                         <label id="pre_usd_label">Цена USD</label>
-                        <input type="text" id="pre_usd_input" class="form-control mb-3" v-model="pre_usd">
+                        <input v-model="pre_usd" id="pre_usd_input" type="text" class="form-control mb-3">
                     </div>
                     <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: block; width: 10px; padding: 0; margin: 0; margin-top: 2px;">+</span>
                 </div>
@@ -32,24 +32,25 @@
                     <button @click="TotalPrice()" style="position: absolute; top: 50%; transform: translateY(-50%); right: 1rem; border: none; box-shadow: none; font-size: 0.7rem; background: none; margin-top: 0.75rem">пересчитать</button>
                 </div>
 
-                <label id="categories_label">Категория</label>
-                <select v-model="categories_selected" id="categories_input" class="form-control mb-3">
-                    <template v-for="category in categories">
-                        <option :value="category.id">{{ category.title }}</option>
-                    </template>
+                <label id="selectedCategory_label">Категория</label>
+                <select v-model="selectedCategory" id="selectedCategory_input" class="form-select mb-3">
+                    <option v-for="category in categories" :key="'key_' + category.id" :value="category.id">{{ category.title }}</option>
                 </select>
 
                 <div class="d-flex justify-content-between">
-                    <label id="boxes_label">Совместимость</label>
-                    <button @click="selectAllCat()" class="btn btn-sm">выбрать все</button>
+                    <label id="selectedBox_label">Совместимость</label>
+                    <button @click="selectAllBoxes()" class="btn btn-sm">выбрать все</button>
                 </div>
-                <select v-model="selected_boxes" id="boxes_input" class="form-control mb-3" style="height: 300px;" multiple>
-                    <template v-for="box in boxes">
-                        <option :value="box.id">{{ box.title }}</option>
-                    </template>
+                <select v-model="selectedBox" id="selectedBox_input" class="form-control mb-3" style="height: 300px;" multiple>
+                    <option v-for="box in boxes" :key="'box_' + box.id" :value="box.id">{{ box.title }}</option>
                 </select>
-                <button @click="saveCalculation()" class="btn btn-primary">Сохранить</button>
+                <button @click="saveElement()" class="btn btn-primary">Сохранить</button>
             </div>
+        </div>
+    </div>
+    <div v-else>
+        <div class="spinner-border text-primary me-2" role="status">
+            <span class="sr-only">Загрузка...</span>
         </div>
     </div>
 </template>
@@ -58,27 +59,46 @@
     export default {
         data() {
             return {
-                categories: {},
-                boxes: {},
-                categories_selected: '',
-                connected_elements: '',
+                categories: [],
+                boxes: [],
+
                 title: '',
                 pre_rub: '',
                 pre_usd: '',
-                price: '',
-                currencies: {},
-                currencies_date: {},
+
+                selectedCategory: '',
+                selectedBox: [],
+                
+                usdKurs: '',
+                usdKursDate: '',
+
                 moment: moment,
-                elements: {},
-                selected_boxes: [],
+            }
+        },
+        computed: {
+            price: function () {
+                if(this.pre_rub && this.pre_rub.length > 0 || this.pre_usd && this.pre_usd.length > 0) {
+                    if(this.pre_rub && this.pre_rub.length > 0 && this.pre_usd && this.pre_usd.length > 0) {
+                        return Math.ceil((parseFloat(this.pre_rub) + (parseFloat(this.usdKurs) * parseFloat(this.pre_usd))) / 50) * 50
+                    } else if (!this.pre_rub) {
+                        return Math.ceil(parseFloat(parseFloat(this.usdKurs) * parseFloat(this.pre_usd) / 50)) * 50
+                    } else if (!this.pre_usd) {
+                        return Math.ceil(parseFloat(this.pre_rub) / 50) * 50
+                    }
+                } else {
+                    return 0
+                }
             }
         },
         created() {
             axios
                 .get('/api/categories')
-                .then(response => (
+                .then((response => {
                     this.categories = response.data
-                ));
+                    if(this.$route.params.category) {
+                        this.selectedCategory = this.$route.params.category
+                    }
+                }));
             axios
                 .get(`/api/boxes/type/all`)
                 .then(response => (
@@ -87,27 +107,19 @@
             axios
                 .get('https://www.cbr-xml-daily.ru/daily_json.js', { withCredentials: false })
                 .then(response => (
-                    this.currencies = response.data.Valute.USD,
-                    this.currencies_date = response.data.Date
-                ));
-            axios
-                .get('/api/elements')
-                .then(response => (
-                    this.elements = response.data
+                    this.usdKurs = response.data.Valute.USD.Value,
+                    this.usdKursDate = response.data.Date
                 ));
         },
         methods: {
-            onChange(index, event) {
-                
-            },
-            selectAllCat() {
+            selectAllBoxes() {
                 axios
                 .get('/api/boxes/type/all')
                 .then(response => (
-                    this.selected_boxes = response.data.map(box => box.id)
+                    this.selectedBox = response.data.map(box => box.id)
                 ));
             },
-            saveCalculation() {
+            saveElement() {
                 for (var i = 0; i < document.querySelectorAll('label').length; i++) {
                     if(document.querySelectorAll('label')[i].classList.contains('text-danger') === true) {
                         document.querySelectorAll('label')[i].classList.remove('text-danger')
@@ -130,12 +142,12 @@
                     pre_rub: this.pre_rub,
                     pre_usd: this.pre_usd,
                     price: this.price,
-                    categories: this.categories_selected,
-                    boxes: this.selected_boxes,
+                    categories: this.selectedCategory,
+                    boxes: this.selectedBox,
                 })
                 .then(response => (
                     this.$parent.counterElementsBoxes(),
-                    this.$router.push({path: `/category/${this.categories_selected}/elements/`}) 
+                    this.$router.push({path: `/category/${this.selectedCategory}/elements/`}) 
                 ))
                 .catch((error) => {
                     if(error.response) {
@@ -146,33 +158,6 @@
                         }
                     }
                 });
-            },
-            TotalPrice() {
-                if(this.pre_rub > 0 && this.pre_usd > 0) {
-                    this.price = Math.ceil((this.pre_rub + (parseFloat(this.currencies.Value) * this.pre_usd)) / 50)*50
-                } else if (!this.pre_rub) {
-                    this.price = Math.ceil((0 + (parseFloat(this.currencies.Value) * this.pre_usd)) / 50)*50
-                } else if (!this.pre_usd) {
-                    this.price = Math.ceil((this.pre_rub + 0) / 50)*50
-                }
-            }
-        },
-        watch: {
-            pre_rub: function (val) {
-                if(!isNaN(parseFloat(val))) {
-                    this.pre_rub = parseFloat(val)
-                    this.TotalPrice()
-                } else {
-                    this.pre_rub = 0
-                }
-            },
-            pre_usd: function (val) {
-                if(!isNaN(parseFloat(val))) {
-                    this.pre_usd = parseFloat(val)
-                    this.TotalPrice()
-                } else {
-                    this.pre_usd = 0
-                }
             },
         },
         components: {

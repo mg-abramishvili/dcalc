@@ -12,7 +12,7 @@
                 <input v-model="title" type="text" class="form-control mb-3">
 
                 <label id="title_label">Код</label>
-                <input v-model="slug" type="text" class="form-control mb-3">
+                <input v-model="slug" type="text" class="form-control mb-3" disabled>
 
                 <div>
                     <button @click="saveCategory()" class="btn btn-primary">Сохранить</button>
@@ -28,10 +28,14 @@
         data() {
             return {
                 title: '',
-                slug: '',
             }
         },
         created() {
+        },
+        computed: {
+            slug: function () {
+            return this.slugify(this.title)
+            }
         },
         methods: {
             saveCategory() {
@@ -41,6 +45,20 @@
                     this.$router.push({path: '/elements'}) 
                 ));
             },
+            slugify (text, ampersand = 'and') {
+                const a = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+                const b = 'abvgdeezziiklmnoprstufxcchhyyyeya'
+                const p = new RegExp(a.split('').join('|'), 'g')
+
+                return text.toString().toLowerCase()
+                    .replace(/[\s_]+/g, '-')
+                    .replace(p, c =>
+                    b.charAt(a.indexOf(c)))
+                    .replace(/&/g, `-${ampersand}-`)
+                    .replace(/[^\w-]+/g, '')
+                    .replace(/--+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+            }
         },
         watch: {
         },

@@ -9,7 +9,7 @@
                 </h1>
             </div>
             <div class="col-12 col-lg-6 text-end">
-                <router-link :to="{name: 'ElementCreate'}" class="btn btn-primary">Новый компонент</router-link>
+                <router-link :to="{name: 'ElementCreate', params: {category: current_category.id}}" class="btn btn-primary">Новый компонент</router-link>
             </div>
         </div>
         

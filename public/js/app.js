@@ -4248,11 +4248,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      title: '',
-      slug: ''
+      title: ''
     };
   },
   created: function created() {},
+  computed: {
+    slug: function slug() {
+      return this.slugify(this.title);
+    }
+  },
   methods: {
     saveCategory: function saveCategory() {
       var _this = this;
@@ -4265,6 +4269,15 @@ __webpack_require__.r(__webpack_exports__);
           path: '/elements'
         });
       });
+    },
+    slugify: function slugify(text) {
+      var ampersand = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'and';
+      var a = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя';
+      var b = 'abvgdeezziiklmnoprstufxcchhyyyeya';
+      var p = new RegExp(a.split('').join('|'), 'g');
+      return text.toString().toLowerCase().replace(/[\s_]+/g, '-').replace(p, function (c) {
+        return b.charAt(a.indexOf(c));
+      }).replace(/&/g, "-".concat(ampersand, "-")).replace(/[^\w-]+/g, '').replace(/--+/g, '-').replace(/^-+|-+$/g, '');
     }
   },
   watch: {},
@@ -4621,29 +4634,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      categories: {},
-      boxes: {},
-      categories_selected: '',
-      connected_elements: '',
+      categories: [],
+      boxes: [],
       title: '',
       pre_rub: '',
       pre_usd: '',
-      price: '',
-      currencies: {},
-      currencies_date: {},
-      moment: moment,
-      elements: {},
-      selected_boxes: []
+      selectedCategory: '',
+      selectedBox: [],
+      usdKurs: '',
+      usdKursDate: '',
+      moment: moment
     };
+  },
+  computed: {
+    price: function price() {
+      if (this.pre_rub && this.pre_rub.length > 0 || this.pre_usd && this.pre_usd.length > 0) {
+        if (this.pre_rub && this.pre_rub.length > 0 && this.pre_usd && this.pre_usd.length > 0) {
+          return Math.ceil((parseFloat(this.pre_rub) + parseFloat(this.usdKurs) * parseFloat(this.pre_usd)) / 50) * 50;
+        } else if (!this.pre_rub) {
+          return Math.ceil(parseFloat(parseFloat(this.usdKurs) * parseFloat(this.pre_usd) / 50)) * 50;
+        } else if (!this.pre_usd) {
+          return Math.ceil(parseFloat(this.pre_rub) / 50) * 50;
+        }
+      } else {
+        return 0;
+      }
+    }
   },
   created: function created() {
     var _this = this;
 
     axios.get('/api/categories').then(function (response) {
-      return _this.categories = response.data;
+      _this.categories = response.data;
+
+      if (_this.$route.params.category) {
+        _this.selectedCategory = _this.$route.params.category;
+      }
     });
     axios.get("/api/boxes/type/all").then(function (response) {
       return _this.boxes = response.data;
@@ -4651,24 +4681,20 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('https://www.cbr-xml-daily.ru/daily_json.js', {
       withCredentials: false
     }).then(function (response) {
-      return _this.currencies = response.data.Valute.USD, _this.currencies_date = response.data.Date;
-    });
-    axios.get('/api/elements').then(function (response) {
-      return _this.elements = response.data;
+      return _this.usdKurs = response.data.Valute.USD.Value, _this.usdKursDate = response.data.Date;
     });
   },
   methods: {
-    onChange: function onChange(index, event) {},
-    selectAllCat: function selectAllCat() {
+    selectAllBoxes: function selectAllBoxes() {
       var _this2 = this;
 
       axios.get('/api/boxes/type/all').then(function (response) {
-        return _this2.selected_boxes = response.data.map(function (box) {
+        return _this2.selectedBox = response.data.map(function (box) {
           return box.id;
         });
       });
     },
-    saveCalculation: function saveCalculation() {
+    saveElement: function saveElement() {
       var _this3 = this;
 
       for (var i = 0; i < document.querySelectorAll('label').length; i++) {
@@ -4694,11 +4720,11 @@ __webpack_require__.r(__webpack_exports__);
         pre_rub: this.pre_rub,
         pre_usd: this.pre_usd,
         price: this.price,
-        categories: this.categories_selected,
-        boxes: this.selected_boxes
+        categories: this.selectedCategory,
+        boxes: this.selectedBox
       }).then(function (response) {
         return _this3.$parent.counterElementsBoxes(), _this3.$router.push({
-          path: "/category/".concat(_this3.categories_selected, "/elements/")
+          path: "/category/".concat(_this3.selectedCategory, "/elements/")
         });
       })["catch"](function (error) {
         if (error.response) {
@@ -4709,33 +4735,6 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       });
-    },
-    TotalPrice: function TotalPrice() {
-      if (this.pre_rub > 0 && this.pre_usd > 0) {
-        this.price = Math.ceil((this.pre_rub + parseFloat(this.currencies.Value) * this.pre_usd) / 50) * 50;
-      } else if (!this.pre_rub) {
-        this.price = Math.ceil((0 + parseFloat(this.currencies.Value) * this.pre_usd) / 50) * 50;
-      } else if (!this.pre_usd) {
-        this.price = Math.ceil((this.pre_rub + 0) / 50) * 50;
-      }
-    }
-  },
-  watch: {
-    pre_rub: function pre_rub(val) {
-      if (!isNaN(parseFloat(val))) {
-        this.pre_rub = parseFloat(val);
-        this.TotalPrice();
-      } else {
-        this.pre_rub = 0;
-      }
-    },
-    pre_usd: function pre_usd(val) {
-      if (!isNaN(parseFloat(val))) {
-        this.pre_usd = parseFloat(val);
-        this.TotalPrice();
-      } else {
-        this.pre_usd = 0;
-      }
     }
   },
   components: {}
@@ -6732,7 +6731,7 @@ var routes = [{
   name: 'ElementsByCategory',
   component: _components_elements_ElementsByCategory_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
 }, {
-  path: '/elements/create',
+  path: '/elements/create/:category?',
   name: 'ElementCreate',
   component: _components_elements_ElementCreate_vue__WEBPACK_IMPORTED_MODULE_13__["default"]
 }, {
@@ -53131,7 +53130,7 @@ var render = function() {
             }
           ],
           staticClass: "form-control mb-3",
-          attrs: { type: "text" },
+          attrs: { type: "text", disabled: "" },
           domProps: { value: _vm.slug },
           on: {
             input: function($event) {
@@ -53677,138 +53676,50 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-body" }, [
-        _c("label", { attrs: { id: "title_label" } }, [_vm._v("Название")]),
+  return _vm.categories &&
+    _vm.categories.length > 0 &&
+    _vm.boxes &&
+    _vm.boxes.length > 0 &&
+    _vm.usdKurs &&
+    _vm.usdKurs > 0
+    ? _c("div", [
+        _vm._m(0),
         _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.title,
-              expression: "title"
-            }
-          ],
-          staticClass: "form-control mb-3",
-          attrs: { id: "title_input", type: "text" },
-          domProps: { value: _vm.title },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("label", { attrs: { id: "title_label" } }, [_vm._v("Название")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.title,
+                  expression: "title"
+                }
+              ],
+              staticClass: "form-control mb-3",
+              attrs: { id: "title_input", type: "text" },
+              domProps: { value: _vm.title },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.title = $event.target.value
+                }
               }
-              _vm.title = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("label", [
-          _vm._v("Курс USD "),
-          _c("small", [
-            _vm._v(
-              "(на " +
-                _vm._s(_vm.moment(_vm.currencies_date).format("DD.MM.YYYY")) +
-                ")"
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control mb-3",
-          attrs: { type: "text", disabled: "" },
-          domProps: { value: _vm.currencies.Value }
-        }),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row", staticStyle: { position: "relative" } },
-          [
-            _c("div", { staticClass: "col-6" }, [
-              _c("label", { attrs: { id: "pre_rub_label" } }, [
-                _vm._v("Цена RUB")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.pre_rub,
-                    expression: "pre_rub"
-                  }
-                ],
-                staticClass: "form-control mb-3",
-                attrs: { type: "text", id: "pre_rub_input" },
-                domProps: { value: _vm.pre_rub },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.pre_rub = $event.target.value
-                  }
-                }
-              })
-            ]),
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
-              _c("label", { attrs: { id: "pre_usd_label" } }, [
-                _vm._v("Цена USD")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.pre_usd,
-                    expression: "pre_usd"
-                  }
-                ],
-                staticClass: "form-control mb-3",
-                attrs: { type: "text", id: "pre_usd_input" },
-                domProps: { value: _vm.pre_usd },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.pre_usd = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c(
-              "span",
-              {
-                staticStyle: {
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  display: "block",
-                  width: "10px",
-                  padding: "0",
-                  margin: "0",
-                  "margin-top": "2px"
-                }
-              },
-              [_vm._v("+")]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "form-group", staticStyle: { position: "relative" } },
-          [
-            _c("label", { attrs: { id: "price_label" } }, [
-              _vm._v("Цена (финальная)")
+            _c("label", [
+              _vm._v("Курс USD "),
+              _c("small", [
+                _vm._v(
+                  "(на " +
+                    _vm._s(_vm.moment(_vm.usdKursDate).format("DD.MM.YYYY")) +
+                    ")"
+                )
+              ])
             ]),
             _vm._v(" "),
             _c("input", {
@@ -53816,169 +53727,282 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.price,
-                  expression: "price"
+                  value: _vm.usdKurs,
+                  expression: "usdKurs"
                 }
               ],
               staticClass: "form-control mb-3",
-              attrs: { id: "price_input", type: "text" },
-              domProps: { value: _vm.price },
+              attrs: { type: "text", disabled: "" },
+              domProps: { value: _vm.usdKurs },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.price = $event.target.value
+                  _vm.usdKurs = $event.target.value
                 }
               }
             }),
             _vm._v(" "),
             _c(
-              "button",
+              "div",
+              { staticClass: "row", staticStyle: { position: "relative" } },
+              [
+                _c("div", { staticClass: "col-6" }, [
+                  _c("label", { attrs: { id: "pre_rub_label" } }, [
+                    _vm._v("Цена RUB")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.pre_rub,
+                        expression: "pre_rub"
+                      }
+                    ],
+                    staticClass: "form-control mb-3",
+                    attrs: { id: "pre_rub_input", type: "text" },
+                    domProps: { value: _vm.pre_rub },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.pre_rub = $event.target.value
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6" }, [
+                  _c("label", { attrs: { id: "pre_usd_label" } }, [
+                    _vm._v("Цена USD")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.pre_usd,
+                        expression: "pre_usd"
+                      }
+                    ],
+                    staticClass: "form-control mb-3",
+                    attrs: { id: "pre_usd_input", type: "text" },
+                    domProps: { value: _vm.pre_usd },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.pre_usd = $event.target.value
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    staticStyle: {
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      display: "block",
+                      width: "10px",
+                      padding: "0",
+                      margin: "0",
+                      "margin-top": "2px"
+                    }
+                  },
+                  [_vm._v("+")]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
               {
-                staticStyle: {
-                  position: "absolute",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  right: "1rem",
-                  border: "none",
-                  "box-shadow": "none",
-                  "font-size": "0.7rem",
-                  background: "none",
-                  "margin-top": "0.75rem"
-                },
+                staticClass: "form-group",
+                staticStyle: { position: "relative" }
+              },
+              [
+                _c("label", { attrs: { id: "price_label" } }, [
+                  _vm._v("Цена (финальная)")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.price,
+                      expression: "price"
+                    }
+                  ],
+                  staticClass: "form-control mb-3",
+                  attrs: { id: "price_input", type: "text" },
+                  domProps: { value: _vm.price },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.price = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticStyle: {
+                      position: "absolute",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      right: "1rem",
+                      border: "none",
+                      "box-shadow": "none",
+                      "font-size": "0.7rem",
+                      background: "none",
+                      "margin-top": "0.75rem"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.TotalPrice()
+                      }
+                    }
+                  },
+                  [_vm._v("пересчитать")]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("label", { attrs: { id: "selectedCategory_label" } }, [
+              _vm._v("Категория")
+            ]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectedCategory,
+                    expression: "selectedCategory"
+                  }
+                ],
+                staticClass: "form-select mb-3",
+                attrs: { id: "selectedCategory_input" },
                 on: {
-                  click: function($event) {
-                    return _vm.TotalPrice()
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectedCategory = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
                   }
                 }
               },
-              [_vm._v("пересчитать")]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c("label", { attrs: { id: "categories_label" } }, [
-          _vm._v("Категория")
-        ]),
-        _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
+              _vm._l(_vm.categories, function(category) {
+                return _c(
+                  "option",
+                  {
+                    key: "key_" + category.id,
+                    domProps: { value: category.id }
+                  },
+                  [_vm._v(_vm._s(category.title))]
+                )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "d-flex justify-content-between" }, [
+              _c("label", { attrs: { id: "selectedBox_label" } }, [
+                _vm._v("Совместимость")
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm",
+                  on: {
+                    click: function($event) {
+                      return _vm.selectAllBoxes()
+                    }
+                  }
+                },
+                [_vm._v("выбрать все")]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "select",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.categories_selected,
-                expression: "categories_selected"
-              }
-            ],
-            staticClass: "form-control mb-3",
-            attrs: { id: "categories_input" },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.categories_selected = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _vm._l(_vm.categories, function(category) {
-              return [
-                _c("option", { domProps: { value: category.id } }, [
-                  _vm._v(_vm._s(category.title))
-                ])
-              ]
-            })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "d-flex justify-content-between" }, [
-          _c("label", { attrs: { id: "boxes_label" } }, [
-            _vm._v("Совместимость")
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-sm",
-              on: {
-                click: function($event) {
-                  return _vm.selectAllCat()
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectedBox,
+                    expression: "selectedBox"
+                  }
+                ],
+                staticClass: "form-control mb-3",
+                staticStyle: { height: "300px" },
+                attrs: { id: "selectedBox_input", multiple: "" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectedBox = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
                 }
-              }
-            },
-            [_vm._v("выбрать все")]
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
+              },
+              _vm._l(_vm.boxes, function(box) {
+                return _c(
+                  "option",
+                  { key: "box_" + box.id, domProps: { value: box.id } },
+                  [_vm._v(_vm._s(box.title))]
+                )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.selected_boxes,
-                expression: "selected_boxes"
-              }
-            ],
-            staticClass: "form-control mb-3",
-            staticStyle: { height: "300px" },
-            attrs: { id: "boxes_input", multiple: "" },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.selected_boxes = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _vm._l(_vm.boxes, function(box) {
-              return [
-                _c("option", { domProps: { value: box.id } }, [
-                  _vm._v(_vm._s(box.title))
-                ])
-              ]
-            })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            on: {
-              click: function($event) {
-                return _vm.saveCalculation()
-              }
-            }
-          },
-          [_vm._v("Сохранить")]
-        )
+                staticClass: "btn btn-primary",
+                on: {
+                  click: function($event) {
+                    return _vm.saveElement()
+                  }
+                }
+              },
+              [_vm._v("Сохранить")]
+            )
+          ])
+        ])
       ])
-    ])
-  ])
+    : _c("div", [_vm._m(1)])
 }
 var staticRenderFns = [
   function() {
@@ -53990,6 +54014,19 @@ var staticRenderFns = [
         _c("h1", { staticClass: "h3 m-0" }, [_vm._v("Новый компонент")])
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "spinner-border text-primary me-2",
+        attrs: { role: "status" }
+      },
+      [_c("span", { staticClass: "sr-only" }, [_vm._v("Загрузка...")])]
+    )
   }
 ]
 render._withStripped = true
@@ -54760,7 +54797,12 @@ var render = function() {
             "router-link",
             {
               staticClass: "btn btn-primary",
-              attrs: { to: { name: "ElementCreate" } }
+              attrs: {
+                to: {
+                  name: "ElementCreate",
+                  params: { category: _vm.current_category.id }
+                }
+              }
             },
             [_vm._v("Новый компонент")]
           )

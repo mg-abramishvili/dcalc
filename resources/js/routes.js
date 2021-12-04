@@ -106,7 +106,7 @@ export const routes = [
         component: ElementsByCategory
     },
     {
-        path: '/elements/create',
+        path: '/elements/create/:category?',
         name: 'ElementCreate',
         component: ElementCreate
     },
