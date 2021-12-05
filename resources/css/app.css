@@ -1,5 +1,9 @@
 @import 'light.css';
 
+html {
+    scroll-behavior: initial !important;
+}
+
 body {
     font-size: .98rem;
 }
@@ -81,19 +85,7 @@ table.dataTable {
 /* ERRORS */
 
 
-/* AUTH FORM */
 
-#auth_form {
-    animation: auth_form_fade 1s;
-}
-
-@keyframes auth_form_fade {
-    0% {opacity: 0;}
-    95% {opacity: 0;}
-    100% {opacity: 100%;}
-}
-
-/* AUTH FORM */
 
 
 /* PROJECT ITEM */

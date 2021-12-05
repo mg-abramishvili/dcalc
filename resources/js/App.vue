@@ -1,6 +1,40 @@
 <template>
 	<div>
-		<div v-if="authenticated === false" id="auth_form" class="main d-flex justify-content-center w-100">
+		<div v-if="authenticated && authenticated === true" class="wrapper">
+			<Sidebar :class="{ collapsed: sidebar === false }" />
+
+			<div class="main">
+				<nav class="navbar navbar-expand navbar-light navbar-bg">
+					<a @click="sidebar_toggle()" class="sidebar-toggle">
+						<i class="hamburger align-self-center"></i>
+					</a>
+
+					<div class="input-group input-group-navbar">
+						<input type="text" class="form-control" placeholder="Поиск ..." aria-label="Поиск">
+						<button class="btn" type="button">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+						</button>
+					</div>
+
+					<div class="navbar-collapse collapse">
+						<ul class="navbar-nav navbar-align">
+							<li class="nav-item">
+								<router-link :to="{name: 'UserEdit', params: {id: user.id }}" class="nav-link d-sm-inline-block">
+									<img src="/img/profile.png" class="avatar img-fluid rounded-circle me-1" alt="Chris Wood"> <span class="text-dark">{{ user.name }}</span>
+								</router-link>
+							</li>
+						</ul>
+					</div>
+				</nav>
+				<main class="content">
+					<div class="container-fluid p-0">
+						<router-view :key="$route.path" />
+					</div>
+				</main>
+			</div>
+		</div>
+
+		<div v-if="authenticated && authenticated === false" id="auth_form" class="main d-flex justify-content-center w-100">
 			<main class="content d-flex p-0">
 				<div class="container d-flex flex-column">
 					<div class="row h-100">
@@ -51,40 +85,7 @@
 				</div>
 			</main>
 		</div>
-	
-		<div v-else class="wrapper">
-			<Sidebar :class="{ collapsed: sidebar === false }" />
 
-			<div class="main">
-				<nav class="navbar navbar-expand navbar-light navbar-bg">
-					<a @click="sidebar_toggle()" class="sidebar-toggle">
-						<i class="hamburger align-self-center"></i>
-					</a>
-
-					<div class="input-group input-group-navbar">
-						<input type="text" class="form-control" placeholder="Поиск ..." aria-label="Поиск">
-						<button class="btn" type="button">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-						</button>
-					</div>
-
-					<div class="navbar-collapse collapse">
-						<ul class="navbar-nav navbar-align">
-							<li class="nav-item">
-								<router-link :to="{name: 'UserEdit', params: {id: user.id }}" class="nav-link d-sm-inline-block">
-									<img src="/img/profile.png" class="avatar img-fluid rounded-circle me-1" alt="Chris Wood"> <span class="text-dark">{{ user.name }}</span>
-								</router-link>
-							</li>
-						</ul>
-					</div>
-				</nav>
-				<main class="content">
-					<div class="container-fluid p-0">
-						<router-view :key="$route.path" />
-					</div>
-				</main>
-			</div>
-		</div>
 	</div>
 </template>
 

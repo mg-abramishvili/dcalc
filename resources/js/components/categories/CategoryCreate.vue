@@ -9,10 +9,10 @@
         <div class="card">
             <div class="card-body">
                 <label id="title_label">Название</label>
-                <input v-model="title" type="text" class="form-control mb-3">
+                <input v-model="title" id="title_input" type="text" class="form-control mb-3">
 
-                <label id="title_label">Код</label>
-                <input v-model="slug" type="text" class="form-control mb-3" disabled>
+                <label id="slug_label">Код</label>
+                <input v-model="slug" id="slug_input" type="text" class="form-control mb-3" disabled>
 
                 <div>
                     <button @click="saveCategory()" class="btn btn-primary">Сохранить</button>
@@ -39,11 +39,36 @@
         },
         methods: {
             saveCategory() {
+                for (var i = 0; i < document.querySelectorAll('label').length; i++) {
+                    if(document.querySelectorAll('label')[i].classList.contains('text-danger') === true) {
+                        document.querySelectorAll('label')[i].classList.remove('text-danger')
+                    }
+                }
+                for (var i = 0; i < document.querySelectorAll('input').length; i++) {
+                    if(document.querySelectorAll('input')[i].classList.contains('border-danger') === true) {
+                        document.querySelectorAll('input')[i].classList.remove('border-danger')
+                    }
+                }
+                for (var i = 0; i < document.querySelectorAll('select').length; i++) {
+                    if(document.querySelectorAll('select')[i].classList.contains('border-danger') === true) {
+                        document.querySelectorAll('select')[i].classList.remove('border-danger')
+                    }
+                }
+
                 axios
                 .post('/api/categories', { title: this.title, slug: this.slug })
                 .then(response => (
                     this.$router.push({path: '/elements'}) 
-                ));
+                ))
+                .catch((error) => {
+                    if(error.response) {
+                        for(var key in error.response.data.errors){
+                            console.log(key)
+                            document.getElementById(key + '_label').classList.add('text-danger')
+                            document.getElementById(key + '_input').classList.add('border-danger')
+                        }
+                    }
+                })
             },
             slugify (text, ampersand = 'and') {
                 const a = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'

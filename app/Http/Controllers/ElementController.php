@@ -33,12 +33,11 @@ class ElementController extends Controller
 
         $this->validate($request, $rules);
 
-        $data = request()->all();
         $element = new Element();
-        $element->title = $data['title'];
-        $element->pre_rub = $data['pre_rub'];
-        $element->pre_usd = $data['pre_usd'];
-        $element->price = $data['price'];
+        $element->title = $request->title;
+        $element->pre_rub = $request->pre_rub;
+        $element->pre_usd = $request->pre_usd;
+        $element->price = $request->price;
         $element->save();
         $element->categories()->attach($request->categories, ['element_id' => $element->id]);
         $element->boxes()->attach($request->boxes, ['element_id' => $element->id]);
@@ -57,12 +56,11 @@ class ElementController extends Controller
 
         $this->validate($request, $rules);
 
-        $data = request()->all();
-        $element = Element::find($data['id']);
-        $element->title = $data['title'];
-        $element->pre_rub = $data['pre_rub'];
-        $element->pre_usd = $data['pre_usd'];
-        $element->price = $data['price'];
+        $element = Element::find($request->id);
+        $element->title = $request->title;
+        $element->pre_rub = $request->pre_rub;
+        $element->pre_usd = $request->pre_usd;
+        $element->price = $request->price;
         $element->save();
         $element->categories()->detach();
         $element->categories()->attach($request->categories, ['element_id' => $element->id]);
@@ -102,6 +100,13 @@ class ElementController extends Controller
 
     public function categories_store(Request $request)
     {
+        $rules = [
+            'title' => 'required',
+            'slug' => 'required',
+        ];
+
+        $this->validate($request, $rules);
+
         $data = request()->all();
         $category = new Category();
         $category->title = $data['title'];

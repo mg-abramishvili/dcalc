@@ -2156,6 +2156,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -4261,6 +4262,24 @@ __webpack_require__.r(__webpack_exports__);
     saveCategory: function saveCategory() {
       var _this = this;
 
+      for (var i = 0; i < document.querySelectorAll('label').length; i++) {
+        if (document.querySelectorAll('label')[i].classList.contains('text-danger') === true) {
+          document.querySelectorAll('label')[i].classList.remove('text-danger');
+        }
+      }
+
+      for (var i = 0; i < document.querySelectorAll('input').length; i++) {
+        if (document.querySelectorAll('input')[i].classList.contains('border-danger') === true) {
+          document.querySelectorAll('input')[i].classList.remove('border-danger');
+        }
+      }
+
+      for (var i = 0; i < document.querySelectorAll('select').length; i++) {
+        if (document.querySelectorAll('select')[i].classList.contains('border-danger') === true) {
+          document.querySelectorAll('select')[i].classList.remove('border-danger');
+        }
+      }
+
       axios.post('/api/categories', {
         title: this.title,
         slug: this.slug
@@ -4268,6 +4287,14 @@ __webpack_require__.r(__webpack_exports__);
         return _this.$router.push({
           path: '/elements'
         });
+      })["catch"](function (error) {
+        if (error.response) {
+          for (var key in error.response.data.errors) {
+            console.log(key);
+            document.getElementById(key + '_label').classList.add('text-danger');
+            document.getElementById(key + '_input').classList.add('border-danger');
+          }
+        }
       });
     },
     slugify: function slugify(text) {
@@ -6589,7 +6616,13 @@ window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]);
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]({
   mode: 'history',
-  routes: _routes__WEBPACK_IMPORTED_MODULE_4__.routes
+  routes: _routes__WEBPACK_IMPORTED_MODULE_4__.routes,
+  scrollBehavior: function scrollBehavior(to, from, savedPosition) {
+    return {
+      x: 0,
+      y: 0
+    };
+  }
 });
 var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
   el: '#app',
@@ -49385,7 +49418,134 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.authenticated === false
+    _vm.authenticated && _vm.authenticated === true
+      ? _c(
+          "div",
+          { staticClass: "wrapper" },
+          [
+            _c("Sidebar", { class: { collapsed: _vm.sidebar === false } }),
+            _vm._v(" "),
+            _c("div", { staticClass: "main" }, [
+              _c(
+                "nav",
+                { staticClass: "navbar navbar-expand navbar-light navbar-bg" },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "sidebar-toggle",
+                      on: {
+                        click: function($event) {
+                          return _vm.sidebar_toggle()
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "hamburger align-self-center" })]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group input-group-navbar" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Поиск ...",
+                        "aria-label": "Поиск"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      { staticClass: "btn", attrs: { type: "button" } },
+                      [
+                        _c(
+                          "svg",
+                          {
+                            staticClass: "feather feather-search align-middle",
+                            attrs: {
+                              xmlns: "http://www.w3.org/2000/svg",
+                              width: "24",
+                              height: "24",
+                              viewBox: "0 0 24 24",
+                              fill: "none",
+                              stroke: "currentColor",
+                              "stroke-width": "2",
+                              "stroke-linecap": "round",
+                              "stroke-linejoin": "round"
+                            }
+                          },
+                          [
+                            _c("circle", {
+                              attrs: { cx: "11", cy: "11", r: "8" }
+                            }),
+                            _c("line", {
+                              attrs: {
+                                x1: "21",
+                                y1: "21",
+                                x2: "16.65",
+                                y2: "16.65"
+                              }
+                            })
+                          ]
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "navbar-collapse collapse" }, [
+                    _c("ul", { staticClass: "navbar-nav navbar-align" }, [
+                      _c(
+                        "li",
+                        { staticClass: "nav-item" },
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "nav-link d-sm-inline-block",
+                              attrs: {
+                                to: {
+                                  name: "UserEdit",
+                                  params: { id: _vm.user.id }
+                                }
+                              }
+                            },
+                            [
+                              _c("img", {
+                                staticClass:
+                                  "avatar img-fluid rounded-circle me-1",
+                                attrs: {
+                                  src: "/img/profile.png",
+                                  alt: "Chris Wood"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "text-dark" }, [
+                                _vm._v(_vm._s(_vm.user.name))
+                              ])
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ])
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("main", { staticClass: "content" }, [
+                _c(
+                  "div",
+                  { staticClass: "container-fluid p-0" },
+                  [_c("router-view", { key: _vm.$route.path })],
+                  1
+                )
+              ])
+            ])
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.authenticated && _vm.authenticated === false
       ? _c(
           "div",
           {
@@ -49539,130 +49699,7 @@ var render = function() {
             ])
           ]
         )
-      : _c(
-          "div",
-          { staticClass: "wrapper" },
-          [
-            _c("Sidebar", { class: { collapsed: _vm.sidebar === false } }),
-            _vm._v(" "),
-            _c("div", { staticClass: "main" }, [
-              _c(
-                "nav",
-                { staticClass: "navbar navbar-expand navbar-light navbar-bg" },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "sidebar-toggle",
-                      on: {
-                        click: function($event) {
-                          return _vm.sidebar_toggle()
-                        }
-                      }
-                    },
-                    [_c("i", { staticClass: "hamburger align-self-center" })]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "input-group input-group-navbar" }, [
-                    _c("input", {
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        placeholder: "Поиск ...",
-                        "aria-label": "Поиск"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      { staticClass: "btn", attrs: { type: "button" } },
-                      [
-                        _c(
-                          "svg",
-                          {
-                            staticClass: "feather feather-search align-middle",
-                            attrs: {
-                              xmlns: "http://www.w3.org/2000/svg",
-                              width: "24",
-                              height: "24",
-                              viewBox: "0 0 24 24",
-                              fill: "none",
-                              stroke: "currentColor",
-                              "stroke-width": "2",
-                              "stroke-linecap": "round",
-                              "stroke-linejoin": "round"
-                            }
-                          },
-                          [
-                            _c("circle", {
-                              attrs: { cx: "11", cy: "11", r: "8" }
-                            }),
-                            _c("line", {
-                              attrs: {
-                                x1: "21",
-                                y1: "21",
-                                x2: "16.65",
-                                y2: "16.65"
-                              }
-                            })
-                          ]
-                        )
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "navbar-collapse collapse" }, [
-                    _c("ul", { staticClass: "navbar-nav navbar-align" }, [
-                      _c(
-                        "li",
-                        { staticClass: "nav-item" },
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "nav-link d-sm-inline-block",
-                              attrs: {
-                                to: {
-                                  name: "UserEdit",
-                                  params: { id: _vm.user.id }
-                                }
-                              }
-                            },
-                            [
-                              _c("img", {
-                                staticClass:
-                                  "avatar img-fluid rounded-circle me-1",
-                                attrs: {
-                                  src: "/img/profile.png",
-                                  alt: "Chris Wood"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "text-dark" }, [
-                                _vm._v(_vm._s(_vm.user.name))
-                              ])
-                            ]
-                          )
-                        ],
-                        1
-                      )
-                    ])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c("main", { staticClass: "content" }, [
-                _c(
-                  "div",
-                  { staticClass: "container-fluid p-0" },
-                  [_c("router-view", { key: _vm.$route.path })],
-                  1
-                )
-              ])
-            ])
-          ],
-          1
-        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -53106,7 +53143,7 @@ var render = function() {
             }
           ],
           staticClass: "form-control mb-3",
-          attrs: { type: "text" },
+          attrs: { id: "title_input", type: "text" },
           domProps: { value: _vm.title },
           on: {
             input: function($event) {
@@ -53118,7 +53155,7 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _c("label", { attrs: { id: "title_label" } }, [_vm._v("Код")]),
+        _c("label", { attrs: { id: "slug_label" } }, [_vm._v("Код")]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -53130,7 +53167,7 @@ var render = function() {
             }
           ],
           staticClass: "form-control mb-3",
-          attrs: { type: "text", disabled: "" },
+          attrs: { id: "slug_input", type: "text", disabled: "" },
           domProps: { value: _vm.slug },
           on: {
             input: function($event) {
