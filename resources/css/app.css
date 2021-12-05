@@ -19,6 +19,11 @@ body {
 .text-primary-dotted:hover {
     text-decoration: none;
 }
+.form-control,
+.form-select {
+    font-size: .95rem;
+    padding: .5rem .8rem;
+}
 
 /* SIDEBAR */
 .sidebar-brand a img {
@@ -42,11 +47,9 @@ body {
 
 
 /* NAVBAR */
-
 .navbar-expand .navbar-nav .dropdown-menu {
     right: 0;
 }
-
 /* NAVBER */
 
 
@@ -77,11 +80,9 @@ table.dataTable {
 
 
 /* ERRORS */
-
 .border-danger {
     border-color: #d9534f;
 }
-
 /* ERRORS */
 
 
